@@ -1,0 +1,170 @@
+{
+  "design_title": "CPO: Цифровой продукт МегаФон — схема платформ",
+  "recommended_size_px": {
+    "width": 1920,
+    "height": 1400
+  },
+  "blocks": [
+    {
+      "id": "business",
+      "title": "Связь с бизнесом",
+      "type": "Бизнес-контекст",
+      "owner": "CPO / бизнес",
+      "raci": "I/C"
+    },
+    {
+      "id": "bogdan",
+      "title": "Капралов Богдан",
+      "type": "Роль",
+      "owner": "Platform Lead Telecom",
+      "raci": "R"
+    },
+    {
+      "id": "telecom-core",
+      "title": "CPO Telecom Core",
+      "type": "Владелец домена",
+      "owner": "CPO Telecom Core",
+      "raci": "A"
+    },
+    {
+      "id": "cx-core",
+      "title": "CPO CX",
+      "type": "Владелец платформы",
+      "owner": "CPO CX",
+      "raci": "A"
+    },
+    {
+      "id": "vas-core",
+      "title": "CPO VAS / Partners",
+      "type": "Владелец домена",
+      "owner": "CPO VAS / Partners",
+      "raci": "A"
+    },
+    {
+      "id": "telecom-platform",
+      "title": "Telecom платформа",
+      "type": "Платформа",
+      "owner": "Platform Lead Telecom",
+      "raci": "R/A"
+    },
+    {
+      "id": "cx-platform",
+      "title": "CX платформа",
+      "type": "Платформа",
+      "owner": "CPO CX",
+      "raci": "R/A"
+    },
+    {
+      "id": "vas-platform",
+      "title": "VAS платформа",
+      "type": "Платформа",
+      "owner": "CPO VAS / Partners",
+      "raci": "R/A"
+    },
+    {
+      "id": "principles",
+      "title": "Принципы модели",
+      "type": "Принципы",
+      "owner": "CPO / Platform Council",
+      "raci": "A/C"
+    },
+    {
+      "id": "governance",
+      "title": "Управление платформой",
+      "type": "Governance",
+      "owner": "CPO + комитеты",
+      "raci": "A"
+    },
+    {
+      "id": "integration",
+      "title": "Интеграция и взаимодействие платформ",
+      "type": "Интеграционный слой",
+      "owner": "Платформенные команды",
+      "raci": "R/A"
+    },
+    {
+      "id": "units",
+      "title": "Бизнес-юниты Telecom",
+      "type": "Бизнес-юниты",
+      "owner": "Владельцы продуктов и P&L",
+      "raci": "A/R"
+    },
+    {
+      "id": "teams",
+      "title": "Команды и зоны ответственности",
+      "type": "Команды",
+      "owner": "CPO + Platform Leads",
+      "raci": "R/A/C/I"
+    },
+    {
+      "id": "api-standards",
+      "title": "API-стандарты",
+      "type": "Ключевая связь",
+      "owner": "Platform Council",
+      "raci": "A/R"
+    },
+    {
+      "id": "data-model",
+      "title": "Единая модель данных",
+      "type": "Ключевая связь",
+      "owner": "CX + Data",
+      "raci": "R/C"
+    },
+    {
+      "id": "design-system",
+      "title": "Дизайн-система",
+      "type": "CX-возможность",
+      "owner": "CX Platform",
+      "raci": "R/A"
+    },
+    {
+      "id": "analytics",
+      "title": "Аналитика",
+      "type": "CX/Data сервис",
+      "owner": "CX Platform + Data",
+      "raci": "R/C"
+    },
+    {
+      "id": "partner-integration",
+      "title": "Партнерские интеграции",
+      "type": "VAS сервис",
+      "owner": "VAS Platform",
+      "raci": "R"
+    },
+    {
+      "id": "tariffs-unit",
+      "title": "Тарифы",
+      "type": "Бизнес-юнит",
+      "owner": "CPO Telecom Core",
+      "raci": "A/R"
+    },
+    {
+      "id": "vas-unit",
+      "title": "VAS продукты",
+      "type": "Бизнес-юнит",
+      "owner": "CPO VAS / Partners",
+      "raci": "A/R"
+    },
+    {
+      "id": "team-telecom",
+      "title": "Команда Telecom Platform",
+      "type": "Команда",
+      "owner": "Platform Lead Telecom",
+      "raci": "R"
+    },
+    {
+      "id": "team-cx",
+      "title": "Команда CX Platform",
+      "type": "Команда",
+      "owner": "CPO CX",
+      "raci": "R"
+    },
+    {
+      "id": "team-vas",
+      "title": "Команда VAS Platform",
+      "type": "Команда",
+      "owner": "CPO VAS / Partners",
+      "raci": "R"
+    }
+  ]
+}
