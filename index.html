@@ -3,20 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CPO: интерактивная схема точек взаимодействия</title>
+    <title>CPO: интерактивная схема на Canvas</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="page-shell">
       <section class="hero" aria-labelledby="page-title">
         <div>
-          <p class="eyebrow">Связь с бизнесом · платформы · команды</p>
-          <h1 id="page-title">CPO. Цифровой продукт МегаФон: интерактивная схема</h1>
+          <p class="eyebrow">Canvas · CPO · Telecom / CX / VAS</p>
+          <h1 id="page-title">Интерактивная кликабельная схема CPO на Canvas</h1>
           <p class="lead">
-            Кликайте по карточкам, чтобы увидеть владельца, ключевые задачи и связанные точки
-            взаимодействия. Используйте поиск для быстрого перехода к платформам, сервисам и метрикам.
+            Схема отрисована на HTML5 Canvas. Кликайте по блокам на холсте, чтобы увидеть
+            детали, владельца, RACI и связанные элементы.
           </p>
         </div>
+
         <div class="toolbar" role="search">
           <label for="scheme-search">Поиск по схеме</label>
           <div class="search-row">
@@ -26,308 +27,34 @@
         </div>
       </section>
 
-      <section class="scheme" aria-label="Интерактивная схема CPO">
-        <aside class="side-panel left-panel" aria-label="Связь с бизнесом">
-          <div class="panel-card accent-green">
-            <h2>Связь с бизнесом</h2>
-            <p class="panel-kicker">Цели бизнеса телекома</p>
-            <button class="node metric" data-node="revenue" type="button">Рост выручки</button>
-            <button class="node metric" data-node="arpu" type="button">Рост ARPU</button>
-            <button class="node metric" data-node="digital-sales" type="button">
-              Рост цифровых продаж и конверсии
-            </button>
-            <button class="node metric" data-node="retention" type="button">
-              Удержание и лояльность клиентов
-            </button>
-            <button class="node metric" data-node="digital-migration" type="button">
-              Переход в цифровые каналы
-            </button>
-            <button class="node metric" data-node="churn" type="button">Снижение оттока</button>
-          </div>
-
-          <div class="panel-card">
-            <h3>Ключевые бизнес-метрики</h3>
-            <ul class="compact-list">
-              <li>Выручка и цифровые продажи</li>
-              <li>ARPU / ARPPU</li>
-              <li>Конверсия в покупку</li>
-              <li>Отток / Churn</li>
-              <li>NPS / MAU / DAU / DK</li>
-              <li>Доля цифровых продаж</li>
-            </ul>
-          </div>
-
-          <div class="panel-card person-card">
-            <h3>Кто такой Капралов Богдан</h3>
-            <strong>Руководитель платформы Telecom</strong>
-            <span>Platform Lead Telecom</span>
-            <p>
-              Отвечает за платформу телеком-продуктов: сквозные сценарии, UX-паттерны,
-              воронки и качество цифровых продаж.
-            </p>
-          </div>
-        </aside>
-
-        <section class="core-map" aria-label="Платформы и точки взаимодействия">
-          <div class="top-row">
-            <button class="owner-pill green node" data-node="telecom-core" type="button">
-              <span>CPO Telecom Core</span>
-              <small>владелец телеком-продуктов и P&amp;L</small>
-            </button>
-            <button class="owner-pill blue node" data-node="cx-core" type="button">
-              <span>CPO CX</span>
-              <small>владелец клиентских возможностей и опыта</small>
-            </button>
-            <button class="owner-pill red node" data-node="vas-core" type="button">
-              <span>CPO VAS / Partners</span>
-              <small>владелец VAS-направлений и партнерских сервисов</small>
-            </button>
-          </div>
-
-          <div class="platform-grid">
-            <article class="platform-card telecom" aria-labelledby="telecom-title">
-              <header>
-                <p>Платформа Telecom Onbital</p>
-                <h2 id="telecom-title">Telecom платформа</h2>
-                <span>Ответственность Богдана: Platform Lead Telecom</span>
-              </header>
-
-              <div class="section-block">
-                <h3>Витрины и навигация телеком</h3>
-                <div class="node-grid">
-                  <button class="node" data-node="main-page" type="button">Главная / виджеты</button>
-                  <button class="node" data-node="catalog" type="button">Каталог тарифов</button>
-                  <button class="node" data-node="cards" type="button">Карточки тарифов</button>
-                  <button class="node" data-node="cart" type="button">Корзина услуг</button>
-                  <button class="node" data-node="payments" type="button">Платежи</button>
-                  <button class="node" data-node="telecom-offers" type="button">Телеком офферы</button>
-                </div>
-              </div>
-
-              <div class="section-block">
-                <h3>Сквозные телеком-сценарии</h3>
-                <div class="node-grid dense">
-                  <button class="node" data-node="tariff-buy" type="button">Покупка тарифа</button>
-                  <button class="node" data-node="transition" type="button">Переход / смена тарифа</button>
-                  <button class="node" data-node="sim" type="button">SIM / eSIM</button>
-                  <button class="node" data-node="upsell" type="button">Доп. услуги</button>
-                  <button class="node" data-node="numbers" type="button">Номера</button>
-                  <button class="node" data-node="roaming" type="button">Роуминг</button>
-                  <button class="node" data-node="subscriptions" type="button">Подписки</button>
-                  <button class="node" data-node="internet" type="button">Домашний интернет</button>
-                  <button class="node" data-node="migration" type="button">Миграция</button>
-                </div>
-              </div>
-
-              <div class="section-block">
-                <h3>Сервисы платформы Telecom</h3>
-                <div class="node-grid">
-                  <button class="node" data-node="activation" type="button">Активация</button>
-                  <button class="node" data-node="profile-telecom" type="button">Профиль услуг</button>
-                  <button class="node" data-node="api-gateway" type="button">API Gateway</button>
-                  <button class="node" data-node="billing" type="button">Биллинг</button>
-                  <button class="node" data-node="settings" type="button">Настройки</button>
-                </div>
-              </div>
-            </article>
-
-            <article class="platform-card cx" aria-labelledby="cx-title">
-              <header>
-                <p>Кросс-доменная платформа клиентского опыта</p>
-                <h2 id="cx-title">CX платформа</h2>
-                <span>Ответственность CPO CX</span>
-              </header>
-
-              <div class="section-block">
-                <h3>Клиентский опыт и взаимодействие</h3>
-                <div class="node-grid">
-                  <button class="node" data-node="home" type="button">Главная навигация</button>
-                  <button class="node" data-node="profile" type="button">Профиль клиента</button>
-                  <button class="node" data-node="search" type="button">Поиск</button>
-                  <button class="node" data-node="notifications" type="button">Пуши и уведомления</button>
-                  <button class="node" data-node="content" type="button">Контент и виджеты</button>
-                  <button class="node" data-node="onboarding" type="button">Онбординг</button>
-                  <button class="node" data-node="personalization" type="button">Персонализация</button>
-                  <button class="node" data-node="feedback" type="button">Обратная связь</button>
-                  <button class="node" data-node="ui-components" type="button">UI-компоненты</button>
-                </div>
-              </div>
-
-              <div class="section-block">
-                <h3>Сервисы CX платформы</h3>
-                <div class="node-grid">
-                  <button class="node" data-node="auth" type="button">Авторизация и профиль</button>
-                  <button class="node" data-node="journey" type="button">Управление CJM</button>
-                  <button class="node" data-node="experiments" type="button">Эксперименты</button>
-                  <button class="node" data-node="analytics" type="button">Аналитика и события</button>
-                  <button class="node" data-node="ab-testing" type="button">A/B тесты</button>
-                  <button class="node" data-node="feature-flags" type="button">Feature flags</button>
-                </div>
-              </div>
-
-              <div class="section-block">
-                <h3>Единые принципы CX</h3>
-                <div class="node-grid dense">
-                  <button class="node" data-node="design-system" type="button">Единая дизайн-система</button>
-                  <button class="node" data-node="patterns" type="button">UX-паттерны</button>
-                  <button class="node" data-node="accessibility" type="button">Доступность</button>
-                  <button class="node" data-node="microcopy" type="button">Микрокопи</button>
-                  <button class="node" data-node="performance" type="button">Производительность</button>
-                  <button class="node" data-node="measurement" type="button">Измерение опыта</button>
-                </div>
-              </div>
-            </article>
-
-            <article class="platform-card vas" aria-labelledby="vas-title">
-              <header>
-                <p>Платформа VAS и партнерских сервисов</p>
-                <h2 id="vas-title">VAS платформа</h2>
-                <span>Ответственность CPO VAS / Partners</span>
-              </header>
-
-              <div class="section-block">
-                <h3>Категории VAS и партнерских сервисов</h3>
-                <div class="node-grid">
-                  <button class="node" data-node="rouming-vas" type="button">Роуминг</button>
-                  <button class="node" data-node="eva" type="button">EVA</button>
-                  <button class="node" data-node="books-games" type="button">Книги / Игры</button>
-                  <button class="node" data-node="finance" type="button">Финансы</button>
-                  <button class="node" data-node="cashback" type="button">Кэшбэк</button>
-                  <button class="node" data-node="partner-services" type="button">Партнерские сервисы</button>
-                </div>
-              </div>
-
-              <div class="section-block">
-                <h3>Сервисы VAS платформы</h3>
-                <div class="node-grid">
-                  <button class="node" data-node="offer-catalog" type="button">Каталог сервисов</button>
-                  <button class="node" data-node="partner-cards" type="button">Карточки партнеров</button>
-                  <button class="node" data-node="subscription-flow" type="button">Подписки VAS</button>
-                  <button class="node" data-node="showcase" type="button">Витрины и подборки</button>
-                  <button class="node" data-node="commission" type="button">Валюта и платежи</button>
-                  <button class="node" data-node="partner-integration" type="button">Партнерские интеграции</button>
-                </div>
-              </div>
-
-              <div class="section-block">
-                <h3>Единый опыт VAS</h3>
-                <div class="node-grid dense">
-                  <button class="node" data-node="vas-catalog" type="button">Единый каталог</button>
-                  <button class="node" data-node="vas-profile" type="button">Единый профиль</button>
-                  <button class="node" data-node="recommendations" type="button">Рекомендации</button>
-                  <button class="node" data-node="vas-events" type="button">Единые события</button>
-                  <button class="node" data-node="vas-management" type="button">Управление услугами</button>
-                  <button class="node" data-node="vas-metrics" type="button">Метрики эффективности</button>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <section class="integration-band" aria-label="Интеграция и взаимодействие платформ">
-            <h2>Интеграция и взаимодействие платформ</h2>
-            <div class="band-grid">
-              <button class="node" data-node="auth-integration" type="button">Единая авторизация и профиль</button>
-              <button class="node" data-node="notification-hub" type="button">Каналы уведомлений</button>
-              <button class="node" data-node="data-model" type="button">Единая бизнес- и продуктовая модель</button>
-              <button class="node" data-node="event-bus" type="button">События аналитики и событий</button>
-              <button class="node" data-node="shared-experience" type="button">Обмен данными между платформами</button>
-              <button class="node" data-node="api-standards" type="button">Единые стандарты API</button>
-              <button class="node" data-node="routing" type="button">Согласование сценариев клиентского пути</button>
-            </div>
-          </section>
-        </section>
-
-        <aside class="side-panel right-panel" aria-label="Принципы и управление">
-          <div class="panel-card accent-purple">
-            <h2>Принципы модели</h2>
-            <button class="node principle" data-node="ownership" type="button">Доменная ответственность</button>
-            <button class="node principle" data-node="platform-first" type="button">
-              Платформа предоставляет общие возможности
-            </button>
-            <button class="node principle" data-node="single-experience" type="button">
-              Единый клиентский опыт во всех доменах
-            </button>
-            <button class="node principle" data-node="reuse" type="button">
-              Повторное использование и скорость доставки
-            </button>
-            <button class="node principle" data-node="scale" type="button">Масштабируемость и гибкость</button>
-          </div>
-
-          <div class="panel-card">
-            <h3>Как принимаем решения</h3>
-            <ul class="compact-list">
-              <li>Доменные команды принимают решения в рамках P&amp;L.</li>
-              <li>Платформенные решения проходят Platform Council.</li>
-              <li>Глобальные вопросы выносятся на уровень CPO.</li>
-            </ul>
-          </div>
-
-          <div class="panel-card">
-            <h3>Управление платформой</h3>
-            <button class="node principle" data-node="platform-council" type="button">Platform Council</button>
-            <button class="node principle" data-node="architecture" type="button">Архитектурный комитет</button>
-            <button class="node principle" data-node="product-committee" type="button">Продуктовый комитет</button>
-            <button class="node principle" data-node="data-committee" type="button">Комитет по данным и аналитике</button>
-          </div>
-        </aside>
+      <section class="canvas-shell" aria-label="Canvas-схема CPO">
+        <div class="canvas-tools">
+          <span id="canvas-status">Наведите или нажмите на блок схемы</span>
+          <span>Колесо мыши не требуется: схема автоматически масштабируется под экран.</span>
+        </div>
+        <div class="canvas-viewport">
+          <canvas
+            id="cpo-canvas"
+            width="1800"
+            height="1160"
+            role="img"
+            aria-label="Интерактивная схема CPO с платформами Telecom, CX и VAS"
+          ></canvas>
+        </div>
       </section>
 
-      <section class="bottom-area" aria-label="Бизнес-юниты и зоны ответственности">
-        <div class="business-units">
-          <h2>Бизнес-юниты Telecom</h2>
-          <div class="unit-grid">
-            <button class="node unit" data-node="tariffs-unit" type="button">Тарифы</button>
-            <button class="node unit" data-node="home-internet-unit" type="button">Домашний интернет</button>
-            <button class="node unit" data-node="convergence-unit" type="button">Конвергенция</button>
-            <button class="node unit" data-node="megasemya-unit" type="button">МегаСемья</button>
-            <button class="node unit" data-node="rouming-unit" type="button">Роуминг</button>
-            <button class="node unit" data-node="vas-unit" type="button">VAS и партнерские продукты</button>
-            <button class="node unit" data-node="other-unit" type="button">Другие продукты и сервисы</button>
-          </div>
-        </div>
-
-        <div class="teams">
-          <h2>Команды и зоны ответственности</h2>
-          <div class="team-grid">
-            <button class="team team-green node" data-node="team-telecom" type="button">
-              <span>Команда Telecom Platform</span>
-              <small>ответственность Богдана</small>
-            </button>
-            <button class="team team-blue node" data-node="team-cx" type="button">
-              <span>Команда CX Platform</span>
-              <small>ответственность CPO CX</small>
-            </button>
-            <button class="team team-red node" data-node="team-vas" type="button">
-              <span>Команда VAS Platform</span>
-              <small>ответственность CPO VAS</small>
-            </button>
-            <button class="team team-purple node" data-node="team-platform" type="button">
-              <span>Платформенные команды</span>
-              <small>общие сервисы и компоненты</small>
-            </button>
-            <button class="team team-dark node" data-node="team-product" type="button">
-              <span>Продуктовые команды</span>
-              <small>бизнес-юниты и P&amp;L</small>
-            </button>
-          </div>
-        </div>
-
-        <div class="legend" aria-label="Легенда RACI">
-          <h2>Легенда RACI</h2>
-          <span><b class="raci r">R</b> Responsible</span>
-          <span><b class="raci a">A</b> Accountable</span>
-          <span><b class="raci c">C</b> Consulted</span>
-          <span><b class="raci i">I</b> Informed</span>
-        </div>
+      <section class="mobile-node-list" aria-label="Список кликабельных элементов">
+        <h2>Кликабельные элементы</h2>
+        <div id="node-list"></div>
       </section>
     </main>
 
     <aside class="details-panel" id="details-panel" aria-live="polite" aria-label="Детали выбранного элемента">
       <button class="close-details" id="close-details" type="button" aria-label="Закрыть панель">×</button>
       <p class="eyebrow" id="details-type">Выберите элемент</p>
-      <h2 id="details-title">Кликабельная схема готова к навигации</h2>
+      <h2 id="details-title">Canvas-схема готова</h2>
       <p id="details-description">
-        Нажмите на любой блок схемы, чтобы увидеть назначение, ответственных и связанные элементы.
+        Нажмите на любой блок на холсте, чтобы увидеть назначение и связанные точки взаимодействия.
       </p>
       <dl class="details-meta">
         <div>
