@@ -20,4 +20,7 @@
 
 - `cpo-scheme-canvas.png` — чистый экспорт схемы;
 - `cpo-content.json` — структура блоков;
-- `CANVA-IMPORT.md` — инструкция импорта.
+- `CANVA-IMPORT.md` — ручной импорт;
+- `AUTO-IMPORT.md` — автоматический импорт через Canva MCP.
+
+Для автоматического импорта подключи Canva в **Cursor → Settings → MCP → Canva**, затем попроси агента импортировать схему.
