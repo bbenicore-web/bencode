@@ -2,11 +2,18 @@ const canvas = document.querySelector("#cpo-canvas");
 const ctx = canvas.getContext("2d");
 const exportScale = window.__EXPORT_SCALE__ || 1;
 
+const CANVAS_W = 1920;
+const CANVAS_H = 1680;
+
 if (exportScale !== 1) {
-  canvas.width = 1800 * exportScale;
-  canvas.height = 1160 * exportScale;
+  canvas.width = CANVAS_W * exportScale;
+  canvas.height = CANVAS_H * exportScale;
   ctx.scale(exportScale, exportScale);
+} else if (canvas.width !== CANVAS_W || canvas.height !== CANVAS_H) {
+  canvas.width = CANVAS_W;
+  canvas.height = CANVAS_H;
 }
+
 const searchInput = document.querySelector("#scheme-search");
 const resetView = document.querySelector("#reset-view");
 const canvasStatus = document.querySelector("#canvas-status");
@@ -34,6 +41,8 @@ const palette = {
   purpleSoft: "#f1edff",
   yellow: "#f2a900",
   yellowSoft: "#fff9e6",
+  orange: "#e8870a",
+  orangeSoft: "#fff4e0",
   panel: "#ffffff",
 };
 
@@ -45,411 +54,454 @@ const state = {
 
 const nodes = [
   {
-    id: "business",
-    title: "Связь с бизнесом",
-    type: "Бизнес-контекст",
-    owner: "CPO / бизнес",
-    raci: "I/C",
-    x: 30,
-    y: 105,
-    w: 205,
-    h: 250,
-    color: palette.green,
-    fill: palette.greenSoft,
-    description: "Связывает платформенную модель с ростом выручки, ARPU, цифровых продаж и удержанием.",
-    lines: ["Рост выручки", "Рост ARPU", "Цифровые продажи", "Удержание", "Снижение оттока", "NPS / MAU / DAU"],
-    related: ["telecom-core", "telecom-platform", "cx-platform", "vas-platform"],
-  },
-  {
-    id: "bogdan",
-    title: "Капралов Богдан",
-    type: "Роль",
-    owner: "Platform Lead Telecom",
-    raci: "R",
-    x: 30,
-    y: 380,
-    w: 205,
-    h: 150,
-    color: palette.green,
-    fill: "#ffffff",
-    description: "Руководитель платформы Telecom: отвечает за телеком-витрины, сценарии, UX-паттерны и воронки.",
-    lines: ["Руководитель платформы Telecom", "Platform Lead Telecom", "Единая телеком-платформа"],
-    related: ["telecom-platform", "team-telecom", "telecom-core"],
-  },
-  {
-    id: "telecom-core",
-    title: "CPO Telecom Core",
-    type: "Владелец домена",
-    owner: "CPO Telecom Core",
+    id: "biz-leader-telecom",
+    title: "Бизнес лидер — Телеком Core",
+    type: "Бизнес-лидер",
+    owner: "Бизнес",
     raci: "A",
-    x: 310,
-    y: 70,
-    w: 330,
-    h: 58,
-    color: palette.green,
-    fill: "#ffffff",
-    description: "Владелец телеком-продуктов и P&L, отвечает за цифровые продажи и сквозные телеком-сценарии.",
-    lines: ["владелец телеком-продуктов и P&L"],
-    related: ["telecom-platform", "business", "team-telecom", "tariffs-unit"],
-  },
-  {
-    id: "cx-core",
-    title: "CPO CX",
-    type: "Владелец платформы",
-    owner: "CPO CX",
-    raci: "A",
-    x: 725,
-    y: 70,
-    w: 330,
-    h: 58,
+    x: 300,
+    y: 24,
+    w: 280,
+    h: 44,
     color: palette.blue,
-    fill: "#ffffff",
-    description: "Владелец клиентских возможностей, единого опыта, дизайн-системы и общих CX-сервисов.",
-    lines: ["владелец клиентских возможностей и опыта"],
-    related: ["cx-platform", "team-cx", "design-system", "analytics"],
+    fill: palette.blueSoft,
+    description: "Бизнес-лидер телеком-направления Core: задаёт приоритеты и KPI для телеком-платформы.",
+    related: ["telecom-platform", "cpo-main-line"],
   },
   {
-    id: "vas-core",
-    title: "CPO VAS / Partners",
-    type: "Владелец домена",
-    owner: "CPO VAS / Partners",
+    id: "biz-leader-showcases",
+    title: "Бизнес лидер — Витрины",
+    type: "Бизнес-лидер",
+    owner: "Бизнес",
     raci: "A",
-    x: 1140,
-    y: 70,
-    w: 330,
+    x: 600,
+    y: 24,
+    w: 280,
+    h: 44,
+    color: palette.blue,
+    fill: palette.blueSoft,
+    description: "Бизнес-лидер витрин: отвечает за конверсию, воронки и монетизацию витрин.",
+    related: ["telecom-platform", "team-tariffs"],
+  },
+  {
+    id: "cpo-main-line",
+    title: "CPO — основная линейка",
+    type: "CPO домена",
+    owner: "CPO",
+    raci: "A",
+    x: 270,
+    y: 88,
+    w: 200,
+    h: 52,
+    color: palette.yellow,
+    fill: palette.yellowSoft,
+    description: "CPO основной продуктовой линейки телекома.",
+    related: ["telecom-platform", "team-tariffs"],
+  },
+  {
+    id: "cpo-persona",
+    title: "CPO — Персона",
+    type: "CPO домена",
+    owner: "CPO",
+    raci: "A",
+    x: 480,
+    y: 88,
+    w: 200,
+    h: 52,
+    color: palette.yellow,
+    fill: palette.yellowSoft,
+    description: "CPO направления Персона и ДГП.",
+    related: ["telecom-platform", "team-persona"],
+  },
+  {
+    id: "cpo-mnp",
+    title: "CPO — MNP, клоны, SIM",
+    type: "CPO домена",
+    owner: "CPO",
+    raci: "A",
+    x: 690,
+    y: 88,
+    w: 200,
+    h: 52,
+    color: palette.yellow,
+    fill: palette.yellowSoft,
+    description: "CPO сценариев MNP, клонов и покупки SIM.",
+    related: ["telecom-platform", "team-subscriber"],
+  },
+  {
+    id: "cpo-megainternet",
+    title: "CPO — МегаИнтернет",
+    type: "CPO домена",
+    owner: "CPO",
+    raci: "A",
+    x: 900,
+    y: 88,
+    w: 200,
+    h: 52,
+    color: palette.yellow,
+    fill: palette.yellowSoft,
+    description: "CPO мобильного интернета и контроля расходов.",
+    related: ["telecom-platform", "team-mega-internet"],
+  },
+  {
+    id: "cpo-home-internet",
+    title: "CPO — ДомИнтернет",
+    type: "CPO домена",
+    owner: "CPO",
+    raci: "A",
+    x: 1110,
+    y: 88,
+    w: 200,
+    h: 52,
+    color: palette.yellow,
+    fill: palette.yellowSoft,
+    description: "CPO домашнего интернета.",
+    related: ["telecom-platform", "team-home-internet"],
+  },
+  {
+    id: "cpo-monetization",
+    title: "CPO — Монетизация",
+    type: "CPO домена",
+    owner: "CPO",
+    raci: "A",
+    x: 1320,
+    y: 88,
+    w: 200,
+    h: 52,
+    color: palette.yellow,
+    fill: palette.yellowSoft,
+    description: "CPO монетизации в личном кабинете и самообслуживании.",
+    related: ["telecom-platform", "team-monetization"],
+  },
+  {
+    id: "cpo-header",
+    title: "CPO Цифровой продукт МегаФона (Личный кабинет)",
+    type: "Роль CPO",
+    owner: "CPO цифрового продукта",
+    raci: "A",
+    x: 520,
+    y: 158,
+    w: 880,
     h: 58,
-    color: palette.red,
-    fill: "#ffffff",
-    description: "Владелец VAS-направлений, партнерских сервисов, монетизации и внешних интеграций.",
-    lines: ["владелец VAS-направлений и партнерских сервисов"],
-    related: ["vas-platform", "team-vas", "partner-integration", "vas-unit"],
+    color: palette.purple,
+    fill: palette.purpleSoft,
+    description:
+      "Роль обеспечивает, чтобы три домена — Telecom, CX и VAS — развивались как единый цифровой продукт личного кабинета МегаФона.",
+    related: ["telecom-platform", "cx-platform", "vas-platform", "cpo-responsibilities"],
+  },
+  {
+    id: "platform-note-left",
+    title: "Общие возможности платформы",
+    type: "Пояснение",
+    owner: "CPO платформы",
+    raci: "I",
+    x: 24,
+    y: 240,
+    w: 228,
+    h: 320,
+    color: palette.muted,
+    fill: "#f8f9fc",
+    description:
+      "Платформа даёт общие возможности — каталоги, поиск, профиль и др. — всем доменам, чтобы новые продукты запускались быстрее и выглядели как единое приложение.",
+    lines: [
+      "Каталоги и витрины",
+      "Поиск и навигация",
+      "Профиль клиента",
+      "Единый UX",
+      "Быстрый запуск продуктов",
+    ],
+    related: ["telecom-platform", "cx-platform", "vas-platform"],
   },
   {
     id: "telecom-platform",
-    title: "Telecom платформа",
+    title: "ТЕЛЕКОМ ПЛАТФОРМА",
     type: "Платформа",
-    owner: "Platform Lead Telecom",
+    owner: "CPO Telecom Platform",
     raci: "R/A",
     x: 270,
-    y: 160,
-    w: 410,
-    h: 545,
+    y: 240,
+    w: 380,
+    h: 860,
     color: palette.green,
     fill: palette.greenSoft,
-    description: "Платформа Telecom Onbital: витрины, сквозные сценарии и сервисы для телеком-продуктов.",
+    description: "Телеком-платформа: витрины, сквозные сценарии и сервисы для телеком-продуктов личного кабинета.",
     sections: [
       {
         title: "Витрины и навигация",
-        items: ["Главная / виджеты", "Каталог тарифов", "Карточки тарифов", "Корзина услуг", "Платежи", "Телеком офферы"],
+        items: [
+          "Сквозные элементы",
+          "Каталоги тарифов",
+          "Карточки тарифов",
+          "Карточки услуг",
+          "Полки",
+          "Корзина Telecom",
+        ],
       },
       {
-        title: "Сквозные сценарии",
-        items: ["Покупка тарифа", "Смена тарифа", "SIM / eSIM", "Доп. услуги", "Номера", "Роуминг", "Подписки", "Домашний интернет", "Миграция"],
+        title: "Сквозные телеком-сценарии",
+        items: [
+          "Покупка SIM",
+          "MNP",
+          "Консьерж",
+          "Подключение услуг",
+          "Домашний интернет",
+          "МегаСемья",
+          "Счётчики ГБ/минут",
+          "Расходы",
+          "Абонентская плата",
+          "Контроль расходов",
+          "Минимальная корзина",
+          "МегаСилы",
+        ],
       },
       {
-        title: "Сервисы платформы",
-        items: ["Активация", "Профиль услуг", "API Gateway", "Биллинг", "Настройки"],
+        title: "Сервисы телеком-платформы",
+        items: [
+          "Подключение/отключение услуг",
+          "Импортер",
+          "Домашний интернет монолит",
+          "Скидки",
+          "Проверка адреса (dadata)",
+          "Проверка баланса",
+          "Мои номера",
+          "Тарифы",
+          "Клоны",
+          "Семья",
+        ],
       },
     ],
-    related: ["business", "telecom-core", "integration", "team-telecom", "data-model"],
+    related: ["cx-platform", "cpo-header", "team-telecom"],
   },
   {
     id: "cx-platform",
-    title: "CX платформа",
+    title: "CX ПЛАТФОРМА",
+    subtitle: "Кросс-доменная платформа клиентского опыта",
     type: "Платформа",
     owner: "CPO CX",
     raci: "R/A",
-    x: 695,
-    y: 160,
-    w: 410,
-    h: 545,
+    x: 670,
+    y: 240,
+    w: 380,
+    h: 860,
     color: palette.blue,
     fill: palette.blueSoft,
-    description: "Кросс-доменная платформа клиентского опыта: профиль, коммуникации, аналитика и единые UX-принципы.",
+    description: "Кросс-доменная CX-платформа: единый клиентский опыт, профиль, коммуникации и UI-компоненты.",
     sections: [
       {
-        title: "Клиентский опыт",
-        items: ["Главная навигация", "Профиль клиента", "Поиск", "Пуши", "Контент", "Онбординг", "Персонализация", "Обратная связь", "UI-компоненты"],
+        title: "Клиентский опыт и взаимодействие",
+        items: [
+          "Главная и навигация",
+          "Профиль клиента",
+          "Поиск",
+          "Пуши и уведомления",
+          "Сторис и контент",
+          "Онбординг",
+          "Персонализация",
+          "Обратная связь",
+          "UI-компоненты",
+        ],
       },
       {
-        title: "Сервисы CX",
-        items: ["Авторизация", "CJM", "Эксперименты", "Аналитика", "A/B тесты", "Feature flags"],
-      },
-      {
-        title: "Единые принципы",
-        items: ["Дизайн-система", "UX-паттерны", "Доступность", "Микрокопи", "Производительность", "Измерение опыта"],
+        title: "Сервисы CX-платформы",
+        items: [
+          "Авторизация и профиль",
+          "Уведомления (Push, In-App)",
+          "Коммуникации и сообщения",
+        ],
       },
     ],
-    related: ["cx-core", "integration", "team-cx", "design-system", "analytics"],
+    related: ["telecom-platform", "vas-platform", "cpo-header"],
   },
   {
     id: "vas-platform",
-    title: "VAS платформа",
+    title: "VAS ПЛАТФОРМА",
+    subtitle: "Платформа VAS и партнёрских сервисов",
     type: "Платформа",
-    owner: "CPO VAS / Partners",
+    owner: "CPO VAS",
     raci: "R/A",
-    x: 1120,
-    y: 160,
-    w: 410,
-    h: 545,
+    x: 1070,
+    y: 240,
+    w: 380,
+    h: 860,
     color: palette.red,
     fill: palette.redSoft,
-    description: "Платформа VAS и партнерских сервисов: категории, подписки, рекомендации и партнерские интеграции.",
+    description: "Платформа VAS и партнёрских сервисов: категории, подключение, подписки и интеграции.",
     sections: [
       {
-        title: "Категории VAS",
-        items: ["Роуминг", "EVA", "Книги / Игры", "Финансы", "Кэшбэк", "Партнерские сервисы"],
+        title: "Категории VAS и партнёров",
+        items: ["Роуминг", "EVA", "Кино/Игры", "Финансы", "Кэшбэк", "Партнёрские сервисы"],
       },
       {
-        title: "Сервисы VAS",
-        items: ["Каталог сервисов", "Карточки партнеров", "Подписки VAS", "Витрины", "Платежи", "Интеграции"],
-      },
-      {
-        title: "Единый опыт VAS",
-        items: ["Единый каталог", "Единый профиль", "Рекомендации", "Единые события", "Управление услугами", "Метрики"],
+        title: "Сервисы VAS-платформы",
+        items: [
+          "Каталог сервисов",
+          "Карточка сервиса",
+          "Подключение VAS",
+          "Управление подписками",
+          "Баланс и пополнение",
+          "Партнёрские интеграции",
+        ],
       },
     ],
-    related: ["vas-core", "integration", "team-vas", "partner-integration", "vas-unit"],
+    related: ["telecom-platform", "cx-platform", "cpo-header"],
   },
   {
-    id: "principles",
-    title: "Принципы модели",
-    type: "Принципы",
-    owner: "CPO / Platform Council",
-    raci: "A/C",
-    x: 1580,
-    y: 120,
-    w: 190,
-    h: 245,
-    color: palette.purple,
-    fill: palette.purpleSoft,
-    description: "Правила совместной работы доменов и платформ: ответственность, единый опыт, переиспользование и масштабируемость.",
-    lines: ["Доменная ответственность", "Платформа дает возможности", "Единый клиентский опыт", "Переиспользование", "Масштабируемость"],
-    related: ["cx-platform", "integration", "governance", "teams"],
-  },
-  {
-    id: "governance",
-    title: "Управление платформой",
-    type: "Governance",
-    owner: "CPO + комитеты",
+    id: "cpo-platform-duties",
+    title: "Зона ответственности CPO платформы",
+    type: "Пояснение",
+    owner: "CPO платформы",
     raci: "A",
-    x: 1580,
-    y: 390,
-    w: 190,
-    h: 215,
-    color: palette.purple,
-    fill: "#ffffff",
-    description: "Platform Council, архитектурный, продуктовый и data-комитеты принимают кросс-доменные решения.",
-    lines: ["Platform Council", "Архитектурный комитет", "Продуктовый комитет", "Data-комитет"],
-    related: ["principles", "integration", "api-standards", "teams"],
-  },
-  {
-    id: "integration",
-    title: "Интеграция и взаимодействие платформ",
-    type: "Интеграционный слой",
-    owner: "Платформенные команды",
-    raci: "R/A",
-    x: 270,
-    y: 740,
-    w: 1260,
-    h: 120,
+    x: 1470,
+    y: 240,
+    w: 210,
+    h: 320,
     color: palette.purple,
     fill: palette.purpleSoft,
-    description: "Связывает Telecom, CX и VAS через единый профиль, события, API-стандарты и обмен данными.",
-    chips: ["Авторизация и профиль", "Уведомления", "Единая модель", "События", "Обмен данными", "API", "Согласование CJM"],
-    related: ["telecom-platform", "cx-platform", "vas-platform", "api-standards", "data-model"],
-  },
-  {
-    id: "units",
-    title: "Бизнес-юниты Telecom",
-    type: "Бизнес-юниты",
-    owner: "Владельцы продуктов и P&L",
-    raci: "A/R",
-    x: 270,
-    y: 900,
-    w: 1260,
-    h: 95,
-    color: "#b98500",
-    fill: "#fff9e6",
-    description: "Продуктовые направления, которые используют платформенные возможности для реализации бизнес-целей.",
-    chips: ["Тарифы", "Домашний интернет", "Конвергенция", "МегаСемья", "Роуминг", "VAS продукты", "Другие сервисы"],
-    related: ["telecom-platform", "vas-platform", "teams", "business"],
-  },
-  {
-    id: "teams",
-    title: "Команды и зоны ответственности",
-    type: "Команды",
-    owner: "CPO + Platform Leads",
-    raci: "R/A/C/I",
-    x: 270,
-    y: 1025,
-    w: 1260,
-    h: 95,
-    color: palette.ink,
-    fill: "#ffffff",
-    description: "Команды Telecom, CX, VAS, платформенные и продуктовые команды распределяют ответственность по RACI.",
-    teams: [
-      ["Telecom Platform", palette.green],
-      ["CX Platform", palette.blue],
-      ["VAS Platform", palette.red],
-      ["Платформенные команды", palette.purple],
-      ["Продуктовые команды", "#30364a"],
+    description: "Ответственность CPO платформы за развитие общих возможностей и координацию команд.",
+    lines: [
+      "Управление 6–10 командами",
+      "Владение роадмапом платформы",
+      "Продуктовые решения в рамках платформы",
+      "Ответственность за KPI домена",
     ],
-    related: ["telecom-platform", "cx-platform", "vas-platform", "governance"],
+    related: ["cpo-header", "team-telecom"],
   },
   {
-    id: "api-standards",
-    title: "API-стандарты",
-    type: "Ключевая связь",
-    owner: "Platform Council",
-    raci: "A/R",
-    x: 40,
-    y: 620,
-    w: 190,
-    h: 85,
+    id: "cpo-responsibilities",
+    title: "Ответственность CPO цифрового продукта",
+    type: "Пояснение",
+    owner: "CPO цифрового продукта",
+    raci: "A",
+    x: 1700,
+    y: 240,
+    w: 196,
+    h: 520,
     color: palette.purple,
     fill: "#ffffff",
-    description: "Единые API-стандарты упрощают интеграции между платформами и переиспользование сервисов.",
-    lines: ["Единые API", "контракты", "переиспользование"],
-    related: ["integration", "telecom-platform", "vas-platform", "governance"],
-  },
-  {
-    id: "data-model",
-    title: "Единая модель данных",
-    type: "Ключевая связь",
-    owner: "CX + Data",
-    raci: "R/C",
-    x: 1580,
-    y: 650,
-    w: 190,
-    h: 85,
-    color: palette.blue,
-    fill: "#ffffff",
-    description: "Единая модель данных синхронизирует профиль, продукты, события и аналитику между доменами.",
-    lines: ["Профиль", "продукты", "события"],
-    related: ["integration", "cx-platform", "telecom-platform", "vas-platform"],
-  },
-  {
-    id: "design-system",
-    title: "Дизайн-система",
-    type: "CX-возможность",
-    owner: "CX Platform",
-    raci: "R/A",
-    x: 1580,
-    y: 765,
-    w: 190,
-    h: 75,
-    color: palette.blue,
-    fill: "#ffffff",
-    description: "Обеспечивает единый визуальный язык, компоненты и UX-паттерны для всех доменов.",
-    lines: ["компоненты", "UX-паттерны"],
-    related: ["cx-platform", "principles", "teams"],
-  },
-  {
-    id: "analytics",
-    title: "Аналитика",
-    type: "CX/Data сервис",
-    owner: "CX Platform + Data",
-    raci: "R/C",
-    x: 40,
-    y: 735,
-    w: 190,
-    h: 75,
-    color: palette.blue,
-    fill: "#ffffff",
-    description: "Измеряет воронки, события, клиентский опыт и эффективность продуктовых гипотез.",
-    lines: ["события", "воронки", "метрики"],
-    related: ["cx-platform", "business", "integration", "units"],
-  },
-  {
-    id: "partner-integration",
-    title: "Партнерские интеграции",
-    type: "VAS сервис",
-    owner: "VAS Platform",
-    raci: "R",
-    x: 40,
-    y: 840,
-    w: 190,
-    h: 80,
-    color: palette.red,
-    fill: "#ffffff",
-    description: "Подключает внешних партнеров к VAS-каталогу, платежам, статусам и аналитике.",
-    lines: ["партнеры", "статусы", "платежи"],
-    related: ["vas-platform", "api-standards", "data-model", "units"],
-  },
-  {
-    id: "tariffs-unit",
-    title: "Тарифы",
-    type: "Бизнес-юнит",
-    owner: "CPO Telecom Core",
-    raci: "A/R",
-    x: 1580,
-    y: 870,
-    w: 190,
-    h: 70,
-    color: palette.green,
-    fill: "#ffffff",
-    description: "Ключевой телеком-продуктовый юнит, связанный с каталогом, покупкой, сменой тарифа и ARPU.",
-    lines: ["каталог", "покупка", "ARPU"],
-    related: ["telecom-core", "telecom-platform", "business", "units"],
-  },
-  {
-    id: "vas-unit",
-    title: "VAS продукты",
-    type: "Бизнес-юнит",
-    owner: "CPO VAS / Partners",
-    raci: "A/R",
-    x: 1580,
-    y: 970,
-    w: 190,
-    h: 70,
-    color: palette.red,
-    fill: "#ffffff",
-    description: "Партнерские и VAS-продукты, влияющие на ARPU, монетизацию и цифровые продажи.",
-    lines: ["VAS", "партнеры", "монетизация"],
-    related: ["vas-core", "vas-platform", "partner-integration", "units"],
+    description: "Пять ключевых зон ответственности CPO цифрового продукта МегаФона.",
+    lines: [
+      "1. Формирование продуктовой стратегии",
+      "2. Управление инвестиционным портфелем",
+      "3. Баланс интересов между доменами",
+      "4. Организационное развитие",
+      "5. Единые стандарты качества и процессов",
+    ],
+    related: ["cpo-header", "telecom-platform", "cx-platform", "vas-platform"],
   },
   {
     id: "team-telecom",
-    title: "Команда Telecom Platform",
-    type: "Команда",
-    owner: "Platform Lead Telecom",
+    title: "Команда Телеком платформы",
+    type: "Команды",
+    owner: "CPO Telecom Platform",
+    raci: "R/A",
+    x: 270,
+    y: 1140,
+    w: 1180,
+    h: 200,
+    color: palette.green,
+    fill: palette.greenSoft,
+    description: "Структура продуктовых команд телеком-платформы по направлениям роста.",
+    teamTable: {
+      title: "Команда Телеком платформы",
+      directions: [
+        { label: "Лид генераторы", span: 3, color: palette.orange },
+        { label: "Профит генераторы", span: 1, color: palette.orange },
+        { label: "Удержание", span: 2, color: palette.orange },
+      ],
+      teams: [
+        "Витрины Тарифов",
+        "Стать абонентом",
+        "Домашний интернет",
+        "Монетизация в ЛК и самообслуживание",
+        "Персона — ДГП",
+        "Мега Интернет и контроль расходов",
+      ],
+    },
+    related: ["telecom-platform", "team-tariffs", "team-subscriber", "team-home-internet", "team-monetization", "team-persona", "team-mega-internet"],
+  },
+  {
+    id: "team-tariffs",
+    title: "Витрины Тарифов",
+    type: "Продуктовая команда",
+    owner: "CPO — основная линейка",
     raci: "R",
     x: 270,
-    y: 1025,
+    y: 1260,
     w: 0,
     h: 0,
     virtual: true,
-    description: "Отвечает за телеком-витрины, сценарии покупки, активацию и интеграции.",
-    related: ["telecom-platform", "telecom-core", "bogdan", "teams"],
+    description: "Команда витрин тарифов — лид-генератор.",
+    related: ["team-telecom", "cpo-main-line"],
   },
   {
-    id: "team-cx",
-    title: "Команда CX Platform",
-    type: "Команда",
-    owner: "CPO CX",
+    id: "team-subscriber",
+    title: "Стать абонентом",
+    type: "Продуктовая команда",
+    owner: "CPO — MNP, клоны, SIM",
     raci: "R",
-    x: 520,
-    y: 1025,
+    x: 470,
+    y: 1260,
     w: 0,
     h: 0,
     virtual: true,
-    description: "Отвечает за профиль, UX, дизайн-систему, коммуникации и аналитику клиентского опыта.",
-    related: ["cx-platform", "cx-core", "design-system", "teams"],
+    description: "Команда сценария «Стать абонентом» — лид-генератор.",
+    related: ["team-telecom", "cpo-mnp"],
   },
   {
-    id: "team-vas",
-    title: "Команда VAS Platform",
-    type: "Команда",
-    owner: "CPO VAS / Partners",
+    id: "team-home-internet",
+    title: "Домашний интернет",
+    type: "Продуктовая команда",
+    owner: "CPO — ДомИнтернет",
     raci: "R",
-    x: 770,
-    y: 1025,
+    x: 670,
+    y: 1260,
     w: 0,
     h: 0,
     virtual: true,
-    description: "Отвечает за VAS-каталог, подписки, рекомендации и партнерские интеграции.",
-    related: ["vas-platform", "vas-core", "partner-integration", "teams"],
+    description: "Команда домашнего интернета — лид-генератор.",
+    related: ["team-telecom", "cpo-home-internet"],
+  },
+  {
+    id: "team-monetization",
+    title: "Монетизация в ЛК и самообслуживание",
+    type: "Продуктовая команда",
+    owner: "CPO — Монетизация",
+    raci: "R",
+    x: 870,
+    y: 1260,
+    w: 0,
+    h: 0,
+    virtual: true,
+    description: "Команда монетизации — профит-генератор.",
+    related: ["team-telecom", "cpo-monetization"],
+  },
+  {
+    id: "team-persona",
+    title: "Персона — ДГП",
+    type: "Продуктовая команда",
+    owner: "CPO — Персона",
+    raci: "R",
+    x: 1070,
+    y: 1260,
+    w: 0,
+    h: 0,
+    virtual: true,
+    description: "Команда Персона — удержание.",
+    related: ["team-telecom", "cpo-persona"],
+  },
+  {
+    id: "team-mega-internet",
+    title: "Мега Интернет и контроль расходов",
+    type: "Продуктовая команда",
+    owner: "CPO — МегаИнтернет",
+    raci: "R",
+    x: 1270,
+    y: 1260,
+    w: 0,
+    h: 0,
+    virtual: true,
+    description: "Команда мобильного интернета и контроля расходов — удержание.",
+    related: ["team-telecom", "cpo-megainternet"],
   },
 ];
 
@@ -499,80 +551,12 @@ const drawText = (text, x, y, maxWidth, font, color, lineHeight = 18, align = "l
   return lines.length * lineHeight;
 };
 
-const drawCard = (node) => {
-  const isActive = state.activeId === node.id;
-  const isRelated = state.activeId && (nodeById.get(state.activeId)?.related || []).includes(node.id);
-  const isHovered = state.hoverId === node.id;
-  const isMatch = matchesQuery(node);
-  const hasQuery = Boolean(state.query);
-  const isDimmed = (state.activeId && !isActive && !isRelated) || (hasQuery && !isMatch);
-
-  ctx.save();
-  ctx.globalAlpha = isDimmed ? 0.22 : 1;
-
-  roundRect(node.x, node.y, node.w, node.h, 18);
-  ctx.fillStyle = isMatch ? palette.yellowSoft : node.fill;
-  ctx.fill();
-  ctx.lineWidth = isActive ? 5 : isRelated || isHovered || isMatch ? 3 : 1.5;
-  ctx.strokeStyle = isActive ? palette.purple : isMatch ? palette.yellow : isRelated ? palette.purple : node.color;
-  ctx.stroke();
-
-  ctx.fillStyle = node.color;
-  ctx.fillRect(node.x, node.y, node.w, Math.min(8, node.h));
-
-  const pad = 18;
-  let cursorY = node.y + 18;
-  drawText(node.title, node.x + node.w / 2, cursorY, node.w - pad * 2, "800 24px Inter, sans-serif", node.color, 28, "center");
-  cursorY += node.title.length > 24 ? 58 : 34;
-
-  if (node.lines) {
-    node.lines.forEach((line) => {
-      cursorY += drawPillLine(line, node.x + pad, cursorY, node.w - pad * 2, node.color);
-    });
-  }
-
-  if (node.sections) {
-    node.sections.forEach((section) => {
-      cursorY += 8;
-      drawText(section.title, node.x + node.w / 2, cursorY, node.w - pad * 2, "800 15px Inter, sans-serif", node.color, 18, "center");
-      cursorY += 26;
-      drawMiniGrid(section.items, node.x + pad, cursorY, node.w - pad * 2, node.color);
-      cursorY += Math.ceil(section.items.length / 3) * 44 + 12;
-    });
-  }
-
-  if (node.chips) {
-    drawChipRow(node.chips, node.x + pad, cursorY + 6, node.w - pad * 2, node.color);
-  }
-
-  if (node.teams) {
-    drawTeamRow(node.teams, node.x + pad, cursorY + 6, node.w - pad * 2);
-  }
-
-  ctx.restore();
-};
-
-const drawPillLine = (text, x, y, width, color) => {
-  roundRect(x, y, width, 28, 9);
-  ctx.fillStyle = "#ffffff";
-  ctx.fill();
-  ctx.strokeStyle = "rgba(100, 112, 132, 0.22)";
-  ctx.lineWidth = 1;
-  ctx.stroke();
-  ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(x + 13, y + 14, 4, 0, Math.PI * 2);
-  ctx.fill();
-  drawText(text, x + 24, y + 6, width - 30, "700 13px Inter, sans-serif", palette.ink, 16);
-  return 34;
-};
-
-const drawMiniGrid = (items, x, y, width, color) => {
+const drawMiniGrid = (items, x, y, width, color, cols = 3) => {
   const gap = 8;
-  const cellW = (width - gap * 2) / 3;
+  const cellW = (width - gap * (cols - 1)) / cols;
   items.forEach((item, index) => {
-    const col = index % 3;
-    const row = Math.floor(index / 3);
+    const col = index % cols;
+    const row = Math.floor(index / cols);
     const cellX = x + col * (cellW + gap);
     const cellY = y + row * 44;
     roundRect(cellX, cellY, cellW, 34, 9);
@@ -587,111 +571,185 @@ const drawMiniGrid = (items, x, y, width, color) => {
     ctx.fill();
     drawText(item, cellX + 20, cellY + 8, cellW - 26, "700 11px Inter, sans-serif", palette.ink, 13);
   });
+  return Math.ceil(items.length / cols) * 44;
 };
 
-const drawChipRow = (items, x, y, width, color) => {
-  const gap = 8;
-  const cellW = (width - gap * (items.length - 1)) / items.length;
-  items.forEach((item, index) => {
-    const cellX = x + index * (cellW + gap);
-    roundRect(cellX, y, cellW, 44, 10);
-    ctx.fillStyle = "#ffffff";
+const drawPillLine = (text, x, y, width, color) => {
+  roundRect(x, y, width, 28, 9);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(100, 112, 132, 0.22)";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x + 13, y + 14, 4, 0, Math.PI * 2);
+  ctx.fill();
+  drawText(text, x + 24, y + 6, width - 30, "700 12px Inter, sans-serif", palette.ink, 16);
+  return 34;
+};
+
+const drawTeamTable = (table, x, y, width) => {
+  const pad = 16;
+  const teamCount = table.teams.length;
+  const cellW = (width - pad * 2 - 10 * (teamCount - 1)) / teamCount;
+
+  drawText(table.title, x + width / 2, y + 14, width - pad * 2, "900 18px Inter, sans-serif", palette.green, 22, "center");
+
+  const dirY = y + 52;
+  let dirX = x + pad;
+  table.directions.forEach((dir) => {
+    const dirW = cellW * dir.span + 10 * (dir.span - 1);
+    roundRect(dirX, dirY, dirW, 38, 10);
+    ctx.fillStyle = dir.color;
     ctx.fill();
-    ctx.strokeStyle = "rgba(100, 112, 132, 0.22)";
-    ctx.stroke();
-    drawText(item, cellX + cellW / 2, y + 9, cellW - 12, "800 11px Inter, sans-serif", color, 13, "center");
+    drawText(dir.label, dirX + dirW / 2, dirY + 10, dirW - 12, "800 12px Inter, sans-serif", "#ffffff", 14, "center");
+    dirX += dirW + 10;
+  });
+
+  const teamY = dirY + 50;
+  table.teams.forEach((team, index) => {
+    const cellX = x + pad + index * (cellW + 10);
+    roundRect(cellX, teamY, cellW, 52, 12);
+    ctx.fillStyle = palette.green;
+    ctx.fill();
+    drawText(team, cellX + cellW / 2, teamY + 10, cellW - 14, "800 11px Inter, sans-serif", "#ffffff", 13, "center");
   });
 };
 
-const drawTeamRow = (teams, x, y, width) => {
-  const gap = 10;
-  const cellW = (width - gap * (teams.length - 1)) / teams.length;
-  teams.forEach(([label, color], index) => {
-    const cellX = x + index * (cellW + gap);
-    roundRect(cellX, y, cellW, 46, 12);
-    ctx.fillStyle = color;
-    ctx.fill();
-    drawText(label, cellX + cellW / 2, y + 12, cellW - 16, "800 12px Inter, sans-serif", "#ffffff", 14, "center");
-  });
-};
-
-const drawArrow = (from, to, color = palette.purple) => {
-  const startX = from.x + from.w;
-  const startY = from.y + from.h / 2;
-  const endX = to.x;
-  const endY = to.y + to.h / 2;
-  const midX = (startX + endX) / 2;
-
+const drawDownArrow = (fromX, fromY, toX, toY, color = palette.ink) => {
   ctx.save();
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
-  ctx.lineWidth = 2;
-  ctx.setLineDash([8, 8]);
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
-  ctx.moveTo(startX, startY);
-  ctx.bezierCurveTo(midX, startY, midX, endY, endX, endY);
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(toX, toY);
   ctx.stroke();
-  ctx.setLineDash([]);
   ctx.beginPath();
-  ctx.moveTo(endX, endY);
-  ctx.lineTo(endX - 10, endY - 6);
-  ctx.lineTo(endX - 10, endY + 6);
+  ctx.moveTo(toX, toY);
+  ctx.lineTo(toX - 7, toY - 10);
+  ctx.lineTo(toX + 7, toY - 10);
   ctx.closePath();
   ctx.fill();
   ctx.restore();
 };
 
-const drawHeader = () => {
-  const gradient = ctx.createLinearGradient(620, 20, 1180, 20);
-  gradient.addColorStop(0, "#3514a6");
-  gradient.addColorStop(1, "#5a2ee8");
-  roundRect(585, 20, 630, 54, 12);
-  ctx.fillStyle = gradient;
+const drawCard = (node) => {
+  const isActive = state.activeId === node.id;
+  const isRelated = state.activeId && (nodeById.get(state.activeId)?.related || []).includes(node.id);
+  const isHovered = state.hoverId === node.id;
+  const isMatch = matchesQuery(node);
+  const hasQuery = Boolean(state.query);
+  const isDimmed = (state.activeId && !isActive && !isRelated) || (hasQuery && !isMatch);
+
+  ctx.save();
+  ctx.globalAlpha = isDimmed ? 0.22 : 1;
+
+  roundRect(node.x, node.y, node.w, node.h, node.teamTable ? 16 : 14);
+  ctx.fillStyle = isMatch ? palette.yellowSoft : node.fill;
   ctx.fill();
-  drawText("CPO", 900, 30, 600, "900 25px Inter, sans-serif", "#ffffff", 28, "center");
-  drawText("Цифровой продукт МегаФон: личный кабинет", 900, 56, 600, "700 13px Inter, sans-serif", "#ffffff", 15, "center");
+  ctx.lineWidth = isActive ? 4 : isRelated || isHovered || isMatch ? 3 : 2;
+  ctx.strokeStyle = isActive ? palette.purple : isMatch ? palette.yellow : isRelated ? palette.purple : node.color;
+  ctx.stroke();
+
+  if (!node.teamTable) {
+    ctx.fillStyle = node.color;
+    ctx.fillRect(node.x, node.y, node.w, 6);
+  }
+
+  const pad = 14;
+  let cursorY = node.y + (node.teamTable ? 0 : 16);
+
+  if (node.teamTable) {
+    drawTeamTable(node.teamTable, node.x, node.y, node.w);
+    ctx.restore();
+    return;
+  }
+
+  const titleFont =
+    node.w > 300 ? "900 20px Inter, sans-serif" : node.h < 60 ? "800 13px Inter, sans-serif" : "800 15px Inter, sans-serif";
+  const titleAlign = node.w > 300 && !node.lines ? "center" : "left";
+  const titleX = titleAlign === "center" ? node.x + node.w / 2 : node.x + pad;
+  drawText(node.title, titleX, cursorY, node.w - pad * 2, titleFont, node.color, node.h < 60 ? 16 : 22, titleAlign);
+  cursorY += node.h < 60 ? 34 : node.subtitle ? 28 : 30;
+
+  if (node.subtitle) {
+    cursorY += drawText(
+      node.subtitle,
+      node.x + node.w / 2,
+      cursorY,
+      node.w - pad * 2,
+      "700 11px Inter, sans-serif",
+      palette.muted,
+      14,
+      "center",
+    );
+    cursorY += 8;
+  }
+
+  if (node.lines) {
+    node.lines.forEach((line) => {
+      cursorY += drawPillLine(line, node.x + pad, cursorY, node.w - pad * 2, node.color) + 4;
+    });
+  }
+
+  if (node.sections) {
+    node.sections.forEach((section) => {
+      cursorY += 6;
+      drawText(
+        section.title,
+        node.x + node.w / 2,
+        cursorY,
+        node.w - pad * 2,
+        "800 14px Inter, sans-serif",
+        node.color,
+        17,
+        "center",
+      );
+      cursorY += 24;
+      const cols = section.items.length <= 6 ? 2 : 3;
+      cursorY += drawMiniGrid(section.items, node.x + pad, cursorY, node.w - pad * 2, node.color, cols) + 10;
+    });
+  }
+
+  ctx.restore();
 };
 
-const drawRaciLegend = () => {
-  const y = 1125;
-  const items = [
-    ["R", "Responsible", palette.green],
-    ["A", "Accountable", palette.red],
-    ["C", "Consulted", "#30364a"],
-    ["I", "Informed", palette.blue],
-  ];
-
-  drawText("Легенда RACI", 40, y, 160, "900 15px Inter, sans-serif", palette.purple, 18);
-  items.forEach(([letter, label, color], index) => {
-    const x = 190 + index * 190;
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(x, y + 10, 13, 0, Math.PI * 2);
-    ctx.fill();
-    drawText(letter, x, y + 2, 26, "900 13px Inter, sans-serif", "#ffffff", 16, "center");
-    drawText(label, x + 24, y + 1, 150, "700 13px Inter, sans-serif", palette.ink, 16);
+const drawCpoArrows = () => {
+  const telecom = nodeById.get("telecom-platform");
+  const cpoNodes = nodes.filter((n) => n.id.startsWith("cpo-") && n.id !== "cpo-header" && !n.virtual);
+  cpoNodes.forEach((cpo) => {
+    drawDownArrow(cpo.x + cpo.w / 2, cpo.y + cpo.h, telecom.x + telecom.w / 2, telecom.y, palette.ink);
   });
 };
 
-function render() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+const drawPlatformLabel = () => {
+  roundRect(24, 158, 180, 36, 10);
+  ctx.fillStyle = palette.purpleSoft;
+  ctx.fill();
+  ctx.strokeStyle = palette.purple;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  drawText("Платформа", 24 + 90, 167, 160, "900 14px Inter, sans-serif", palette.purple, 16, "center");
+};
 
-  drawHeader();
-  drawArrow(nodeById.get("business"), nodeById.get("telecom-platform"), palette.green);
-  drawArrow(nodeById.get("telecom-platform"), nodeById.get("cx-platform"), "rgba(74, 31, 199, 0.34)");
-  drawArrow(nodeById.get("cx-platform"), nodeById.get("vas-platform"), "rgba(74, 31, 199, 0.34)");
+function render() {
+  ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+  drawPlatformLabel();
+  drawCpoArrows();
 
   visibleNodes.forEach(drawCard);
-  drawRaciLegend();
 }
 
 const getCanvasPoint = (event) => {
   const rect = canvas.getBoundingClientRect();
   return {
-    x: ((event.clientX - rect.left) / rect.width) * canvas.width,
-    y: ((event.clientY - rect.top) / rect.height) * canvas.height,
+    x: ((event.clientX - rect.left) / rect.width) * CANVAS_W,
+    y: ((event.clientY - rect.top) / rect.height) * CANVAS_H,
   };
 };
 
@@ -704,13 +762,14 @@ const matchesQuery = (node) => {
   if (!state.query) return false;
   const haystack = [
     node.title,
+    node.subtitle || "",
     node.type,
     node.owner,
     node.description,
     ...(node.lines || []),
-    ...(node.chips || []),
     ...(node.sections || []).flatMap((section) => [section.title, ...section.items]),
-    ...(node.teams || []).map(([label]) => label),
+    ...(node.teamTable?.teams || []),
+    ...(node.teamTable?.directions || []).map((d) => d.label),
   ]
     .join(" ")
     .toLocaleLowerCase("ru");
