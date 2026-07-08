@@ -1,5 +1,12 @@
 const canvas = document.querySelector("#cpo-canvas");
 const ctx = canvas.getContext("2d");
+const exportScale = window.__EXPORT_SCALE__ || 1;
+
+if (exportScale !== 1) {
+  canvas.width = 1800 * exportScale;
+  canvas.height = 1160 * exportScale;
+  ctx.scale(exportScale, exportScale);
+}
 const searchInput = document.querySelector("#scheme-search");
 const resetView = document.querySelector("#reset-view");
 const canvasStatus = document.querySelector("#canvas-status");
