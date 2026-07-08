@@ -4,7 +4,18 @@
 
 ## Как открыть
 
-Откройте `index.html` в браузере или запустите любой статический сервер в корне репозитория.
+**Онлайн (после включения GitHub Pages):** https://bbenicore-web.github.io/bencode/
+
+Локально: откройте `index.html` в браузере или запустите любой статический сервер в корне репозитория.
+
+### Публикация по ссылке
+
+1. Откройте [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages)
+2. В **Build and deployment → Source** выберите **Deploy from a branch**
+3. Branch: `gh-pages`, folder: `/ (root)` → **Save**
+4. Через 1–2 минуты схема будет доступна по адресу выше
+
+При каждом push в `main` ветка `gh-pages` обновляется автоматически через GitHub Actions.
 
 ## Возможности
 
