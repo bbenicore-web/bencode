@@ -141,20 +141,22 @@ function platformCard(x, y, w, h, color, fill, title, subtitle, owner, sections)
   let cy = y + 83;
   for (const section of sections) {
     sectionTitle(x + 12, cy, w - 24, section.title, color);
-    cy += 14;
+    cy += section.titleGap || 14;
     const cols = section.cols || 3;
-    const gap = 9;
+    const gap = section.gap ?? 9;
+    const rowGap = section.rowGap ?? 9;
     const itemW = (w - 30 - gap * (cols - 1)) / cols;
     const itemH = section.itemH || 28;
     section.items.forEach((item, index) => {
       const col = index % cols;
       const row = Math.floor(index / cols);
-      pillItem(x + 15 + col * (itemW + gap), cy + row * (itemH + 9), itemW, itemH, item, color, {
+      pillItem(x + 15 + col * (itemW + gap), cy + row * (itemH + rowGap), itemW, itemH, item, color, {
         size: section.size || 7.1,
+        lineHeight: section.lineHeight,
         maxChars: section.maxChars || Math.floor((itemW - 22) / 5.1),
       });
     });
-    cy += Math.ceil(section.items.length / cols) * (itemH + 9) + 30;
+    cy += Math.ceil(section.items.length / cols) * itemH + Math.max(0, Math.ceil(section.items.length / cols) - 1) * rowGap + (section.afterGap ?? 30);
   }
 }
 
@@ -237,10 +239,10 @@ line(206, 210, 250, 210, { stroke: colors.green, strokeWidth: 1.2, arrow: true, 
 line(206, 632, 250, 632, { stroke: colors.green, strokeWidth: 1.1, dash: "4 4", arrow: true, arrowColor: "green" });
 
 platformCard(250, 135, 345, 515, colors.green, colors.greenSoft, "TELECOM ПЛАТФОРМА", "(ПЛАТФОРМА TELECOM ONBITAL)", "Ответственность Богдан (Platform Lead Telecom)", [
-  { title: "ВИТРИНЫ И НАВИГАЦИЯ TELECOM", cols: 6, itemH: 44, maxChars: 10, size: 6.6, items: ["Сквозная витрина", "Каталог тарифов", "Карточки тарифов", "Корзина услуг", "Поиск", "Корзина Telecom"] },
-  { title: "СКВОЗНЫЕ TELECOM-СЦЕНАРИИ", cols: 6, itemH: 44, maxChars: 11, size: 6.4, items: ["Купить SIM / eSIM", "Перенос номера (MNP)", "Консьерж", "Подключение услуг", "Домашний интернет", "МегаСемья", "Счётчики ГБ и минут", "Расходы", "Абонентская плата", "Контроль расходов", "Монетизация маржи", "МегаСилы"] },
-  { title: "СЕРВИСЫ ПЛАТФОРМЫ TELECOM", cols: 5, itemH: 44, maxChars: 12, size: 6.5, items: ["Авторизация и профиль", "Уведомления (push, in-App)", "API Gateway", "Биллинг и платежи", "Настройка безопасности"] },
-  { title: "ЕДИНЫЙ ОПЫТ ТЕЛЕКОМА", cols: 3, itemH: 33, maxChars: 18, size: 6.5, items: ["Единая навигация и сценарии", "Единый профиль клиента", "Семейные сценарии (Семья, Консьерж)", "Единые продукты и монетизация", "Единые сообщения и коммуникации", "Качество и персонализация"] },
+  { title: "ВИТРИНЫ И НАВИГАЦИЯ TELECOM", cols: 6, itemH: 39, gap: 7, rowGap: 7, titleGap: 13, afterGap: 24, maxChars: 10, size: 6.15, lineHeight: 7.2, items: ["Сквозная витрина", "Каталог тарифов", "Карточки тарифов", "Корзина услуг", "Поиск", "Корзина Telecom"] },
+  { title: "СКВОЗНЫЕ TELECOM-СЦЕНАРИИ", cols: 6, itemH: 39, gap: 7, rowGap: 7, titleGap: 13, afterGap: 24, maxChars: 11, size: 6.05, lineHeight: 7.1, items: ["Купить SIM / eSIM", "Перенос номера (MNP)", "Консьерж", "Подключение услуг", "Домашний интернет", "МегаСемья", "Счётчики ГБ и минут", "Расходы", "Абонентская плата", "Контроль расходов", "Монетизация маржи", "МегаСилы"] },
+  { title: "СЕРВИСЫ ПЛАТФОРМЫ TELECOM", cols: 5, itemH: 38, gap: 8, rowGap: 7, titleGap: 13, afterGap: 24, maxChars: 12, size: 6.05, lineHeight: 7.1, items: ["Авторизация и профиль", "Уведомления (push, in-App)", "API Gateway", "Биллинг и платежи", "Настройка безопасности"] },
+  { title: "ЕДИНЫЙ ОПЫТ ТЕЛЕКОМА", cols: 3, itemH: 30, gap: 8, rowGap: 7, titleGap: 13, afterGap: 0, maxChars: 18, size: 6.05, lineHeight: 7.1, items: ["Единая навигация и сценарии", "Единый профиль клиента", "Семейные сценарии (Семья, Консьерж)", "Единые продукты и монетизация", "Единые сообщения и коммуникации", "Качество и персонализация"] },
 ]);
 
 platformCard(610, 135, 335, 515, colors.blue, colors.blueSoft, "CX ПЛАТФОРМА", "(КРОСС-ДОМЕННАЯ ПЛАТФОРМА КЛИЕНТСКОГО ОПЫТА)", "Ответственность CPO CX", [

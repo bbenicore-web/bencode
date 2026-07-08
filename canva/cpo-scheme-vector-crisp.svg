@@ -77,119 +77,119 @@
 <text x="422.5" y="175" font-family="Inter, Arial, Helvetica, sans-serif" font-size="8.4" font-weight="900" fill="#18855a" text-anchor="middle" letter-spacing="0">(ПЛАТФОРМА TELECOM ONBITAL)</text>
 <text x="422.5" y="190" font-family="Inter, Arial, Helvetica, sans-serif" font-size="7.6" font-weight="800" fill="#111827" text-anchor="middle" letter-spacing="0">Ответственность Богдан (Platform Lead Telecom)</text>
 <text x="422.5" y="218" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">ВИТРИНЫ И НАВИГАЦИЯ TELECOM</text>
-<rect x="265" y="232" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="279" cy="254" r="3.2" fill="#18855a"/>
-<text x="288" y="252" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Сквозная</text>
-<text x="288" y="260.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">витрина</text>
-<rect x="319" y="232" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="333" cy="254" r="3.2" fill="#18855a"/>
-<text x="342" y="252" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Каталог</text>
-<text x="342" y="260.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">тарифов</text>
-<rect x="373" y="232" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="387" cy="254" r="3.2" fill="#18855a"/>
-<text x="396" y="252" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Карточки</text>
-<text x="396" y="260.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">тарифов</text>
-<rect x="427" y="232" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="441" cy="254" r="3.2" fill="#18855a"/>
-<text x="450" y="252" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Корзина</text>
-<text x="450" y="260.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">услуг</text>
-<rect x="481" y="232" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="495" cy="254" r="3.2" fill="#18855a"/>
-<text x="504" y="257.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Поиск</text>
-<rect x="535" y="232" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="549" cy="254" r="3.2" fill="#18855a"/>
-<text x="558" y="252" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Корзина</text>
-<text x="558" y="260.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.6" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Telecom</text>
-<text x="422.5" y="315" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">СКВОЗНЫЕ TELECOM-СЦЕНАРИИ</text>
-<rect x="265" y="329" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="279" cy="351" r="3.2" fill="#18855a"/>
-<text x="288" y="349" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Купить SIM</text>
-<text x="288" y="357.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">/ eSIM</text>
-<rect x="319" y="329" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="333" cy="351" r="3.2" fill="#18855a"/>
-<text x="342" y="349" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Перенос</text>
-<text x="342" y="357.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">номера</text>
-<rect x="373" y="329" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="387" cy="351" r="3.2" fill="#18855a"/>
-<text x="396" y="354.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Консьерж</text>
-<rect x="427" y="329" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="441" cy="351" r="3.2" fill="#18855a"/>
-<text x="450" y="349" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Подключение</text>
-<text x="450" y="357.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">услуг</text>
-<rect x="481" y="329" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="495" cy="351" r="3.2" fill="#18855a"/>
-<text x="504" y="349" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Домашний</text>
-<text x="504" y="357.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">интернет</text>
-<rect x="535" y="329" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="549" cy="351" r="3.2" fill="#18855a"/>
-<text x="558" y="354.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">МегаСемья</text>
-<rect x="265" y="382" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="279" cy="404" r="3.2" fill="#18855a"/>
-<text x="288" y="402" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Счётчики ГБ</text>
-<text x="288" y="410.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и минут</text>
-<rect x="319" y="382" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="333" cy="404" r="3.2" fill="#18855a"/>
-<text x="342" y="407.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Расходы</text>
-<rect x="373" y="382" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="387" cy="404" r="3.2" fill="#18855a"/>
-<text x="396" y="402" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Абонентская</text>
-<text x="396" y="410.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">плата</text>
-<rect x="427" y="382" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="441" cy="404" r="3.2" fill="#18855a"/>
-<text x="450" y="402" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Контроль</text>
-<text x="450" y="410.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">расходов</text>
-<rect x="481" y="382" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="495" cy="404" r="3.2" fill="#18855a"/>
-<text x="504" y="402" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Монетизация</text>
-<text x="504" y="410.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">маржи</text>
-<rect x="535" y="382" width="45" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="549" cy="404" r="3.2" fill="#18855a"/>
-<text x="558" y="407.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.4" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">МегаСилы</text>
-<text x="422.5" y="465" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">СЕРВИСЫ ПЛАТФОРМЫ TELECOM</text>
-<rect x="265" y="479" width="55.8" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="279" cy="501" r="3.2" fill="#18855a"/>
-<text x="288" y="499" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Авторизация</text>
-<text x="288" y="507.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и профиль</text>
-<rect x="329.8" y="479" width="55.8" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="343.8" cy="501" r="3.2" fill="#18855a"/>
-<text x="352.8" y="499" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Уведомления</text>
-<text x="352.8" y="507.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">(push,</text>
-<rect x="394.6" y="479" width="55.8" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="408.6" cy="501" r="3.2" fill="#18855a"/>
-<text x="417.6" y="504.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">API Gateway</text>
-<rect x="459.4" y="479" width="55.8" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="473.4" cy="501" r="3.2" fill="#18855a"/>
-<text x="482.4" y="499" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Биллинг и</text>
-<text x="482.4" y="507.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">платежи</text>
-<rect x="524.2" y="479" width="55.8" height="44" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="538.2" cy="501" r="3.2" fill="#18855a"/>
-<text x="547.2" y="499" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Настройка</text>
-<text x="547.2" y="507.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">безопасности</text>
-<text x="422.5" y="562" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">ЕДИНЫЙ ОПЫТ ТЕЛЕКОМА</text>
-<rect x="265" y="576" width="99" height="33" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="279" cy="592.5" r="3.2" fill="#18855a"/>
-<text x="288" y="590.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единая навигация и</text>
-<text x="288" y="598.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">сценарии</text>
-<rect x="373" y="576" width="99" height="33" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="387" cy="592.5" r="3.2" fill="#18855a"/>
-<text x="396" y="590.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единый профиль</text>
-<text x="396" y="598.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">клиента</text>
-<rect x="481" y="576" width="99" height="33" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="495" cy="592.5" r="3.2" fill="#18855a"/>
-<text x="504" y="590.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Семейные сценарии</text>
-<text x="504" y="598.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">(Семья, Консьерж)</text>
-<rect x="265" y="618" width="99" height="33" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="279" cy="634.5" r="3.2" fill="#18855a"/>
-<text x="288" y="632.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единые продукты и</text>
-<text x="288" y="640.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">монетизация</text>
-<rect x="373" y="618" width="99" height="33" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="387" cy="634.5" r="3.2" fill="#18855a"/>
-<text x="396" y="632.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единые сообщения и</text>
-<text x="396" y="640.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">коммуникации</text>
-<rect x="481" y="618" width="99" height="33" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="495" cy="634.5" r="3.2" fill="#18855a"/>
-<text x="504" y="632.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Качество и</text>
-<text x="504" y="640.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.5" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">персонализация</text>
+<rect x="265" y="231" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="279" cy="250.5" r="3.2" fill="#18855a"/>
+<text x="288" y="248.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Сквозная</text>
+<text x="288" y="255.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">витрина</text>
+<rect x="318.6666666666667" y="231" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="332.6666666666667" cy="250.5" r="3.2" fill="#18855a"/>
+<text x="341.6666666666667" y="248.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Каталог</text>
+<text x="341.6666666666667" y="255.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">тарифов</text>
+<rect x="372.3333333333333" y="231" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="386.3333333333333" cy="250.5" r="3.2" fill="#18855a"/>
+<text x="395.3333333333333" y="248.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Карточки</text>
+<text x="395.3333333333333" y="255.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">тарифов</text>
+<rect x="426" y="231" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="440" cy="250.5" r="3.2" fill="#18855a"/>
+<text x="449" y="248.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Корзина</text>
+<text x="449" y="255.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">услуг</text>
+<rect x="479.66666666666663" y="231" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="493.66666666666663" cy="250.5" r="3.2" fill="#18855a"/>
+<text x="502.66666666666663" y="253.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Поиск</text>
+<rect x="533.3333333333333" y="231" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="547.3333333333333" cy="250.5" r="3.2" fill="#18855a"/>
+<text x="556.3333333333333" y="248.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Корзина</text>
+<text x="556.3333333333333" y="255.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.15" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Telecom</text>
+<text x="422.5" y="294" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">СКВОЗНЫЕ TELECOM-СЦЕНАРИИ</text>
+<rect x="265" y="307" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="279" cy="326.5" r="3.2" fill="#18855a"/>
+<text x="288" y="324.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Купить SIM</text>
+<text x="288" y="331.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">/ eSIM</text>
+<rect x="318.6666666666667" y="307" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="332.6666666666667" cy="326.5" r="3.2" fill="#18855a"/>
+<text x="341.6666666666667" y="324.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Перенос</text>
+<text x="341.6666666666667" y="331.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">номера</text>
+<rect x="372.3333333333333" y="307" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="386.3333333333333" cy="326.5" r="3.2" fill="#18855a"/>
+<text x="395.3333333333333" y="329.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Консьерж</text>
+<rect x="426" y="307" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="440" cy="326.5" r="3.2" fill="#18855a"/>
+<text x="449" y="324.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Подключение</text>
+<text x="449" y="331.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">услуг</text>
+<rect x="479.66666666666663" y="307" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="493.66666666666663" cy="326.5" r="3.2" fill="#18855a"/>
+<text x="502.66666666666663" y="324.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Домашний</text>
+<text x="502.66666666666663" y="331.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">интернет</text>
+<rect x="533.3333333333333" y="307" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="547.3333333333333" cy="326.5" r="3.2" fill="#18855a"/>
+<text x="556.3333333333333" y="329.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">МегаСемья</text>
+<rect x="265" y="353" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="279" cy="372.5" r="3.2" fill="#18855a"/>
+<text x="288" y="370.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Счётчики ГБ</text>
+<text x="288" y="377.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и минут</text>
+<rect x="318.6666666666667" y="353" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="332.6666666666667" cy="372.5" r="3.2" fill="#18855a"/>
+<text x="341.6666666666667" y="375.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Расходы</text>
+<rect x="372.3333333333333" y="353" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="386.3333333333333" cy="372.5" r="3.2" fill="#18855a"/>
+<text x="395.3333333333333" y="370.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Абонентская</text>
+<text x="395.3333333333333" y="377.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">плата</text>
+<rect x="426" y="353" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="440" cy="372.5" r="3.2" fill="#18855a"/>
+<text x="449" y="370.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Контроль</text>
+<text x="449" y="377.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">расходов</text>
+<rect x="479.66666666666663" y="353" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="493.66666666666663" cy="372.5" r="3.2" fill="#18855a"/>
+<text x="502.66666666666663" y="370.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Монетизация</text>
+<text x="502.66666666666663" y="377.6" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">маржи</text>
+<rect x="533.3333333333333" y="353" width="46.666666666666664" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="547.3333333333333" cy="372.5" r="3.2" fill="#18855a"/>
+<text x="556.3333333333333" y="375.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">МегаСилы</text>
+<text x="422.5" y="416" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">СЕРВИСЫ ПЛАТФОРМЫ TELECOM</text>
+<rect x="265" y="429" width="56.6" height="38" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="279" cy="448" r="3.2" fill="#18855a"/>
+<text x="288" y="446" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Авторизация</text>
+<text x="288" y="453.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и профиль</text>
+<rect x="329.6" y="429" width="56.6" height="38" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="343.6" cy="448" r="3.2" fill="#18855a"/>
+<text x="352.6" y="446" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Уведомления</text>
+<text x="352.6" y="453.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">(push,</text>
+<rect x="394.2" y="429" width="56.6" height="38" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="408.2" cy="448" r="3.2" fill="#18855a"/>
+<text x="417.2" y="451.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">API Gateway</text>
+<rect x="458.79999999999995" y="429" width="56.6" height="38" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="472.79999999999995" cy="448" r="3.2" fill="#18855a"/>
+<text x="481.79999999999995" y="446" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Биллинг и</text>
+<text x="481.79999999999995" y="453.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">платежи</text>
+<rect x="523.4" y="429" width="56.6" height="38" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="537.4" cy="448" r="3.2" fill="#18855a"/>
+<text x="546.4" y="446" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Настройка</text>
+<text x="546.4" y="453.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">безопасности</text>
+<text x="422.5" y="491" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#18855a" text-anchor="middle" letter-spacing="0">ЕДИНЫЙ ОПЫТ ТЕЛЕКОМА</text>
+<rect x="265" y="504" width="99.66666666666667" height="30" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="279" cy="519" r="3.2" fill="#18855a"/>
+<text x="288" y="517" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единая навигация и</text>
+<text x="288" y="524.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">сценарии</text>
+<rect x="372.6666666666667" y="504" width="99.66666666666667" height="30" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="386.6666666666667" cy="519" r="3.2" fill="#18855a"/>
+<text x="395.6666666666667" y="517" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единый профиль</text>
+<text x="395.6666666666667" y="524.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">клиента</text>
+<rect x="480.33333333333337" y="504" width="99.66666666666667" height="30" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="494.33333333333337" cy="519" r="3.2" fill="#18855a"/>
+<text x="503.33333333333337" y="517" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Семейные сценарии</text>
+<text x="503.33333333333337" y="524.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">(Семья, Консьерж)</text>
+<rect x="265" y="541" width="99.66666666666667" height="30" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="279" cy="556" r="3.2" fill="#18855a"/>
+<text x="288" y="554" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единые продукты и</text>
+<text x="288" y="561.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">монетизация</text>
+<rect x="372.6666666666667" y="541" width="99.66666666666667" height="30" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="386.6666666666667" cy="556" r="3.2" fill="#18855a"/>
+<text x="395.6666666666667" y="554" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единые сообщения и</text>
+<text x="395.6666666666667" y="561.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">коммуникации</text>
+<rect x="480.33333333333337" y="541" width="99.66666666666667" height="30" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="494.33333333333337" cy="556" r="3.2" fill="#18855a"/>
+<text x="503.33333333333337" y="554" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Качество и</text>
+<text x="503.33333333333337" y="561.1" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.05" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">персонализация</text>
 <rect x="610" y="135" width="335" height="515" rx="10" fill="#f1f6ff" stroke="#245be8" stroke-width="1.35" opacity="1"/>
 <text x="777.5" y="159" font-family="Inter, Arial, Helvetica, sans-serif" font-size="16" font-weight="950" fill="#245be8" text-anchor="middle" letter-spacing="0">CX ПЛАТФОРМА</text>
 <text x="777.5" y="175" font-family="Inter, Arial, Helvetica, sans-serif" font-size="8.4" font-weight="900" fill="#245be8" text-anchor="middle" letter-spacing="0">(КРОСС-ДОМЕННАЯ ПЛАТФОРМА КЛИЕНТСКОГО ОПЫТА)</text>
@@ -224,60 +224,60 @@
 <rect x="834.3333333333334" y="334" width="95.66666666666667" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
 <circle cx="848.3333333333334" cy="355" r="3.2" fill="#245be8"/>
 <text x="857.3333333333334" y="358.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.7" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">UI-компоненты</text>
-<text x="777.5" y="415" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#245be8" text-anchor="middle" letter-spacing="0">СЕРВИСЫ CX ПЛАТФОРМЫ</text>
-<rect x="625" y="429" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="639" cy="450.5" r="3.2" fill="#245be8"/>
-<text x="648" y="448.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Авторизация</text>
-<text x="648" y="456.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и профиль</text>
-<rect x="703.5" y="429" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="717.5" cy="450.5" r="3.2" fill="#245be8"/>
-<text x="726.5" y="448.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Уведомления</text>
-<text x="726.5" y="456.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">(Push,</text>
-<rect x="782" y="429" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="796" cy="450.5" r="3.2" fill="#245be8"/>
-<text x="805" y="448.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Коммуникации</text>
-<text x="805" y="456.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и сообщения</text>
-<rect x="860.5" y="429" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="874.5" cy="450.5" r="3.2" fill="#245be8"/>
-<text x="883.5" y="448.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Аналитика и</text>
-<text x="883.5" y="456.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">события</text>
-<rect x="625" y="481" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="639" cy="502.5" r="3.2" fill="#245be8"/>
-<text x="648" y="500.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Эксперименты</text>
-<text x="648" y="508.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">A/B тесты</text>
-<rect x="703.5" y="481" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="717.5" cy="502.5" r="3.2" fill="#245be8"/>
-<text x="726.5" y="500.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Feature</text>
-<text x="726.5" y="508.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Flags и</text>
-<rect x="782" y="481" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="796" cy="502.5" r="3.2" fill="#245be8"/>
-<text x="805" y="500.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Контент и</text>
-<text x="805" y="508.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">модерация</text>
-<text x="777.5" y="563" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#245be8" text-anchor="middle" letter-spacing="0">ЕДИНЫЕ ПРИНЦИПЫ CX</text>
-<rect x="625" y="577" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="639" cy="596.5" r="3.2" fill="#245be8"/>
-<text x="648" y="594.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единая система</text>
-<text x="648" y="602.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">взаимодействия</text>
-<rect x="729.6666666666666" y="577" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="743.6666666666666" cy="596.5" r="3.2" fill="#245be8"/>
-<text x="752.6666666666666" y="594.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единый визуальный</text>
-<text x="752.6666666666666" y="602.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">язык и</text>
-<rect x="834.3333333333334" y="577" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="848.3333333333334" cy="596.5" r="3.2" fill="#245be8"/>
-<text x="857.3333333333334" y="594.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Доступность и</text>
-<text x="857.3333333333334" y="602.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">удобство</text>
-<rect x="625" y="625" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="639" cy="644.5" r="3.2" fill="#245be8"/>
-<text x="648" y="642.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Кросс-канальность</text>
-<text x="648" y="650.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и омниканальность</text>
-<rect x="729.6666666666666" y="625" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="743.6666666666666" cy="644.5" r="3.2" fill="#245be8"/>
-<text x="752.6666666666666" y="642.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Персонализированный</text>
-<text x="752.6666666666666" y="650.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">опыт</text>
-<rect x="834.3333333333334" y="625" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="848.3333333333334" cy="644.5" r="3.2" fill="#245be8"/>
-<text x="857.3333333333334" y="642.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Измерение опыта и</text>
-<text x="857.3333333333334" y="650.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">удовлетворенности</text>
+<text x="777.5" y="406" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#245be8" text-anchor="middle" letter-spacing="0">СЕРВИСЫ CX ПЛАТФОРМЫ</text>
+<rect x="625" y="420" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="639" cy="441.5" r="3.2" fill="#245be8"/>
+<text x="648" y="439.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Авторизация</text>
+<text x="648" y="447.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и профиль</text>
+<rect x="703.5" y="420" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="717.5" cy="441.5" r="3.2" fill="#245be8"/>
+<text x="726.5" y="439.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Уведомления</text>
+<text x="726.5" y="447.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">(Push,</text>
+<rect x="782" y="420" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="796" cy="441.5" r="3.2" fill="#245be8"/>
+<text x="805" y="439.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Коммуникации</text>
+<text x="805" y="447.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и сообщения</text>
+<rect x="860.5" y="420" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="874.5" cy="441.5" r="3.2" fill="#245be8"/>
+<text x="883.5" y="439.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Аналитика и</text>
+<text x="883.5" y="447.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">события</text>
+<rect x="625" y="472" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="639" cy="493.5" r="3.2" fill="#245be8"/>
+<text x="648" y="491.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Эксперименты</text>
+<text x="648" y="499.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">A/B тесты</text>
+<rect x="703.5" y="472" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="717.5" cy="493.5" r="3.2" fill="#245be8"/>
+<text x="726.5" y="491.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Feature</text>
+<text x="726.5" y="499.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Flags и</text>
+<rect x="782" y="472" width="69.5" height="43" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="796" cy="493.5" r="3.2" fill="#245be8"/>
+<text x="805" y="491.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Контент и</text>
+<text x="805" y="499.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">модерация</text>
+<text x="777.5" y="545" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#245be8" text-anchor="middle" letter-spacing="0">ЕДИНЫЕ ПРИНЦИПЫ CX</text>
+<rect x="625" y="559" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="639" cy="578.5" r="3.2" fill="#245be8"/>
+<text x="648" y="576.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единая система</text>
+<text x="648" y="584.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">взаимодействия</text>
+<rect x="729.6666666666666" y="559" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="743.6666666666666" cy="578.5" r="3.2" fill="#245be8"/>
+<text x="752.6666666666666" y="576.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единый визуальный</text>
+<text x="752.6666666666666" y="584.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">язык и</text>
+<rect x="834.3333333333334" y="559" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="848.3333333333334" cy="578.5" r="3.2" fill="#245be8"/>
+<text x="857.3333333333334" y="576.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Доступность и</text>
+<text x="857.3333333333334" y="584.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">удобство</text>
+<rect x="625" y="607" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="639" cy="626.5" r="3.2" fill="#245be8"/>
+<text x="648" y="624.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Кросс-канальность</text>
+<text x="648" y="632.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и омниканальность</text>
+<rect x="729.6666666666666" y="607" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="743.6666666666666" cy="626.5" r="3.2" fill="#245be8"/>
+<text x="752.6666666666666" y="624.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Персонализированный</text>
+<text x="752.6666666666666" y="632.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">опыт</text>
+<rect x="834.3333333333334" y="607" width="95.66666666666667" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="848.3333333333334" cy="626.5" r="3.2" fill="#245be8"/>
+<text x="857.3333333333334" y="624.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Измерение опыта и</text>
+<text x="857.3333333333334" y="632.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">удовлетворенности</text>
 <rect x="965" y="135" width="330" height="515" rx="10" fill="#fff2ee" stroke="#ef543f" stroke-width="1.35" opacity="1"/>
 <text x="1130" y="159" font-family="Inter, Arial, Helvetica, sans-serif" font-size="16" font-weight="950" fill="#ef543f" text-anchor="middle" letter-spacing="0">VAS ПЛАТФОРМА</text>
 <text x="1130" y="175" font-family="Inter, Arial, Helvetica, sans-serif" font-size="8.4" font-weight="900" fill="#ef543f" text-anchor="middle" letter-spacing="0">(ПЛАТФОРМА VAS И ПАРТНЕРСКИХ СЕРВИСОВ)</text>
@@ -306,63 +306,63 @@
 <circle cx="994" cy="350" r="3.2" fill="#ef543f"/>
 <text x="1003" y="348" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.7" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Другие сервисы</text>
 <text x="1003" y="356.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.7" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и будущие</text>
-<text x="1130" y="409" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#ef543f" text-anchor="middle" letter-spacing="0">СЕРВИСЫ VAS ПЛАТФОРМЫ</text>
-<rect x="980" y="423" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="994" cy="444" r="3.2" fill="#ef543f"/>
-<text x="1003" y="442" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Каталог</text>
-<text x="1003" y="450.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">сервисов</text>
-<rect x="1057.25" y="423" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1071.25" cy="444" r="3.2" fill="#ef543f"/>
-<text x="1080.25" y="442" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Карточки</text>
-<text x="1080.25" y="450.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">партнеров</text>
-<rect x="1134.5" y="423" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1148.5" cy="444" r="3.2" fill="#ef543f"/>
-<text x="1157.5" y="447.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Подписки VAS</text>
-<rect x="1211.75" y="423" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1225.75" cy="444" r="3.2" fill="#ef543f"/>
-<text x="1234.75" y="442" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Управление</text>
-<text x="1234.75" y="450.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">подписками</text>
-<rect x="980" y="474" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="994" cy="495" r="3.2" fill="#ef543f"/>
-<text x="1003" y="493" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Витрины и</text>
-<text x="1003" y="501.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">интеграции</text>
-<rect x="1057.25" y="474" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1071.25" cy="495" r="3.2" fill="#ef543f"/>
-<text x="1080.25" y="493" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Баланс и</text>
-<text x="1080.25" y="501.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">пополнение</text>
-<rect x="1134.5" y="474" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1148.5" cy="495" r="3.2" fill="#ef543f"/>
-<text x="1157.5" y="493" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Партнерские</text>
-<text x="1157.5" y="501.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">интеграции</text>
-<rect x="1211.75" y="474" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1225.75" cy="495" r="3.2" fill="#ef543f"/>
-<text x="1234.75" y="493" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Оферы и</text>
-<text x="1234.75" y="501.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">истории</text>
-<text x="1130" y="555" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#ef543f" text-anchor="middle" letter-spacing="0">ЕДИНЫЙ ОПЫТ VAS</text>
-<rect x="980" y="569" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="994" cy="588.5" r="3.2" fill="#ef543f"/>
-<text x="1003" y="586.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единая навигация</text>
-<text x="1003" y="594.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и сценарии</text>
-<rect x="1083" y="569" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1097" cy="588.5" r="3.2" fill="#ef543f"/>
-<text x="1106" y="586.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единый профиль и</text>
-<text x="1106" y="594.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">настройки</text>
-<rect x="1186" y="569" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1200" cy="588.5" r="3.2" fill="#ef543f"/>
-<text x="1209" y="586.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Персонализация</text>
-<text x="1209" y="594.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">предложений</text>
-<rect x="980" y="617" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="994" cy="636.5" r="3.2" fill="#ef543f"/>
-<text x="1003" y="634.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единые сообщения</text>
-<text x="1003" y="642.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и коммуникации</text>
-<rect x="1083" y="617" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1097" cy="636.5" r="3.2" fill="#ef543f"/>
-<text x="1106" y="634.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Прозрачность</text>
-<text x="1106" y="642.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">условий и цены</text>
-<rect x="1186" y="617" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
-<circle cx="1200" cy="636.5" r="3.2" fill="#ef543f"/>
-<text x="1209" y="634.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Измерение</text>
-<text x="1209" y="642.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">эффективности</text>
+<text x="1130" y="400" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#ef543f" text-anchor="middle" letter-spacing="0">СЕРВИСЫ VAS ПЛАТФОРМЫ</text>
+<rect x="980" y="414" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="994" cy="435" r="3.2" fill="#ef543f"/>
+<text x="1003" y="433" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Каталог</text>
+<text x="1003" y="441.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">сервисов</text>
+<rect x="1057.25" y="414" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1071.25" cy="435" r="3.2" fill="#ef543f"/>
+<text x="1080.25" y="433" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Карточки</text>
+<text x="1080.25" y="441.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">партнеров</text>
+<rect x="1134.5" y="414" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1148.5" cy="435" r="3.2" fill="#ef543f"/>
+<text x="1157.5" y="438.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Подписки VAS</text>
+<rect x="1211.75" y="414" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1225.75" cy="435" r="3.2" fill="#ef543f"/>
+<text x="1234.75" y="433" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Управление</text>
+<text x="1234.75" y="441.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">подписками</text>
+<rect x="980" y="465" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="994" cy="486" r="3.2" fill="#ef543f"/>
+<text x="1003" y="484" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Витрины и</text>
+<text x="1003" y="492.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">интеграции</text>
+<rect x="1057.25" y="465" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1071.25" cy="486" r="3.2" fill="#ef543f"/>
+<text x="1080.25" y="484" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Баланс и</text>
+<text x="1080.25" y="492.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">пополнение</text>
+<rect x="1134.5" y="465" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1148.5" cy="486" r="3.2" fill="#ef543f"/>
+<text x="1157.5" y="484" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Партнерские</text>
+<text x="1157.5" y="492.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">интеграции</text>
+<rect x="1211.75" y="465" width="68.25" height="42" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1225.75" cy="486" r="3.2" fill="#ef543f"/>
+<text x="1234.75" y="484" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Оферы и</text>
+<text x="1234.75" y="492.2" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.2" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">истории</text>
+<text x="1130" y="537" font-family="Inter, Arial, Helvetica, sans-serif" font-size="9.2" font-weight="800" fill="#ef543f" text-anchor="middle" letter-spacing="0">ЕДИНЫЙ ОПЫТ VAS</text>
+<rect x="980" y="551" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="994" cy="570.5" r="3.2" fill="#ef543f"/>
+<text x="1003" y="568.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единая навигация</text>
+<text x="1003" y="576.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и сценарии</text>
+<rect x="1083" y="551" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1097" cy="570.5" r="3.2" fill="#ef543f"/>
+<text x="1106" y="568.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единый профиль и</text>
+<text x="1106" y="576.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">настройки</text>
+<rect x="1186" y="551" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1200" cy="570.5" r="3.2" fill="#ef543f"/>
+<text x="1209" y="568.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Персонализация</text>
+<text x="1209" y="576.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">предложений</text>
+<rect x="980" y="599" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="994" cy="618.5" r="3.2" fill="#ef543f"/>
+<text x="1003" y="616.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Единые сообщения</text>
+<text x="1003" y="624.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">и коммуникации</text>
+<rect x="1083" y="599" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1097" cy="618.5" r="3.2" fill="#ef543f"/>
+<text x="1106" y="616.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Прозрачность</text>
+<text x="1106" y="624.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">условий и цены</text>
+<rect x="1186" y="599" width="94" height="39" rx="6" fill="#fff" stroke="#d7deea" stroke-width="1" opacity="1"/>
+<circle cx="1200" cy="618.5" r="3.2" fill="#ef543f"/>
+<text x="1209" y="616.5" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">Измерение</text>
+<text x="1209" y="624.7" font-family="Inter, Arial, Helvetica, sans-serif" font-size="6.3" font-weight="700" fill="#111827" text-anchor="start" letter-spacing="0">эффективности</text>
 <rect x="1328" y="135" width="190" height="210" rx="9" fill="#fff" stroke="#5422d5" stroke-width="1.2" opacity="1"/>
 <text x="1344" y="158" font-family="Inter, Arial, Helvetica, sans-serif" font-size="13" font-weight="900" fill="#5422d5" text-anchor="start" letter-spacing="0">ПРИНЦИПЫ МОДЕЛИ</text>
 <circle cx="1346" cy="182" r="2.8" fill="#5422d5"/>
