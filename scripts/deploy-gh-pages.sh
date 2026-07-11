@@ -10,7 +10,7 @@ copy() {
   cp "$ROOT/$1" "$TMP/$1"
 }
 
-for file in index.html app.js styles.css .nojekyll README.md; do
+for file in index.html app.js styles.css scheme-standalone.html .nojekyll; do
   copy "$file"
 done
 
