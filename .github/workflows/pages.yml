@@ -21,7 +21,7 @@ jobs:
       - name: Prepare site files
         run: |
           mkdir -p _site
-          cp index.html app.js styles.css scheme-standalone.html .nojekyll _site/
+          cp index.html app.js styles.css scheme-standalone.html resume.html resume.md .nojekyll _site/
           cp -R canva _site/canva
 
       - name: Publish to gh-pages branch
@@ -35,7 +35,7 @@ jobs:
         run: |
           rm -rf docs
           mkdir -p docs
-          cp index.html app.js styles.css scheme-standalone.html .nojekyll docs/
+          cp index.html app.js styles.css scheme-standalone.html resume.html resume.md .nojekyll docs/
           cp -R canva docs/canva
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

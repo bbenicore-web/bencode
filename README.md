@@ -6,6 +6,8 @@
 
 **Онлайн:** https://bbenicore-web.github.io/bencode/
 
+**Резюме:** https://bbenicore-web.github.io/bencode/resume.html
+
 > Если видите **404** — GitHub Pages ещё не включён.  
 > Откройте [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages), выберите **Deploy from a branch**, ветка `main`, папка `/docs`, нажмите **Save**.  
 > Подробная инструкция: [PUBLISH.md](PUBLISH.md)
