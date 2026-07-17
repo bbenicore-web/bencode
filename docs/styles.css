@@ -331,11 +331,21 @@ h1 {
 
 .resume-hero {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
+  grid-template-columns: 192px minmax(0, 1fr);
+  gap: 24px;
   align-items: start;
   margin-bottom: 18px;
   padding: 30px;
+}
+
+.resume-photo {
+  width: 192px;
+  height: 192px;
+  border: 6px solid #fff;
+  border-radius: 32px;
+  object-fit: cover;
+  object-position: 50% 35%;
+  box-shadow: 0 18px 40px rgba(31, 45, 71, 0.18);
 }
 
 .resume-hero h1 {
@@ -459,6 +469,15 @@ h1 {
   .details-meta {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .resume-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .resume-photo {
+    width: 152px;
+    height: 152px;
   }
 
   .hero-actions,
