@@ -315,7 +315,7 @@ h1 {
 }
 
 .resume-shell {
-  width: min(1120px, calc(100% - 32px));
+  width: min(900px, calc(100% - 32px));
   margin: 0 auto;
   padding: 28px 0 56px;
 }
@@ -331,8 +331,8 @@ h1 {
 
 .resume-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 24px;
+  grid-template-columns: 1fr;
+  gap: 18px;
   align-items: start;
   margin-bottom: 18px;
   padding: 30px;
@@ -350,9 +350,9 @@ h1 {
 }
 
 .resume-contact {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  min-width: 260px;
 }
 
 .resume-contact a {
@@ -363,7 +363,7 @@ h1 {
 
 .resume-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 310px;
+  grid-template-columns: 1fr;
   gap: 18px;
   align-items: start;
 }
@@ -439,21 +439,8 @@ h1 {
   padding-left: 1.2rem;
 }
 
-.resume-back-link {
-  display: inline-flex;
-  margin-bottom: 14px;
-  color: var(--purple);
-  font-weight: 800;
-  text-decoration: none;
-}
-
 @media (max-width: 1180px) {
   .hero {
-    grid-template-columns: 1fr;
-  }
-
-  .resume-layout,
-  .resume-hero {
     grid-template-columns: 1fr;
   }
 
@@ -485,7 +472,7 @@ h1 {
   }
 
   .resume-shell {
-    width: min(100% - 20px, 1120px);
+    width: min(100% - 20px, 900px);
     padding-top: 16px;
   }
 
