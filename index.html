@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CPO: интерактивная схема на Canvas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Canvas · CPO · Telecom / CX / VAS</p>
+          <h1 id="page-title">Интерактивная кликабельная схема CPO на Canvas</h1>
+          <p class="lead">
+            Схема отрисована на HTML5 Canvas. Кликайте по блокам на холсте, чтобы увидеть
+            детали, владельца, RACI и связанные элементы.
+          </p>
+          <div class="hero-actions" aria-label="Дополнительные материалы">
+            <a class="primary-link" href="resume.html">Открыть резюме</a>
+            <a class="secondary-link" href="resume.md">Markdown-версия</a>
+          </div>
+        </div>
+
+        <div class="toolbar" role="search">
+          <label for="scheme-search">Поиск по схеме</label>
+          <div class="search-row">
+            <input id="scheme-search" type="search" placeholder="Например: ARPU, API Gateway, VAS" />
+            <button class="ghost-button" id="reset-view" type="button">Сбросить</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="canvas-shell" aria-label="Canvas-схема CPO">
+        <div class="canvas-tools">
+          <span id="canvas-status">Наведите или нажмите на блок схемы</span>
+          <span>Колесо мыши не требуется: схема автоматически масштабируется под экран.</span>
+        </div>
+        <div class="canvas-viewport">
+          <canvas
+            id="cpo-canvas"
+            width="1920"
+            height="1680"
+            role="img"
+            aria-label="Схема CPO цифрового продукта МегаФона: Telecom, CX и VAS платформы"
+          ></canvas>
+        </div>
+      </section>
+
+      <section class="mobile-node-list" aria-label="Список кликабельных элементов">
+        <h2>Кликабельные элементы</h2>
+        <div id="node-list"></div>
+      </section>
+    </main>
+
+    <aside class="details-panel" id="details-panel" aria-live="polite" aria-label="Детали выбранного элемента">
+      <button class="close-details" id="close-details" type="button" aria-label="Закрыть панель">×</button>
+      <p class="eyebrow" id="details-type">Выберите элемент</p>
+      <h2 id="details-title">Canvas-схема готова</h2>
+      <p id="details-description">
+        Нажмите на любой блок на холсте, чтобы увидеть назначение и связанные точки взаимодействия.
+      </p>
+      <dl class="details-meta">
+        <div>
+          <dt>Владелец</dt>
+          <dd id="details-owner">-</dd>
+        </div>
+        <div>
+          <dt>RACI</dt>
+          <dd id="details-raci">-</dd>
+        </div>
+      </dl>
+      <div>
+        <h3>Связанные элементы</h3>
+        <div class="related-list" id="details-related"></div>
+      </div>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>
