@@ -177,6 +177,18 @@ function click(root, selector) {
   );
 }
 
+function pressTabKey(root, tab, key) {
+  const element = root.querySelector(`[role="tab"][data-tab="${tab}"]`);
+  element.focus();
+  element.dispatchEvent(
+    new element.ownerDocument.defaultView.KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      key
+    })
+  );
+}
+
 test("index provides a skip link, notification region, and app root", async () => {
   const html = await readFile(
     new URL("../../electricity/index.html", import.meta.url),
@@ -451,6 +463,69 @@ test("switches accessible tabs and preserves the active tab through mutations", 
     root.querySelector('[role="tab"][data-tab="history"]').getAttribute("aria-selected"),
     "true"
   );
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
+});
+
+test("wraps tab selection and focus with ArrowLeft and ArrowRight", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const { app, root } = createFixture({ auth });
+  await app.start();
+
+  pressTabKey(root, "readings", "ArrowLeft");
+
+  let readingsTab = root.querySelector('[role="tab"][data-tab="readings"]');
+  let historyTab = root.querySelector('[role="tab"][data-tab="history"]');
+  assert.equal(readingsTab.getAttribute("aria-selected"), "false");
+  assert.equal(readingsTab.tabIndex, -1);
+  assert.equal(historyTab.getAttribute("aria-selected"), "true");
+  assert.equal(historyTab.tabIndex, 0);
+  assert.equal(root.ownerDocument.activeElement, historyTab);
+  assert.equal(root.querySelector('#readings[role="tabpanel"]').hidden, true);
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
+
+  pressTabKey(root, "history", "ArrowRight");
+
+  readingsTab = root.querySelector('[role="tab"][data-tab="readings"]');
+  historyTab = root.querySelector('[role="tab"][data-tab="history"]');
+  assert.equal(readingsTab.getAttribute("aria-selected"), "true");
+  assert.equal(readingsTab.tabIndex, 0);
+  assert.equal(historyTab.getAttribute("aria-selected"), "false");
+  assert.equal(historyTab.tabIndex, -1);
+  assert.equal(root.ownerDocument.activeElement, readingsTab);
+  assert.equal(root.querySelector('#readings[role="tabpanel"]').hidden, false);
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, true);
+});
+
+test("selects and focuses the first and last tabs with Home and End", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const { app, root } = createFixture({ auth });
+  await app.start();
+  click(root, '[role="tab"][data-tab="history"]');
+
+  pressTabKey(root, "history", "Home");
+
+  let selected = root.querySelector('[role="tab"][aria-selected="true"]');
+  assert.equal(selected.dataset.tab, "readings");
+  assert.equal(selected.tabIndex, 0);
+  assert.equal(root.ownerDocument.activeElement, selected);
+  assert.equal(root.querySelector('#readings[role="tabpanel"]').hidden, false);
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, true);
+
+  pressTabKey(root, "readings", "End");
+
+  selected = root.querySelector('[role="tab"][aria-selected="true"]');
+  assert.equal(selected.dataset.tab, "history");
+  assert.equal(selected.tabIndex, 0);
+  assert.equal(root.ownerDocument.activeElement, selected);
+  assert.equal(root.querySelector('#readings[role="tabpanel"]').hidden, true);
   assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
 });
 

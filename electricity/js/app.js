@@ -15,6 +15,7 @@ const READING_FIELDS = [
   "t1_rate",
   "t2_rate"
 ];
+const TABS = ["readings", "history"];
 const VALIDATION_MESSAGES = {
   "Reading date is required": "Укажите дату показаний.",
   "A reading already exists for this date": "На эту дату уже есть запись.",
@@ -449,6 +450,47 @@ export function createApp({ auth, readings, root, confirm, today }) {
     });
   }
 
+  function selectTab(tab, moveFocus = false) {
+    if (!state.readingsLoaded || !TABS.includes(tab)) {
+      return;
+    }
+
+    render({ ...state, activeTab: tab });
+    if (moveFocus && !destroyed) {
+      root.querySelector(`[role="tab"][data-tab="${tab}"]`)?.focus();
+    }
+  }
+
+  function handleTabKeydown(event) {
+    const tab = event.target.closest?.('[role="tab"][data-tab]');
+    if (
+      !tab ||
+      state.status !== "signedIn" ||
+      !state.readingsLoaded ||
+      state.pending
+    ) {
+      return;
+    }
+
+    const currentIndex = TABS.indexOf(tab.dataset.tab);
+    let nextTab;
+
+    if (event.key === "ArrowRight") {
+      nextTab = TABS[(currentIndex + 1) % TABS.length];
+    } else if (event.key === "ArrowLeft") {
+      nextTab = TABS[(currentIndex - 1 + TABS.length) % TABS.length];
+    } else if (event.key === "Home") {
+      [nextTab] = TABS;
+    } else if (event.key === "End") {
+      nextTab = TABS.at(-1);
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    selectTab(nextTab, true);
+  }
+
   async function handleReadingAction(event) {
     const button = event.target.closest?.("[data-action]");
     if (!button || state.status !== "signedIn" || state.pending) {
@@ -458,12 +500,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
     const { action, id } = button.dataset;
 
     if (action === "switchTab") {
-      if (
-        state.readingsLoaded &&
-        (button.dataset.tab === "readings" || button.dataset.tab === "history")
-      ) {
-        render({ ...state, activeTab: button.dataset.tab });
-      }
+      selectTab(button.dataset.tab);
       return;
     }
 
@@ -552,6 +589,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
     root.addEventListener("submit", submitAuthentication);
     root.addEventListener("submit", submitReading);
     root.addEventListener("input", updateReadingForm);
+    root.addEventListener("keydown", handleTabKeydown);
     root.addEventListener("click", handleReadingAction);
     root.addEventListener("click", signOut);
     authSubscription = auth.onAuthStateChange((_event, session) => {
@@ -590,6 +628,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
       root.removeEventListener("submit", submitAuthentication);
       root.removeEventListener("submit", submitReading);
       root.removeEventListener("input", updateReadingForm);
+      root.removeEventListener("keydown", handleTabKeydown);
       root.removeEventListener("click", handleReadingAction);
       root.removeEventListener("click", signOut);
       authSubscription?.unsubscribe();
