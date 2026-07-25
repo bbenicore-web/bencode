@@ -39,6 +39,82 @@ create policy "Users can delete their electricity readings"
   to authenticated
   using ((select auth.uid()) = user_id);
 
+create function public.validate_electricity_reading_monotonicity()
+returns trigger
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+declare
+  excluded_id uuid;
+  previous_t1_reading numeric(14,3);
+  previous_t2_reading numeric(14,3);
+  next_t1_reading numeric(14,3);
+  next_t2_reading numeric(14,3);
+begin
+  if tg_op = 'UPDATE' then
+    excluded_id := old.id;
+  end if;
+
+  select t1_reading, t2_reading
+    into previous_t1_reading, previous_t2_reading
+    from public.electricity_readings
+    where user_id = new.user_id
+      and reading_date < new.reading_date
+      and (excluded_id is null or id <> excluded_id)
+    order by reading_date desc
+    limit 1;
+
+  if previous_t1_reading is not null then
+    if new.t1_reading < previous_t1_reading then
+      raise exception using
+        errcode = '23514',
+        message = 't1_reading cannot be below the previous chronological reading',
+        constraint = 'electricity_readings_t1_monotonic';
+    end if;
+
+    if new.t2_reading < previous_t2_reading then
+      raise exception using
+        errcode = '23514',
+        message = 't2_reading cannot be below the previous chronological reading',
+        constraint = 'electricity_readings_t2_monotonic';
+    end if;
+  end if;
+
+  select t1_reading, t2_reading
+    into next_t1_reading, next_t2_reading
+    from public.electricity_readings
+    where user_id = new.user_id
+      and reading_date > new.reading_date
+      and (excluded_id is null or id <> excluded_id)
+    order by reading_date asc
+    limit 1;
+
+  if next_t1_reading is not null then
+    if new.t1_reading > next_t1_reading then
+      raise exception using
+        errcode = '23514',
+        message = 't1_reading cannot exceed the next chronological reading',
+        constraint = 'electricity_readings_t1_monotonic';
+    end if;
+
+    if new.t2_reading > next_t2_reading then
+      raise exception using
+        errcode = '23514',
+        message = 't2_reading cannot exceed the next chronological reading',
+        constraint = 'electricity_readings_t2_monotonic';
+    end if;
+  end if;
+
+  return new;
+end;
+$$;
+
+create trigger validate_electricity_reading_monotonicity
+  before insert or update on public.electricity_readings
+  for each row
+  execute function public.validate_electricity_reading_monotonicity();
+
 create function public.set_electricity_readings_updated_at()
 returns trigger
 language plpgsql

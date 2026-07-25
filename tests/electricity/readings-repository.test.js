@@ -53,7 +53,8 @@ function createFakeClient(response = { data: null, error: null }) {
           client.lastUpdate = value;
           client.calls.push(["update", value]);
           return query;
-        }
+        },
+        then: (resolve, reject) => Promise.resolve(client.response).then(resolve, reject)
       };
 
       return query;
@@ -133,7 +134,7 @@ test("updates only reading fields and scopes the mutation by user and ID", async
     ["user_id", "user-1"],
     ["id", "reading-7"]
   ]);
-  assert.equal(fakeClient.lastSelect, "*");
+  assert.deepEqual(fakeClient.calls.slice(-2), [["select", "*"], ["single"]]);
   assert.deepEqual(result, persisted);
 });
 
@@ -149,7 +150,7 @@ test("removes one reading scoped by user and ID and returns it", async () => {
     ["user_id", "user-1"],
     ["id", "reading-7"]
   ]);
-  assert.equal(fakeClient.lastSelect, "*");
+  assert.deepEqual(fakeClient.calls.slice(-2), [["select", "*"], ["single"]]);
   assert.deepEqual(result, persisted);
 });
 
@@ -165,7 +166,7 @@ test("changes only payment status scoped by user and ID", async () => {
     ["user_id", "user-1"],
     ["id", "reading-7"]
   ]);
-  assert.equal(fakeClient.lastSelect, "*");
+  assert.deepEqual(fakeClient.calls.slice(-2), [["select", "*"], ["single"]]);
   assert.deepEqual(result, persisted);
 });
 
@@ -216,4 +217,57 @@ test("migration creates an RLS-protected readings table and updated-at trigger",
     /create trigger set_electricity_readings_updated_at[\s\S]*before update on public\.electricity_readings/
   );
   assert.doesNotMatch(migration, /(?:usage|cost|total_amount) numeric/);
+});
+
+test("migration rejects readings below the immediate previous row", async () => {
+  const migration = await readFile(
+    new URL(
+      "../../electricity/supabase/20260725000000_create_electricity_readings.sql",
+      import.meta.url
+    ),
+    "utf8"
+  );
+  const sql = migration.replace(/\s+/g, " ");
+
+  assert.match(sql, /create function public\.validate_electricity_reading_monotonicity\(\)/);
+  assert.match(
+    sql,
+    /where user_id = new\.user_id and reading_date < new\.reading_date .*order by reading_date desc limit 1/
+  );
+  assert.match(sql, /if new\.t1_reading < previous_t1_reading then/);
+  assert.match(sql, /if new\.t2_reading < previous_t2_reading then/);
+  assert.match(sql, /errcode = '23514'/);
+  assert.match(sql, /constraint = 'electricity_readings_t1_monotonic'/);
+  assert.match(sql, /constraint = 'electricity_readings_t2_monotonic'/);
+});
+
+test("migration rejects readings above the immediate next row and excludes an updated row", async () => {
+  const migration = await readFile(
+    new URL(
+      "../../electricity/supabase/20260725000000_create_electricity_readings.sql",
+      import.meta.url
+    ),
+    "utf8"
+  );
+  const sql = migration.replace(/\s+/g, " ");
+
+  assert.match(sql, /if tg_op = 'UPDATE' then excluded_id := old\.id/);
+  assert.equal(
+    sql.match(/and \(excluded_id is null or id <> excluded_id\)/g)?.length,
+    2
+  );
+  assert.match(
+    sql,
+    /where user_id = new\.user_id and reading_date > new\.reading_date .*order by reading_date asc limit 1/
+  );
+  assert.match(sql, /if new\.t1_reading > next_t1_reading then/);
+  assert.match(sql, /if new\.t2_reading > next_t2_reading then/);
+  assert.match(
+    sql,
+    /create trigger validate_electricity_reading_monotonicity before insert or update on public\.electricity_readings/
+  );
+  assert.match(
+    sql,
+    /execute function public\.validate_electricity_reading_monotonicity\(\)/
+  );
 });
