@@ -57,6 +57,20 @@
 1. Откройте **Authentication → Providers → Email**.
 2. Включите **Enable Email provider** и сохраните изменения.
 3. Для production оставьте **Confirm email** включённым: новый пользователь должен перейти по ссылке из письма до первого входа. Для локальной тестовой среды его можно отключить, чтобы тестовый аккаунт активировался сразу.
+4. Откройте **Authentication → URL Configuration** и задайте **Site URL**:
+
+   ```text
+   https://bbenicore-web.github.io/bencode/electricity/
+   ```
+
+5. В **Redirect URLs** добавьте оба разрешённых адреса:
+
+   ```text
+   https://bbenicore-web.github.io/bencode/electricity/
+   http://localhost:5173/
+   ```
+
+6. Сохраните изменения. Эти URL обязательны при включённом **Confirm email**: после перехода по ссылке из письма Supabase должен вернуть пользователя в production-приложение или на локальный Vite-сервер.
 
 ### 4. Настройте локальные публичные переменные
 
