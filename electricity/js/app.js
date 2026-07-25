@@ -57,6 +57,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
     render({
       status: "signedOut",
       email,
+      password,
       pending: true,
       error: "",
       notice: ""
@@ -87,6 +88,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
       render({
         status: "signedOut",
         email,
+        password,
         pending: false,
         error: toUserMessage(error),
         notice: ""

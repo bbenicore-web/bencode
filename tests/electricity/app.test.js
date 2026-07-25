@@ -153,24 +153,27 @@ test("disables both auth actions while login is pending", async () => {
   await settle();
 });
 
-test("retains the email and shows a safe Russian alert after login fails", async () => {
+test("retains entered credentials and shows a safe Russian alert after a network failure", async () => {
   const auth = createFakeAuth();
   auth.signIn = async (email, password) => {
     auth.calls.push(["signIn", email, password]);
-    throw new Error("Invalid login credentials");
+    throw new TypeError("Failed to fetch");
   };
   const { app, root } = createFixture({ auth });
   await app.start();
 
   submitAuthForm(root, {
     email: "person@example.com",
-    password: "wrong-password"
+    password: "secret-password"
   });
   await settle();
 
   assert.equal(root.querySelector("#email").value, "person@example.com");
-  assert.equal(root.querySelector("#password").value, "");
-  assert.equal(root.querySelector('[role="alert"]')?.textContent, "Неверный email или пароль.");
+  assert.equal(root.querySelector("#password").value, "secret-password");
+  assert.equal(
+    root.querySelector('[role="alert"]')?.textContent,
+    "Не удалось подключиться к серверу. Проверьте интернет-соединение."
+  );
 });
 
 test("uses the registration action without conflating it with login", async () => {
@@ -204,6 +207,22 @@ test("renders signed-in navigation when authentication changes", async () => {
   assert.match(navigation.textContent, /Показания/);
   assert.match(navigation.textContent, /История/);
   assert.equal(root.querySelector("button[data-action='signOut']")?.textContent, "Выйти");
+});
+
+test("returns to the signed-out login shell when the auth session becomes null", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const { app, root } = createFixture({ auth });
+  await app.start();
+
+  auth.emit(null, "SIGNED_OUT");
+
+  assert.ok(root.querySelector('form[data-form="auth"]'));
+  assert.equal(root.querySelector('button[value="signIn"]')?.textContent, "Войти");
+  assert.equal(root.querySelector('nav[aria-label="Основная навигация"]'), null);
 });
 
 test("restores an existing session before showing the signed-in shell", async () => {

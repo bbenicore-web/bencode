@@ -13,6 +13,7 @@ function renderLoading() {
 
 function renderSignedOut(state) {
   const email = escapeHtml(state.email ?? "");
+  const password = escapeHtml(state.password ?? "");
   const pending = state.pending ? " disabled" : "";
   const alert = state.error
     ? `<p role="alert">${escapeHtml(state.error)}</p>`
@@ -34,7 +35,7 @@ function renderSignedOut(state) {
         </div>
         <div>
           <label for="password">Пароль</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <input id="password" name="password" type="password" autocomplete="current-password" value="${password}" required>
           <p id="password-error" data-field-error="password"></p>
         </div>
         <button type="submit" name="action" value="signIn"${pending}>Войти</button>
