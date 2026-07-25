@@ -5,6 +5,7 @@ import test from "node:test";
 import { JSDOM } from "jsdom";
 
 import { createApp } from "../../electricity/js/app.js";
+import { bootstrap } from "../../electricity/js/main.js";
 
 function deferred() {
   let reject;
@@ -199,6 +200,20 @@ test("index provides a skip link, notification region, and app root", async () =
   assert.equal(document.querySelector('a[href="#main-content"]')?.textContent, "К содержанию");
   assert.equal(document.querySelector('[aria-live="polite"]')?.id, "notifications");
   assert.equal(document.querySelector("main#main-content")?.contains(document.querySelector("#app")), true);
+});
+
+test("bootstrap renders the setup screen and rejects missing public configuration", async () => {
+  const dom = new JSDOM('<div id="app"><p>Загрузка…</p></div>');
+  const root = dom.window.document.querySelector("#app");
+  const setupMessage =
+    "Не настроено подключение к Supabase. Укажите VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY.";
+
+  await assert.rejects(bootstrap({ env: {}, root }), {
+    message: setupMessage
+  });
+
+  assert.equal(root.querySelector('[role="alert"]')?.textContent, setupMessage);
+  assert.equal(root.querySelector("h2")?.textContent, "Требуется настройка");
 });
 
 test("shows loading immediately while the initial session is restored", async () => {
