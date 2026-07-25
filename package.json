@@ -1,0 +1,33 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Самодостаточная HTML/CSS/JS-схема по образцу организационной диаграммы МегаФона. Основная схема отрисована на HTML5 Canvas: бизнес-лидеры, CPO-домены, три платформы (Telecom, CX, VAS), зоны ответственности и команда телеком-платформы.",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/electricity/*.test.js",
+    "build:electricity": "vite build --config electricity/vite.config.js",
+    "dev:electricity": "vite --config electricity/vite.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bbenicore-web/bencode.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bbenicore-web/bencode/issues"
+  },
+  "homepage": "https://github.com/bbenicore-web/bencode#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.8"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1",
+    "vite": "^8.1.5"
+  }
+}
