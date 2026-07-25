@@ -127,6 +127,28 @@ test("passes sign-up credentials to Supabase unchanged", async () => {
   assert.deepEqual(result, { user: { id: "new-user" }, session: null });
 });
 
+test("adds the configured email confirmation redirect to sign-up", async () => {
+  const client = createFakeClient();
+  const service = createAuthService(client, {
+    emailRedirectTo: "https://example.com/electricity/"
+  });
+
+  await service.signUp("person@example.com", "secret-password");
+
+  assert.deepEqual(client.calls, [
+    [
+      "signUp",
+      {
+        email: "person@example.com",
+        password: "secret-password",
+        options: {
+          emailRedirectTo: "https://example.com/electricity/"
+        }
+      }
+    ]
+  ]);
+});
+
 test("passes sign-in credentials to Supabase unchanged", async () => {
   const client = createFakeClient();
   const service = createAuthService(client);

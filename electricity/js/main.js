@@ -23,6 +23,19 @@ function localDate() {
   return `${year}-${month}-${day}`;
 }
 
+export function getAppDirectoryUrl(location) {
+  return new URL("./", location.href).href;
+}
+
+export function createProductionServices(client, location) {
+  return {
+    auth: createAuthService(client, {
+      emailRedirectTo: getAppDirectoryUrl(location)
+    }),
+    readings: createReadingsRepository(client)
+  };
+}
+
 export async function bootstrap({
   env = import.meta.env,
   root = document.querySelector("#app")
@@ -43,9 +56,13 @@ export async function bootstrap({
   }
 
   const client = createSupabaseClient(config);
+  const { auth, readings } = createProductionServices(
+    client,
+    root.ownerDocument.defaultView.location
+  );
   const app = createApp({
-    auth: createAuthService(client),
-    readings: createReadingsRepository(client),
+    auth,
+    readings,
     root,
     confirm: (message) => root.ownerDocument.defaultView.confirm(message),
     today: localDate

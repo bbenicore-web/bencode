@@ -8,7 +8,7 @@ async function dataOrThrow(request) {
   return data;
 }
 
-export function createAuthService(client) {
+export function createAuthService(client, { emailRedirectTo } = {}) {
   return {
     async getSession() {
       const data = await dataOrThrow(client.auth.getSession());
@@ -16,7 +16,13 @@ export function createAuthService(client) {
     },
 
     signUp(email, password) {
-      return dataOrThrow(client.auth.signUp({ email, password }));
+      const credentials = { email, password };
+
+      if (emailRedirectTo) {
+        credentials.options = { emailRedirectTo };
+      }
+
+      return dataOrThrow(client.auth.signUp(credentials));
     },
 
     signIn(email, password) {

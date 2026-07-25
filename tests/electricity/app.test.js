@@ -5,7 +5,11 @@ import test from "node:test";
 import { JSDOM } from "jsdom";
 
 import { createApp } from "../../electricity/js/app.js";
-import { bootstrap } from "../../electricity/js/main.js";
+import {
+  bootstrap,
+  createProductionServices,
+  getAppDirectoryUrl
+} from "../../electricity/js/main.js";
 
 function deferred() {
   let reject;
@@ -214,6 +218,47 @@ test("bootstrap renders the setup screen and rejects missing public configuratio
 
   assert.equal(root.querySelector('[role="alert"]')?.textContent, setupMessage);
   assert.equal(root.querySelector("h2")?.textContent, "Требуется настройка");
+});
+
+test("derives the email confirmation redirect from the current app directory", () => {
+  const cases = [
+    ["http://localhost:5173/?source=signup", "http://localhost:5173/"],
+    [
+      "https://bbenicore-web.github.io/bencode/electricity/?source=signup",
+      "https://bbenicore-web.github.io/bencode/electricity/"
+    ]
+  ];
+
+  for (const [href, expected] of cases) {
+    assert.equal(getAppDirectoryUrl({ href }), expected);
+  }
+});
+
+test("production composition configures sign-up to return to the current app directory", async () => {
+  const calls = [];
+  const client = {
+    auth: {
+      async signUp(payload) {
+        calls.push(payload);
+        return { data: { user: { id: "new-user" }, session: null }, error: null };
+      }
+    }
+  };
+
+  const { auth } = createProductionServices(client, {
+    href: "https://bbenicore-web.github.io/bencode/electricity/"
+  });
+  await auth.signUp("person@example.com", "secret-password");
+
+  assert.deepEqual(calls, [
+    {
+      email: "person@example.com",
+      password: "secret-password",
+      options: {
+        emailRedirectTo: "https://bbenicore-web.github.io/bencode/electricity/"
+      }
+    }
+  ]);
 });
 
 test("shows loading immediately while the initial session is restored", async () => {
