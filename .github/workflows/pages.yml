@@ -33,8 +33,8 @@ jobs:
       - name: Build electricity tracker
         run: npm run build:electricity
         env:
-          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://hheobgjivljydirnculb.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || 'sb_publishable_N26f9M2WPwiOMzHlHwoY4w_Jh1gr8GD' }}
 
       - name: Prepare site files
         run: |
