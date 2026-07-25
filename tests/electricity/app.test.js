@@ -206,6 +206,21 @@ test("index provides a skip link, notification region, and app root", async () =
   assert.equal(document.querySelector("main#main-content")?.contains(document.querySelector("#app")), true);
 });
 
+test("index declares a self-contained SVG favicon", async () => {
+  const html = await readFile(
+    new URL("../../electricity/index.html", import.meta.url),
+    "utf8"
+  );
+  const document = new JSDOM(html).window.document;
+  const favicon = document.querySelector('link[rel="icon"]');
+
+  assert.ok(favicon, "expected an explicit favicon declaration");
+  assert.match(
+    favicon.getAttribute("href"),
+    /^data:image\/svg\+xml(?:;charset=utf-8)?,/
+  );
+});
+
 test("bootstrap renders the setup screen and rejects missing public configuration", async () => {
   const dom = new JSDOM('<div id="app"><p>Загрузка…</p></div>');
   const root = dom.window.document.querySelector("#app");
