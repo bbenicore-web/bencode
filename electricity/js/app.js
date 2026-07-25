@@ -15,6 +15,24 @@ const READING_FIELDS = [
   "t1_rate",
   "t2_rate"
 ];
+const VALIDATION_MESSAGES = {
+  "Reading date is required": "Укажите дату показаний.",
+  "A reading already exists for this date": "На эту дату уже есть запись.",
+  "T1 reading must be zero or greater":
+    "Показания Т1 не могут быть отрицательными.",
+  "T2 reading must be zero or greater":
+    "Показания Т2 не могут быть отрицательными.",
+  "T1 rate must be greater than zero": "Тариф Т1 должен быть больше нуля.",
+  "T2 rate must be greater than zero": "Тариф Т2 должен быть больше нуля.",
+  "T1 reading cannot be below the previous reading":
+    "Показания Т1 не могут быть меньше предыдущей записи.",
+  "T2 reading cannot be below the previous reading":
+    "Показания Т2 не могут быть меньше предыдущей записи.",
+  "T1 reading cannot exceed the next reading":
+    "Показания Т1 не могут превышать следующую запись.",
+  "T2 reading cannot exceed the next reading":
+    "Показания Т2 не могут превышать следующую запись."
+};
 
 function emptyReadingForm(today) {
   return {
@@ -44,7 +62,14 @@ function readingCandidate(form, id = "__preview__") {
 }
 
 function readingErrors(candidate, readings, editingId) {
-  const errors = validateReading(candidate, readings, editingId);
+  const errors = Object.fromEntries(
+    Object.entries(validateReading(candidate, readings, editingId)).map(
+      ([field, message]) => [
+        field,
+        VALIDATION_MESSAGES[message] ?? "Проверьте значение."
+      ]
+    )
+  );
 
   for (const field of READING_FIELDS.slice(1)) {
     if (!Number.isFinite(candidate[field])) {
@@ -120,41 +145,84 @@ export function createApp({ auth, readings, root, confirm, today }) {
     }
   }
 
+  async function loadCanonicalReadings(user) {
+    const request = ++sessionRequest;
+    render({
+      ...state,
+      user,
+      readingsLoaded: false,
+      loadingReadings: true,
+      pending: false,
+      error: ""
+    });
+
+    try {
+      const storedReadings = await readings.list(user.id);
+      if (!destroyed && request === sessionRequest) {
+        render({
+          ...state,
+          readings: storedReadings,
+          readingsLoaded: true,
+          loadingReadings: false,
+          error: ""
+        });
+      }
+    } catch (error) {
+      let session;
+
+      try {
+        session = await auth.getSession();
+      } catch {
+        session = { user };
+      }
+
+      if (destroyed || request !== sessionRequest) {
+        return;
+      }
+
+      if (!session?.user) {
+        await renderSession(null);
+        return;
+      }
+
+      if (session.user.id !== user.id) {
+        await renderSession(session);
+        return;
+      }
+
+      render({
+        ...state,
+        readings: [],
+        readingsLoaded: false,
+        loadingReadings: false,
+        pending: false,
+        error: toUserMessage(error)
+      });
+    }
+  }
+
   async function renderSession(session) {
     mutationRequest += 1;
-    const request = ++sessionRequest;
 
     if (session?.user) {
+      const activeTab =
+        state.status === "signedIn" && state.user.id === session.user.id
+          ? state.activeTab
+          : "readings";
       render({
         status: "signedIn",
         user: session.user,
         readings: [],
+        readingsLoaded: false,
         form: emptyReadingForm(today),
         editingId: null,
         fieldErrors: {},
+        activeTab,
         loadingReadings: true,
         pending: false,
         error: ""
       });
-
-      try {
-        const storedReadings = await readings.list(session.user.id);
-        if (!destroyed && request === sessionRequest) {
-          render({
-            ...state,
-            readings: storedReadings,
-            loadingReadings: false
-          });
-        }
-      } catch (error) {
-        if (!destroyed && request === sessionRequest) {
-          render({
-            ...state,
-            loadingReadings: false,
-            error: toUserMessage(error)
-          });
-        }
-      }
+      await loadCanonicalReadings(session.user);
       return;
     }
 
@@ -228,7 +296,12 @@ export function createApp({ auth, readings, root, confirm, today }) {
 
   function updateReadingForm(event) {
     const field = event.target.closest?.('[data-form="reading"] [name]');
-    if (!field || state.status !== "signedIn" || state.pending) {
+    if (
+      !field ||
+      state.status !== "signedIn" ||
+      !state.readingsLoaded ||
+      state.pending
+    ) {
       return;
     }
 
@@ -318,7 +391,11 @@ export function createApp({ auth, readings, root, confirm, today }) {
     }
 
     event.preventDefault();
-    if (state.status !== "signedIn" || state.pending) {
+    if (
+      state.status !== "signedIn" ||
+      !state.readingsLoaded ||
+      state.pending
+    ) {
       return;
     }
 
@@ -366,18 +443,41 @@ export function createApp({ auth, readings, root, confirm, today }) {
         READING_FIELDS.map((field) => [field, String(reading[field])])
       ),
       editingId: id,
+      activeTab: "readings",
       fieldErrors: {},
       error: ""
     });
   }
 
   async function handleReadingAction(event) {
-    const button = event.target.closest?.("[data-action][data-id]");
+    const button = event.target.closest?.("[data-action]");
     if (!button || state.status !== "signedIn" || state.pending) {
       return;
     }
 
     const { action, id } = button.dataset;
+
+    if (action === "switchTab") {
+      if (
+        state.readingsLoaded &&
+        (button.dataset.tab === "readings" || button.dataset.tab === "history")
+      ) {
+        render({ ...state, activeTab: button.dataset.tab });
+      }
+      return;
+    }
+
+    if (action === "retryReadings") {
+      if (!state.loadingReadings) {
+        await loadCanonicalReadings(state.user);
+      }
+      return;
+    }
+
+    if (!state.readingsLoaded || !id) {
+      return;
+    }
+
     const reading = state.readings.find((item) => item.id === id);
     if (!reading) {
       return;

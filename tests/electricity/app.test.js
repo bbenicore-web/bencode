@@ -293,7 +293,7 @@ test("renders signed-in navigation when authentication changes", async () => {
 
   const navigation = root.querySelector('nav[aria-label="Основная навигация"]');
   assert.ok(navigation);
-  assert.match(navigation.textContent, /Показания/);
+  assert.match(navigation.textContent, /Новая запись/);
   assert.match(navigation.textContent, /История/);
   assert.equal(root.querySelector("button[data-action='signOut']")?.textContent, "Выйти");
 });
@@ -312,10 +312,146 @@ test("shows the baseline explanation and a reading form defaulted to today", asy
   await app.start();
 
   assert.match(normalizedText(root.querySelector("#history")), /первая запись.*стартов/i);
+  assert.match(normalizedText(root.querySelector("[data-unpaid-total]")), /0,00 ₽/);
   assert.equal(root.querySelector("#reading_date")?.value, "2026-08-03");
   for (const name of ["t1_reading", "t2_reading", "t1_rate", "t2_rate"]) {
     assert.equal(root.querySelector(`[name="${name}"]`)?.inputMode, "decimal");
   }
+});
+
+test("keeps unknown history locked after load failure and enables it only after retry succeeds", async () => {
+  const retry = deferred();
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings();
+  let listAttempts = 0;
+  readings.list = async (userId) => {
+    readings.calls.push(["list", userId]);
+    listAttempts += 1;
+    if (listAttempts === 1) {
+      throw new TypeError("Failed to fetch");
+    }
+    return retry.promise;
+  };
+  const { app, root } = createFixture({ auth, readings });
+
+  await app.start();
+
+  assert.equal(
+    normalizedText(root.querySelector('[role="alert"]')),
+    "Не удалось подключиться к серверу. Проверьте интернет-соединение."
+  );
+  assert.equal(
+    auth.calls.filter(([method]) => method === "getSession").length,
+    2
+  );
+  assert.ok(root.querySelector('[data-action="retryReadings"]'));
+  for (const control of root.querySelectorAll(
+    'form[data-form="reading"] input, form[data-form="reading"] button'
+  )) {
+    assert.equal(control.disabled, true);
+  }
+  assert.equal(root.querySelector("[data-unpaid-total]"), null);
+
+  enterReading(root, {
+    reading_date: "2026-07-20",
+    t1_reading: "6989",
+    t2_reading: "3136",
+    t1_rate: "6.25",
+    t2_rate: "2.5"
+  });
+  submitReadingForm(root);
+  await settle();
+  assert.equal(
+    readings.calls.filter(([method]) => method === "create").length,
+    0
+  );
+
+  click(root, '[data-action="retryReadings"]');
+  assert.equal(root.querySelector('form[data-form="reading"] button').disabled, true);
+  assert.equal(root.querySelector("[data-reading-id]"), null);
+
+  retry.resolve([reading({ id: "canonical" })]);
+  await settle();
+
+  assert.equal(
+    readings.calls.filter(([method]) => method === "list").length,
+    2
+  );
+  assert.ok(root.querySelector('[data-reading-id="canonical"]'));
+  assert.equal(root.querySelector('form[data-form="reading"] button').disabled, false);
+  assert.equal(root.querySelector('[data-action="retryReadings"]'), null);
+});
+
+test("returns to authentication when the initial readings failure finds no session", async () => {
+  const session = {
+    user: { id: "user-1", email: "person@example.com" }
+  };
+  const auth = createFakeAuth({ session });
+  let sessionChecks = 0;
+  auth.getSession = async () => {
+    auth.calls.push(["getSession"]);
+    sessionChecks += 1;
+    return sessionChecks === 1 ? session : null;
+  };
+  const readings = createFakeReadings();
+  readings.list = async (userId) => {
+    readings.calls.push(["list", userId]);
+    throw { code: "PGRST301", message: "JWT expired" };
+  };
+  const { app, root } = createFixture({ auth, readings });
+
+  await app.start();
+
+  assert.ok(root.querySelector('form[data-form="auth"]'));
+  assert.equal(root.querySelector('form[data-form="reading"]'), null);
+});
+
+test("switches accessible tabs and preserves the active tab through mutations", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([reading({ id: "baseline" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+
+  const tablist = root.querySelector('[role="tablist"]');
+  const readingsTab = root.querySelector('[role="tab"][data-tab="readings"]');
+  const historyTab = root.querySelector('[role="tab"][data-tab="history"]');
+  assert.ok(tablist);
+  assert.equal(readingsTab.textContent, "Новая запись");
+  assert.equal(historyTab.textContent, "История");
+  assert.equal(readingsTab.getAttribute("aria-selected"), "true");
+  assert.equal(historyTab.getAttribute("aria-selected"), "false");
+  assert.equal(root.querySelector('#readings[role="tabpanel"]').hidden, false);
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, true);
+
+  click(root, '[role="tab"][data-tab="history"]');
+
+  assert.equal(
+    root.querySelector('[role="tab"][data-tab="readings"]').getAttribute("aria-selected"),
+    "false"
+  );
+  assert.equal(
+    root.querySelector('[role="tab"][data-tab="history"]').getAttribute("aria-selected"),
+    "true"
+  );
+  assert.equal(root.querySelector('#readings[role="tabpanel"]').hidden, true);
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
+
+  click(root, '[data-action="togglePaid"][data-id="baseline"]');
+  await settle();
+
+  assert.equal(
+    root.querySelector('[role="tab"][data-tab="history"]').getAttribute("aria-selected"),
+    "true"
+  );
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
 });
 
 test("previews a first valid reading as a zero-cost baseline and accepts comma decimals", async () => {
@@ -419,10 +555,120 @@ test("shows field-level reading errors and does not persist invalid values", asy
     assert.ok(root.querySelector(`[data-field-error="${name}"]`)?.textContent);
     assert.equal(root.querySelector(`[name="${name}"]`)?.getAttribute("aria-invalid"), "true");
   }
+  assert.deepEqual(
+    Object.fromEntries(
+      [
+        "reading_date",
+        "t1_reading",
+        "t2_reading",
+        "t1_rate",
+        "t2_rate"
+      ].map((name) => [
+        name,
+        normalizedText(root.querySelector(`[data-field-error="${name}"]`))
+      ])
+    ),
+    {
+      reading_date: "Укажите дату показаний.",
+      t1_reading: "Показания Т1 не могут быть отрицательными.",
+      t2_reading: "Показания Т2 не могут быть отрицательными.",
+      t1_rate: "Тариф Т1 должен быть больше нуля.",
+      t2_rate: "Тариф Т2 должен быть больше нуля."
+    }
+  );
   assert.equal(
     readings.calls.filter(([method]) => method === "create").length,
     0
   );
+});
+
+test("renders duplicate-date and neighbor validation errors only in Russian", async () => {
+  const session = {
+    user: { id: "user-1", email: "person@example.com" }
+  };
+
+  const duplicate = createFixture({
+    auth: createFakeAuth({ session }),
+    readings: createFakeReadings([reading({ id: "existing" })])
+  });
+  await duplicate.app.start();
+  enterReading(duplicate.root, {
+    reading_date: "2025-08-15",
+    t1_reading: "6989",
+    t2_reading: "3136",
+    t1_rate: "6.25",
+    t2_rate: "2.5"
+  });
+  submitReadingForm(duplicate.root);
+  await settle();
+  assert.equal(
+    normalizedText(
+      duplicate.root.querySelector('[data-field-error="reading_date"]')
+    ),
+    "На эту дату уже есть запись."
+  );
+
+  const below = createFixture({
+    auth: createFakeAuth({ session }),
+    readings: createFakeReadings([reading({ id: "previous" })])
+  });
+  await below.app.start();
+  enterReading(below.root, {
+    reading_date: "2025-09-15",
+    t1_reading: "6988",
+    t2_reading: "3135",
+    t1_rate: "6.25",
+    t2_rate: "2.5"
+  });
+  submitReadingForm(below.root);
+  await settle();
+  assert.equal(
+    normalizedText(below.root.querySelector('[data-field-error="t1_reading"]')),
+    "Показания Т1 не могут быть меньше предыдущей записи."
+  );
+  assert.equal(
+    normalizedText(below.root.querySelector('[data-field-error="t2_reading"]')),
+    "Показания Т2 не могут быть меньше предыдущей записи."
+  );
+
+  const above = createFixture({
+    auth: createFakeAuth({ session }),
+    readings: createFakeReadings([
+      reading({ id: "editing" }),
+      reading({
+        id: "next",
+        reading_date: "2025-09-15",
+        t1_reading: 7000,
+        t2_reading: 3200
+      })
+    ])
+  });
+  await above.app.start();
+  click(above.root, '[data-action="edit"][data-id="editing"]');
+  enterReading(above.root, {
+    t1_reading: "7001",
+    t2_reading: "3201"
+  });
+  submitReadingForm(above.root);
+  await settle();
+  assert.equal(
+    normalizedText(above.root.querySelector('[data-field-error="t1_reading"]')),
+    "Показания Т1 не могут превышать следующую запись."
+  );
+  assert.equal(
+    normalizedText(above.root.querySelector('[data-field-error="t2_reading"]')),
+    "Показания Т2 не могут превышать следующую запись."
+  );
+
+  const allMessages = [
+    ...duplicate.root.querySelectorAll("[data-field-error]"),
+    ...below.root.querySelectorAll("[data-field-error]"),
+    ...above.root.querySelectorAll("[data-field-error]")
+  ]
+    .map(normalizedText)
+    .filter(Boolean)
+    .join(" ");
+  assert.doesNotMatch(allMessages, /reading|must|cannot|previous|next|required/i);
 });
 
 test("renders newest-first history cards, separate tariff lines, and unpaid debt", async () => {
@@ -608,6 +854,62 @@ test("edits a canonical reading and recalculates later history periods", async (
   );
 });
 
+test("reorders an edited date and recalculates periods from the new chronology", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([
+    reading({
+      id: "baseline",
+      reading_date: "2025-01-15",
+      t1_reading: 100,
+      t2_reading: 100,
+      t1_rate: 1,
+      t2_rate: 1
+    }),
+    reading({
+      id: "middle",
+      reading_date: "2025-02-15",
+      t1_reading: 200,
+      t2_reading: 200,
+      t1_rate: 1,
+      t2_rate: 1
+    }),
+    reading({
+      id: "newest",
+      reading_date: "2025-03-15",
+      t1_reading: 300,
+      t2_reading: 300,
+      t1_rate: 1,
+      t2_rate: 1
+    })
+  ]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+
+  click(root, '[data-action="edit"][data-id="middle"]');
+  enterReading(root, {
+    reading_date: "2025-04-15",
+    t1_reading: "400",
+    t2_reading: "400"
+  });
+  submitReadingForm(root);
+  await settle();
+
+  assert.deepEqual(
+    [...root.querySelectorAll("[data-reading-id]")].map(
+      (card) => card.dataset.readingId
+    ),
+    ["middle", "newest", "baseline"]
+  );
+  assert.match(
+    normalizedText(root.querySelector('[data-reading-id="newest"]')),
+    /400,00 ₽/
+  );
+});
+
 test("deletes a reading only after the exact confirmation prompt", async () => {
   const prompts = [];
   const auth = createFakeAuth({
@@ -673,6 +975,51 @@ test("leaves history unchanged when deletion is cancelled", async () => {
     0
   );
   assert.ok(root.querySelector('[data-reading-id="baseline"]'));
+});
+
+test("deleting a middle reading recalculates the downstream period", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([
+    reading({
+      id: "baseline",
+      reading_date: "2025-01-15",
+      t1_reading: 100,
+      t2_reading: 100
+    }),
+    reading({
+      id: "middle",
+      reading_date: "2025-02-15",
+      t1_reading: 200,
+      t2_reading: 200
+    }),
+    reading({
+      id: "newest",
+      reading_date: "2025-03-15",
+      t1_reading: 300,
+      t2_reading: 300,
+      t1_rate: 2,
+      t2_rate: 3
+    })
+  ]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  assert.match(
+    normalizedText(root.querySelector('[data-reading-id="newest"]')),
+    /500,00 ₽/
+  );
+
+  click(root, '[data-action="delete"][data-id="middle"]');
+  await settle();
+
+  assert.equal(root.querySelector('[data-reading-id="middle"]'), null);
+  assert.match(
+    normalizedText(root.querySelector('[data-reading-id="newest"]')),
+    /1 000,00 ₽/
+  );
 });
 
 test("toggles paid status and removes that period from the debt total", async () => {

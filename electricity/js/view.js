@@ -91,7 +91,10 @@ function renderPreview(preview) {
 }
 
 function renderReadingForm(state) {
-  const disabled = state.pending || state.loadingReadings ? " disabled" : "";
+  const disabled =
+    state.pending || state.loadingReadings || !state.readingsLoaded
+      ? " disabled"
+      : "";
   const dateError = fieldError(state, "reading_date");
   const t1ReadingError = fieldError(state, "t1_reading");
   const t2ReadingError = fieldError(state, "t2_reading");
@@ -163,8 +166,17 @@ function renderHistory(state) {
     return '<p role="status">Загрузка показаний…</p>';
   }
 
+  if (!state.readingsLoaded) {
+    return "<p>История недоступна, пока показания не загружены.</p>";
+  }
+
+  const summary = `<p data-unpaid-total>Задолженность: <strong>${formatRubles(state.unpaidTotal)}</strong></p>`;
+
   if (state.periods.length === 0) {
-    return "<p>Первая запись станет стартовой и не создаст начисление.</p>";
+    return `
+      ${summary}
+      <p>Первая запись станет стартовой и не создаст начисление.</p>
+    `;
   }
 
   const disabled = state.pending ? " disabled" : "";
@@ -174,7 +186,7 @@ function renderHistory(state) {
     .join("");
 
   return `
-    <p data-unpaid-total>Задолженность: <strong>${formatRubles(state.unpaidTotal)}</strong></p>
+    ${summary}
     <div>${cards}</div>
   `;
 }
@@ -182,26 +194,39 @@ function renderHistory(state) {
 function renderSignedIn(state) {
   const email = escapeHtml(state.user.email ?? "");
   const pending = state.pending || state.loadingReadings ? " disabled" : "";
+  const tabsDisabled =
+    state.pending || state.loadingReadings || !state.readingsLoaded
+      ? " disabled"
+      : "";
+  const readingsSelected = state.activeTab === "readings";
+  const historySelected = state.activeTab === "history";
   const alert = state.error
     ? `<p role="alert">${escapeHtml(state.error)}</p>`
     : "";
+  const retry =
+    !state.readingsLoaded && !state.loadingReadings
+      ? '<button type="button" data-action="retryReadings">Повторить загрузку</button>'
+      : "";
 
   return `
     <section aria-labelledby="account-heading">
       <h2 id="account-heading">Личный кабинет</h2>
       <p>Вы вошли как ${email}</p>
       ${alert}
+      ${retry}
       <nav aria-label="Основная навигация">
-        <a href="#readings">Показания</a>
-        <a href="#history">История</a>
+        <div role="tablist" aria-label="Разделы приложения">
+          <button id="readings-tab" type="button" role="tab" data-action="switchTab" data-tab="readings" aria-controls="readings" aria-selected="${readingsSelected}" tabindex="${readingsSelected ? "0" : "-1"}"${tabsDisabled}>Новая запись</button>
+          <button id="history-tab" type="button" role="tab" data-action="switchTab" data-tab="history" aria-controls="history" aria-selected="${historySelected}" tabindex="${historySelected ? "0" : "-1"}"${tabsDisabled}>История</button>
+        </div>
       </nav>
       <button type="button" data-action="signOut"${pending}>Выйти</button>
-      <section id="readings" aria-labelledby="readings-heading">
-        <h3 id="readings-heading">Показания электроэнергии</h3>
+      <section id="readings" role="tabpanel" aria-labelledby="readings-tab"${readingsSelected ? "" : " hidden"}>
+        <h3>Показания электроэнергии</h3>
         ${renderReadingForm(state)}
       </section>
-      <section id="history" aria-labelledby="history-heading">
-        <h3 id="history-heading">История</h3>
+      <section id="history" role="tabpanel" aria-labelledby="history-tab"${historySelected ? "" : " hidden"}>
+        <h3>История</h3>
         ${renderHistory(state)}
       </section>
     </section>
