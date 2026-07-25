@@ -1,3 +1,5 @@
+import { formatRubles } from "./domain.js";
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -45,9 +47,141 @@ function renderSignedOut(state) {
   `;
 }
 
+function fieldError(state, name) {
+  const message = state.fieldErrors?.[name] ?? "";
+
+  return {
+    attributes: message
+      ? ` aria-describedby="${name}-error" aria-invalid="true"`
+      : "",
+    message: escapeHtml(message)
+  };
+}
+
+function formatNumber(value) {
+  return new Intl.NumberFormat("ru-RU", {
+    maximumFractionDigits: 3
+  }).format(value);
+}
+
+function renderPreview(preview) {
+  if (!preview) {
+    return `
+      <section data-preview aria-labelledby="preview-heading">
+        <h4 id="preview-heading">Предварительный расчёт</h4>
+        <p>Заполните корректно все поля, чтобы увидеть расчёт.</p>
+      </section>
+    `;
+  }
+
+  return `
+    <section data-preview aria-labelledby="preview-heading">
+      <h4 id="preview-heading">Предварительный расчёт</h4>
+      ${
+        preview.isBaseline
+          ? "<p>Первая запись будет стартовой и не создаст начисление.</p>"
+          : `
+            <p>Т1: ${formatNumber(preview.t1Usage)} кВт⋅ч × ${formatNumber(preview.t1_rate)} ₽ = ${formatRubles(preview.t1Cost)}</p>
+            <p>Т2: ${formatNumber(preview.t2Usage)} кВт⋅ч × ${formatNumber(preview.t2_rate)} ₽ = ${formatRubles(preview.t2Cost)}</p>
+          `
+      }
+      <p><strong>Итого: ${formatRubles(preview.totalCost)}</strong></p>
+    </section>
+  `;
+}
+
+function renderReadingForm(state) {
+  const disabled = state.pending || state.loadingReadings ? " disabled" : "";
+  const dateError = fieldError(state, "reading_date");
+  const t1ReadingError = fieldError(state, "t1_reading");
+  const t2ReadingError = fieldError(state, "t2_reading");
+  const t1RateError = fieldError(state, "t1_rate");
+  const t2RateError = fieldError(state, "t2_rate");
+
+  return `
+    <form data-form="reading">
+      <div>
+        <label for="reading_date">Дата показаний</label>
+        <input id="reading_date" name="reading_date" type="date" value="${escapeHtml(state.form.reading_date)}" required${dateError.attributes}${disabled}>
+        <p id="reading_date-error" data-field-error="reading_date">${dateError.message}</p>
+      </div>
+      <div>
+        <label for="t1_reading">Показания Т1</label>
+        <input id="t1_reading" name="t1_reading" type="text" inputmode="decimal" value="${escapeHtml(state.form.t1_reading)}" required${t1ReadingError.attributes}${disabled}>
+        <p id="t1_reading-error" data-field-error="t1_reading">${t1ReadingError.message}</p>
+      </div>
+      <div>
+        <label for="t2_reading">Показания Т2</label>
+        <input id="t2_reading" name="t2_reading" type="text" inputmode="decimal" value="${escapeHtml(state.form.t2_reading)}" required${t2ReadingError.attributes}${disabled}>
+        <p id="t2_reading-error" data-field-error="t2_reading">${t2ReadingError.message}</p>
+      </div>
+      <div>
+        <label for="t1_rate">Тариф Т1</label>
+        <input id="t1_rate" name="t1_rate" type="text" inputmode="decimal" value="${escapeHtml(state.form.t1_rate)}" required${t1RateError.attributes}${disabled}>
+        <p id="t1_rate-error" data-field-error="t1_rate">${t1RateError.message}</p>
+      </div>
+      <div>
+        <label for="t2_rate">Тариф Т2</label>
+        <input id="t2_rate" name="t2_rate" type="text" inputmode="decimal" value="${escapeHtml(state.form.t2_rate)}" required${t2RateError.attributes}${disabled}>
+        <p id="t2_rate-error" data-field-error="t2_rate">${t2RateError.message}</p>
+      </div>
+      <button type="submit"${disabled}>${state.editingId ? "Сохранить изменения" : "Сохранить запись"}</button>
+      ${
+        state.editingId
+          ? `<button type="button" data-action="cancelEdit" data-id="${escapeHtml(state.editingId)}"${disabled}>Отменить редактирование</button>`
+          : ""
+      }
+    </form>
+    ${renderPreview(state.preview)}
+  `;
+}
+
+function renderHistoryCard(period, disabled) {
+  const id = escapeHtml(period.id);
+  const paymentStatus = period.is_paid ? "Оплачено" : "Не оплачено";
+  const paymentAction = period.is_paid
+    ? "Отметить неоплаченным"
+    : "Отметить оплаченным";
+
+  return `
+    <article data-reading-id="${id}">
+      <h4><time datetime="${escapeHtml(period.reading_date)}">${escapeHtml(period.reading_date)}</time></h4>
+      ${period.isBaseline ? "<p>Стартовая запись</p>" : ""}
+      <p data-tariff="t1">Т1: показание ${formatNumber(period.t1_reading)}, расход ${formatNumber(period.t1Usage)} кВт⋅ч, тариф ${formatNumber(period.t1_rate)} ₽, стоимость ${formatRubles(period.t1Cost)}</p>
+      <p data-tariff="t2">Т2: показание ${formatNumber(period.t2_reading)}, расход ${formatNumber(period.t2Usage)} кВт⋅ч, тариф ${formatNumber(period.t2_rate)} ₽, стоимость ${formatRubles(period.t2Cost)}</p>
+      <p><strong>Итого: ${formatRubles(period.totalCost)}</strong></p>
+      <p>${paymentStatus}</p>
+      <button type="button" data-action="togglePaid" data-id="${id}"${disabled}>${paymentAction}</button>
+      <button type="button" data-action="edit" data-id="${id}"${disabled}>Редактировать</button>
+      <button type="button" data-action="delete" data-id="${id}"${disabled}>Удалить</button>
+    </article>
+  `;
+}
+
+function renderHistory(state) {
+  if (state.loadingReadings) {
+    return '<p role="status">Загрузка показаний…</p>';
+  }
+
+  if (state.periods.length === 0) {
+    return "<p>Первая запись станет стартовой и не создаст начисление.</p>";
+  }
+
+  const disabled = state.pending ? " disabled" : "";
+  const cards = [...state.periods]
+    .reverse()
+    .map((period) => renderHistoryCard(period, disabled))
+    .join("");
+
+  return `
+    <p data-unpaid-total>Задолженность: <strong>${formatRubles(state.unpaidTotal)}</strong></p>
+    <div>${cards}</div>
+  `;
+}
+
 function renderSignedIn(state) {
   const email = escapeHtml(state.user.email ?? "");
-  const pending = state.pending ? " disabled" : "";
+  const pending = state.pending || state.loadingReadings ? " disabled" : "";
   const alert = state.error
     ? `<p role="alert">${escapeHtml(state.error)}</p>`
     : "";
@@ -64,9 +198,11 @@ function renderSignedIn(state) {
       <button type="button" data-action="signOut"${pending}>Выйти</button>
       <section id="readings" aria-labelledby="readings-heading">
         <h3 id="readings-heading">Показания электроэнергии</h3>
+        ${renderReadingForm(state)}
       </section>
       <section id="history" aria-labelledby="history-heading">
         <h3 id="history-heading">История</h3>
+        ${renderHistory(state)}
       </section>
     </section>
   `;
@@ -109,6 +245,12 @@ export function createView(root) {
         root.innerHTML = renderSignedOut(state);
       }
     },
-    showFieldErrors
+    showFieldErrors,
+    updatePreview(preview) {
+      const currentPreview = root.querySelector("[data-preview]");
+      if (currentPreview) {
+        currentPreview.outerHTML = renderPreview(preview);
+      }
+    }
   };
 }
