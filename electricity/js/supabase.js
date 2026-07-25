@@ -8,8 +8,14 @@ const USER_MESSAGES = {
   fallback: "Не удалось выполнить запрос. Попробуйте ещё раз."
 };
 
-export function createSupabaseClient(config) {
-  return createClient(config.url, config.anonKey);
+export function createSupabaseClient(config, factory = createClient) {
+  return factory(config.url, config.anonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
 }
 
 export function toUserMessage(error) {

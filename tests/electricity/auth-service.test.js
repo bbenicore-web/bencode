@@ -74,14 +74,36 @@ test("rejects a missing Supabase anon key with the Russian setup message", () =>
   );
 });
 
-test("creates a Supabase client from validated public configuration", () => {
-  const client = createSupabaseClient({
-    url: "https://project.supabase.co",
-    anonKey: "public-anon-key"
-  });
+test("creates a Supabase client with an explicit persistent session contract", () => {
+  const client = { name: "injected client" };
+  const calls = [];
+  const factory = (...args) => {
+    calls.push(args);
+    return client;
+  };
 
-  assert.equal(client.supabaseUrl, "https://project.supabase.co");
-  assert.equal(client.supabaseKey, "public-anon-key");
+  const result = createSupabaseClient(
+    {
+      url: "https://project.supabase.co",
+      anonKey: "public-anon-key"
+    },
+    factory
+  );
+
+  assert.equal(result, client);
+  assert.deepEqual(calls, [
+    [
+      "https://project.supabase.co",
+      "public-anon-key",
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    ]
+  ]);
 });
 
 test("returns the current session", async () => {
