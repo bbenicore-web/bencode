@@ -241,6 +241,33 @@ test("migration rejects readings below the immediate previous row", async () => 
   assert.match(sql, /constraint = 'electricity_readings_t2_monotonic'/);
 });
 
+test("migration acquires a transaction-scoped per-user lock before neighbor reads", async () => {
+  const migration = await readFile(
+    new URL(
+      "../../electricity/supabase/20260725000000_create_electricity_readings.sql",
+      import.meta.url
+    ),
+    "utf8"
+  );
+  const functionBody = migration.match(
+    /create function public\.validate_electricity_reading_monotonicity\(\)[\s\S]*?as \$\$([\s\S]*?)\$\$;/
+  )?.[1];
+
+  assert.ok(functionBody, "expected the monotonicity trigger function body");
+  const sql = functionBody.replace(/\s+/g, " ");
+  const lockIndex = sql.search(
+    /perform pg_catalog\.pg_advisory_xact_lock\( ?pg_catalog\.hashtextextended\(new\.user_id::text, 0\) ?\)/
+  );
+  const firstNeighborReadIndex = sql.indexOf("select t1_reading, t2_reading");
+
+  assert.notEqual(lockIndex, -1, "expected a lock derived from new.user_id");
+  assert.notEqual(firstNeighborReadIndex, -1, "expected neighbor reads");
+  assert.ok(
+    lockIndex < firstNeighborReadIndex,
+    "the per-user lock must be acquired before reading neighbors"
+  );
+});
+
 test("migration rejects readings above the immediate next row and excludes an updated row", async () => {
   const migration = await readFile(
     new URL(

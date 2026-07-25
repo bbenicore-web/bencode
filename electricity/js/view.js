@@ -23,12 +23,16 @@ function renderSignedOut(state) {
   const notice = state.notice
     ? `<p role="status">${escapeHtml(state.notice)}</p>`
     : "";
+  const progress = state.pending
+    ? '<p role="status" aria-live="polite" data-progress>Отправка данных…</p>'
+    : "";
 
   return `
     <section aria-labelledby="auth-heading">
       <h2 id="auth-heading">Вход в приложение</h2>
       ${alert}
       ${notice}
+      ${progress}
       <form data-form="auth">
         <div>
           <label for="email">Email</label>
@@ -163,7 +167,7 @@ function renderHistoryCard(period, disabled) {
 
 function renderHistory(state) {
   if (state.loadingReadings) {
-    return '<p role="status">Загрузка показаний…</p>';
+    return "<p>Загрузка показаний…</p>";
   }
 
   if (!state.readingsLoaded) {
@@ -207,12 +211,16 @@ function renderSignedIn(state) {
     !state.readingsLoaded && !state.loadingReadings
       ? '<button type="button" data-action="retryReadings">Повторить загрузку</button>'
       : "";
+  const loadingStatus = state.loadingReadings
+    ? '<p role="status" aria-live="polite" data-progress>Загрузка показаний…</p>'
+    : "";
 
   return `
     <section aria-labelledby="account-heading">
       <h2 id="account-heading">Личный кабинет</h2>
       <p>Вы вошли как ${email}</p>
       ${alert}
+      ${loadingStatus}
       ${retry}
       <nav aria-label="Основная навигация">
         <div role="tablist" aria-label="Разделы приложения">

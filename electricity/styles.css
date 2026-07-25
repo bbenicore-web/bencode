@@ -18,7 +18,7 @@
   --success-soft: #e9f8f0;
   --error: #b42318;
   --error-soft: #fff0ee;
-  --focus: #80b5ff;
+  --focus: #1f4fbd;
   --shadow-sm: 0 1px 2px rgb(16 24 40 / 6%);
   --shadow-md: 0 12px 32px rgb(16 24 40 / 10%);
 }
@@ -362,7 +362,9 @@ p[role="alert"]::before {
   text-transform: uppercase;
 }
 
-#app > section[aria-labelledby="auth-heading"] > p[role="status"] {
+#app
+  > section[aria-labelledby="auth-heading"]
+  > p[role="status"]:not([data-progress]) {
   padding: 0.8rem 0.9rem;
   border: 1px solid #a8ddc1;
   border-left: 4px solid var(--success);
@@ -372,10 +374,32 @@ p[role="alert"]::before {
   font-size: 0.9rem;
 }
 
-#app > section[aria-labelledby="auth-heading"] > p[role="status"]::before {
+#app
+  > section[aria-labelledby="auth-heading"]
+  > p[role="status"]:not([data-progress])::before {
   display: block;
   margin-bottom: 0.15rem;
   content: "Готово";
+  font-size: 0.75rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+p[data-progress] {
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #bfd1f8;
+  border-left: 4px solid var(--brand);
+  border-radius: 12px;
+  color: var(--brand-strong);
+  background: var(--surface-brand);
+  font-size: 0.9rem;
+}
+
+p[data-progress]::before {
+  display: block;
+  margin-bottom: 0.15rem;
+  content: "Подождите";
   font-size: 0.75rem;
   font-weight: 850;
   letter-spacing: 0.06em;

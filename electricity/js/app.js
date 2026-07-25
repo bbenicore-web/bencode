@@ -236,6 +236,17 @@ export function createApp({ auth, readings, root, confirm, today }) {
     });
   }
 
+  function handleAuthStateChange(event, session) {
+    const repeatsCurrentUser =
+      state.status === "signedIn" &&
+      session?.user?.id === state.user.id &&
+      (event === "TOKEN_REFRESHED" || event === "SIGNED_IN");
+
+    if (!repeatsCurrentUser) {
+      void renderSession(session);
+    }
+  }
+
   async function submitAuthentication(event) {
     if (!event.target.matches('[data-form="auth"]')) {
       return;
@@ -483,6 +494,8 @@ export function createApp({ auth, readings, root, confirm, today }) {
       [nextTab] = TABS;
     } else if (event.key === "End") {
       nextTab = TABS.at(-1);
+    } else if (event.key === "Enter" || event.key === " ") {
+      nextTab = tab.dataset.tab;
     } else {
       return;
     }
@@ -500,7 +513,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
     const { action, id } = button.dataset;
 
     if (action === "switchTab") {
-      selectTab(button.dataset.tab);
+      selectTab(button.dataset.tab, true);
       return;
     }
 
@@ -592,9 +605,9 @@ export function createApp({ auth, readings, root, confirm, today }) {
     root.addEventListener("keydown", handleTabKeydown);
     root.addEventListener("click", handleReadingAction);
     root.addEventListener("click", signOut);
-    authSubscription = auth.onAuthStateChange((_event, session) => {
+    authSubscription = auth.onAuthStateChange((event, session) => {
       if (!destroyed) {
-        void renderSession(session);
+        handleAuthStateChange(event, session);
       }
     });
 

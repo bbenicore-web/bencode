@@ -175,6 +175,26 @@ function normalizedText(element) {
   return element?.textContent.replaceAll("\u00a0", " ").replace(/\s+/g, " ").trim();
 }
 
+function relativeLuminance(hexColor) {
+  const channels = hexColor
+    .slice(1)
+    .match(/.{2}/g)
+    .map((channel) => Number.parseInt(channel, 16) / 255)
+    .map((channel) =>
+      channel <= 0.04045
+        ? channel / 12.92
+        : ((channel + 0.055) / 1.055) ** 2.4
+    );
+
+  return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+}
+
+function contrastRatio(first, second) {
+  const lighter = Math.max(relativeLuminance(first), relativeLuminance(second));
+  const darker = Math.min(relativeLuminance(first), relativeLuminance(second));
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 function click(root, selector) {
   const element = root.querySelector(selector);
   element.dispatchEvent(
@@ -221,6 +241,25 @@ test("index declares a self-contained SVG favicon", async () => {
   );
 });
 
+test("focus outline token has at least 3:1 contrast on every app background", async () => {
+  const css = await readFile(
+    new URL("../../electricity/styles.css", import.meta.url),
+    "utf8"
+  );
+  const tokens = Object.fromEntries(
+    [...css.matchAll(/--([\w-]+):\s*(#[\da-f]{6})/gi)].map(
+      ([, name, value]) => [name, value]
+    )
+  );
+
+  for (const background of ["surface", "surface-soft", "page"]) {
+    assert.ok(
+      contrastRatio(tokens.focus, tokens[background]) >= 3,
+      `expected --focus ${tokens.focus} to contrast with --${background} ${tokens[background]}`
+    );
+  }
+});
+
 test("bootstrap renders the setup screen and rejects missing public configuration", async () => {
   const dom = new JSDOM('<div id="app"><p>Загрузка…</p></div>');
   const root = dom.window.document.querySelector("#app");
@@ -233,6 +272,28 @@ test("bootstrap renders the setup screen and rejects missing public configuratio
 
   assert.equal(root.querySelector('[role="alert"]')?.textContent, setupMessage);
   assert.equal(root.querySelector("h2")?.textContent, "Требуется настройка");
+});
+
+test("bootstrap replaces loading with safe setup copy for an invalid Supabase URL", async () => {
+  const dom = new JSDOM('<div id="app"><p>Загрузка…</p></div>');
+  const root = dom.window.document.querySelector("#app");
+  const setupMessage =
+    "Не настроено подключение к Supabase. Укажите VITE_SUPABASE_URL и VITE_SUPABASE_ANON_KEY.";
+
+  await assert.rejects(
+    bootstrap({
+      env: {
+        VITE_SUPABASE_URL: "file:///tmp/supabase",
+        VITE_SUPABASE_ANON_KEY: "public-anon-key"
+      },
+      root
+    }),
+    { message: setupMessage }
+  );
+
+  assert.equal(root.querySelector('[role="alert"]')?.textContent, setupMessage);
+  assert.equal(root.querySelector("h2")?.textContent, "Требуется настройка");
+  assert.doesNotMatch(root.textContent, /Загрузка/);
 });
 
 test("derives the email confirmation redirect from the current app directory", () => {
@@ -323,10 +384,39 @@ test("disables both auth actions while login is pending", async () => {
 
   assert.equal(root.querySelector('button[value="signIn"]').disabled, true);
   assert.equal(root.querySelector('button[value="signUp"]').disabled, true);
+  const progress = root.querySelector('[role="status"]');
+  assert.equal(normalizedText(progress), "Отправка данных…");
+  assert.equal(progress.getAttribute("aria-live"), "polite");
   pending.resolve({
     session: { user: { id: "user-1", email: "person@example.com" } }
   });
   await settle();
+});
+
+test("shows and announces reading progress outside hidden panels while loading", async () => {
+  const pending = deferred();
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings();
+  readings.list = (userId) => {
+    readings.calls.push(["list", userId]);
+    return pending.promise;
+  };
+  const { app, root } = createFixture({ auth, readings });
+
+  const started = app.start();
+  await settle();
+
+  const progress = root.querySelector('[role="status"]');
+  assert.equal(normalizedText(progress), "Загрузка показаний…");
+  assert.equal(progress.getAttribute("aria-live"), "polite");
+  assert.equal(progress.closest("[hidden]"), null);
+
+  pending.resolve([]);
+  await started;
 });
 
 test("retains entered credentials and shows a safe Russian alert after a network failure", async () => {
@@ -383,6 +473,157 @@ test("renders signed-in navigation when authentication changes", async () => {
   assert.match(navigation.textContent, /Новая запись/);
   assert.match(navigation.textContent, /История/);
   assert.equal(root.querySelector("button[data-action='signOut']")?.textContent, "Выйти");
+});
+
+test("repeated same-user SIGNED_IN preserves editing, raw form values, active tab, and history", async () => {
+  const session = {
+    user: { id: "user-1", email: "person@example.com" }
+  };
+  const auth = createFakeAuth({ session });
+  const readings = createFakeReadings([reading({ id: "baseline" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  click(root, '[data-action="edit"][data-id="baseline"]');
+  enterReading(root, {
+    t1_reading: "6989,500",
+    t2_reading: "3136,500",
+    t1_rate: "6,2500",
+    t2_rate: "2,5000"
+  });
+  click(root, '[role="tab"][data-tab="history"]');
+  const listCallsBeforeRefresh = readings.calls.filter(
+    ([method]) => method === "list"
+  ).length;
+
+  auth.emit(
+    { user: { id: "user-1", email: "person@example.com" } },
+    "SIGNED_IN"
+  );
+  await settle();
+
+  assert.equal(
+    readings.calls.filter(([method]) => method === "list").length,
+    listCallsBeforeRefresh
+  );
+  assert.equal(
+    root.querySelector('[role="tab"][data-tab="history"]').getAttribute(
+      "aria-selected"
+    ),
+    "true"
+  );
+  assert.equal(root.querySelector("#t1_reading").value, "6989,500");
+  assert.equal(root.querySelector("#t1_rate").value, "6,2500");
+  assert.ok(root.querySelector('[data-action="cancelEdit"][data-id="baseline"]'));
+  assert.ok(root.querySelector('[data-reading-id="baseline"]'));
+});
+
+test("TOKEN_REFRESHED preserves signed-in editing state without reloading readings", async () => {
+  const session = {
+    user: { id: "user-1", email: "person@example.com" }
+  };
+  const auth = createFakeAuth({ session });
+  const readings = createFakeReadings([reading({ id: "baseline" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  click(root, '[data-action="edit"][data-id="baseline"]');
+  enterReading(root, { t1_reading: "6989,750" });
+  const listCallsBeforeRefresh = readings.calls.filter(
+    ([method]) => method === "list"
+  ).length;
+
+  auth.emit(
+    { user: { id: "user-1", email: "person@example.com" } },
+    "TOKEN_REFRESHED"
+  );
+  await settle();
+
+  assert.equal(
+    readings.calls.filter(([method]) => method === "list").length,
+    listCallsBeforeRefresh
+  );
+  assert.equal(root.querySelector("#t1_reading").value, "6989,750");
+  assert.ok(root.querySelector('[data-action="cancelEdit"][data-id="baseline"]'));
+});
+
+test("TOKEN_REFRESHED does not invalidate a pending reading mutation", async () => {
+  const pending = deferred();
+  const session = {
+    user: { id: "user-1", email: "person@example.com" }
+  };
+  const auth = createFakeAuth({ session });
+  const readings = createFakeReadings();
+  readings.create = (userId, input) => {
+    readings.calls.push(["create", userId, input]);
+    return pending.promise;
+  };
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  enterReading(root, {
+    reading_date: "2026-07-20",
+    t1_reading: "6989",
+    t2_reading: "3136",
+    t1_rate: "6.25",
+    t2_rate: "2.5"
+  });
+  submitReadingForm(root);
+
+  auth.emit(
+    { user: { id: "user-1", email: "person@example.com" } },
+    "TOKEN_REFRESHED"
+  );
+  pending.resolve({
+    id: "created",
+    user_id: "user-1",
+    reading_date: "2026-07-20",
+    t1_reading: 6989,
+    t2_reading: 3136,
+    t1_rate: 6.25,
+    t2_rate: 2.5,
+    is_paid: false
+  });
+  await settle();
+
+  assert.equal(
+    readings.calls.filter(([method]) => method === "list").length,
+    1
+  );
+  assert.ok(root.querySelector('[data-reading-id="created"]'));
+  assert.equal(root.querySelector("#reading_date").value, "2026-07-25");
+  assert.equal(root.querySelector("#t1_reading").value, "");
+});
+
+test("SIGNED_IN for a different user resets local state and loads that user's history", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "one@example.com" }
+    }
+  });
+  const readings = createFakeReadings([reading({ id: "baseline" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  click(root, '[data-action="edit"][data-id="baseline"]');
+  enterReading(root, { t1_reading: "7000" });
+  click(root, '[role="tab"][data-tab="history"]');
+
+  auth.emit(
+    { user: { id: "user-2", email: "two@example.com" } },
+    "SIGNED_IN"
+  );
+  await settle();
+
+  assert.deepEqual(
+    readings.calls.filter(([method]) => method === "list"),
+    [["list", "user-1"], ["list", "user-2"]]
+  );
+  assert.match(root.textContent, /two@example\.com/);
+  assert.equal(
+    root.querySelector('[role="tab"][data-tab="readings"]').getAttribute(
+      "aria-selected"
+    ),
+    "true"
+  );
+  assert.equal(root.querySelector("#t1_reading").value, "");
+  assert.equal(root.querySelector('[data-action="cancelEdit"]'), null);
 });
 
 test("shows the baseline explanation and a reading form defaulted to today", async () => {
@@ -538,6 +779,52 @@ test("switches accessible tabs and preserves the active tab through mutations", 
     root.querySelector('[role="tab"][data-tab="history"]').getAttribute("aria-selected"),
     "true"
   );
+  assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
+});
+
+test("restores focus to the replacement tab after click activation", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const { app, root } = createFixture({ auth });
+  await app.start();
+  const originalHistoryTab = root.querySelector(
+    '[role="tab"][data-tab="history"]'
+  );
+  originalHistoryTab.focus();
+
+  click(root, '[role="tab"][data-tab="history"]');
+
+  const replacementHistoryTab = root.querySelector(
+    '[role="tab"][data-tab="history"]'
+  );
+  assert.notEqual(replacementHistoryTab, originalHistoryTab);
+  assert.equal(root.ownerDocument.activeElement, replacementHistoryTab);
+  assert.equal(replacementHistoryTab.getAttribute("aria-selected"), "true");
+});
+
+test("Enter activates a tab and restores focus after the tablist rerenders", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const { app, root } = createFixture({ auth });
+  await app.start();
+  const originalHistoryTab = root.querySelector(
+    '[role="tab"][data-tab="history"]'
+  );
+
+  pressTabKey(root, "history", "Enter");
+
+  const replacementHistoryTab = root.querySelector(
+    '[role="tab"][data-tab="history"]'
+  );
+  assert.notEqual(replacementHistoryTab, originalHistoryTab);
+  assert.equal(root.ownerDocument.activeElement, replacementHistoryTab);
+  assert.equal(replacementHistoryTab.getAttribute("aria-selected"), "true");
   assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
 });
 

@@ -74,6 +74,24 @@ test("rejects a missing Supabase anon key with the Russian setup message", () =>
   );
 });
 
+test("rejects malformed and non-http Supabase URLs with the Russian setup message", () => {
+  for (const url of [
+    "not a URL",
+    "ftp://project.supabase.co",
+    "javascript:alert('unsafe')"
+  ]) {
+    assert.throws(
+      () =>
+        getSupabaseConfig({
+          VITE_SUPABASE_URL: url,
+          VITE_SUPABASE_ANON_KEY: "public-anon-key"
+        }),
+      (error) => error.message === SETUP_MESSAGE,
+      url
+    );
+  }
+});
+
 test("creates a Supabase client with an explicit persistent session contract", () => {
   const client = { name: "injected client" };
   const calls = [];

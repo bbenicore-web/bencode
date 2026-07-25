@@ -4,7 +4,9 @@ const rubleFormatter = new Intl.NumberFormat("ru-RU", {
 });
 
 function roundMoney(value) {
-  return Math.round((value + Number.EPSILON) * 100) / 100;
+  const scaled = value * 100;
+  const scaledTolerance = Number.EPSILON * Math.abs(scaled);
+  return Math.round(scaled + scaledTolerance) / 100;
 }
 
 function sortByDate(readings) {

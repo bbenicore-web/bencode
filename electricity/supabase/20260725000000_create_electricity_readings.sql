@@ -52,6 +52,10 @@ declare
   next_t1_reading numeric(14,3);
   next_t2_reading numeric(14,3);
 begin
+  perform pg_catalog.pg_advisory_xact_lock(
+    pg_catalog.hashtextextended(new.user_id::text, 0)
+  );
+
   if tg_op = 'UPDATE' then
     excluded_id := old.id;
   end if;

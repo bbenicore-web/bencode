@@ -49,6 +49,49 @@ test("calculates adjacent usage and separate tariff costs", () => {
   );
 });
 
+test("rounds a half-cent tariff at the scaled monetary precision", () => {
+  const periods = calculatePeriods([
+    reading({
+      id: "old",
+      t1_reading: 100,
+      t2_reading: 100
+    }),
+    reading({
+      id: "new",
+      reading_date: "2025-09-15",
+      t1_reading: 101,
+      t2_reading: 100,
+      t1_rate: 10.075
+    })
+  ]);
+
+  assert.equal(periods[1].t1Cost, 10.08);
+  assert.equal(periods[1].totalCost, 10.08);
+});
+
+test("rounds tariff costs around the half-cent edge before totaling", () => {
+  const periods = calculatePeriods([
+    reading({
+      id: "old",
+      t1_reading: 100,
+      t2_reading: 100
+    }),
+    reading({
+      id: "new",
+      reading_date: "2025-09-15",
+      t1_reading: 101,
+      t2_reading: 101,
+      t1_rate: 1.005,
+      t2_rate: 2.0049
+    })
+  ]);
+
+  assert.deepEqual(
+    pick(periods[1], ["t1Cost", "t2Cost", "totalCost"]),
+    { t1Cost: 1.01, t2Cost: 2, totalCost: 3.01 }
+  );
+});
+
 test("produces the same periods regardless of input order", () => {
   const oldReading = reading({ id: "old" });
   const newReading = reading({
