@@ -269,6 +269,8 @@ function renderSignedIn(state) {
 }
 
 export function createView(root) {
+  let previousNeedsPrevious;
+
   function clearFieldErrors() {
     for (const message of root.querySelectorAll("[data-field-error]")) {
       const field = root.querySelector(`#${message.dataset.fieldError}`);
@@ -301,6 +303,7 @@ export function createView(root) {
         root.innerHTML = renderLoading();
       } else if (state.status === "signedIn") {
         root.innerHTML = renderSignedIn(state);
+        previousNeedsPrevious = state.needsPrevious;
       } else {
         root.innerHTML = renderSignedOut(state);
       }
@@ -320,11 +323,14 @@ export function createView(root) {
         "[data-previous-requirement]"
       );
       if (previousRequirement) {
-        previousRequirement.hidden = !state.needsPrevious;
-        previousRequirement.textContent = state.needsPrevious
-          ? PREVIOUS_REQUIREMENT_MESSAGE
-          : "";
+        if (state.needsPrevious !== previousNeedsPrevious) {
+          previousRequirement.hidden = !state.needsPrevious;
+          previousRequirement.textContent = state.needsPrevious
+            ? PREVIOUS_REQUIREMENT_MESSAGE
+            : "";
+        }
       }
+      previousNeedsPrevious = state.needsPrevious;
       const currentPreview = root.querySelector("[data-preview]");
       if (currentPreview) {
         currentPreview.outerHTML = renderPreview(state.preview);

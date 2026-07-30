@@ -1114,6 +1114,48 @@ test("announces when a current-date change makes previous readings required with
   }
 });
 
+test("does not repeat the previous-fields announcement during ordinary required-state typing", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([reading({ id: "later" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  const dateField = root.querySelector("#reading_date");
+
+  dateField.value = "2025-07-15";
+  dateField.dispatchEvent(
+    new dateField.ownerDocument.defaultView.Event("input", { bubbles: true })
+  );
+
+  const requirementStatus = root.querySelector("[data-previous-requirement]");
+  const field = root.querySelector("#t1_reading");
+  const mutations = [];
+  const observer = new field.ownerDocument.defaultView.MutationObserver(
+    (records) => mutations.push(...records)
+  );
+  observer.observe(requirementStatus, {
+    characterData: true,
+    childList: true,
+    subtree: true
+  });
+  field.focus();
+  field.value = "6990";
+  field.dispatchEvent(
+    new field.ownerDocument.defaultView.Event("input", { bubbles: true })
+  );
+  await Promise.resolve();
+  observer.disconnect();
+
+  assert.equal(root.querySelector("[data-previous-requirement]"), requirementStatus);
+  assert.equal(root.querySelector("#t1_reading"), field);
+  assert.equal(root.ownerDocument.activeElement, field);
+  assert.equal(field.value, "6990");
+  assert.deepEqual(mutations, []);
+});
+
 test("shows field-level reading errors and does not persist invalid values", async () => {
   const auth = createFakeAuth({
     session: {
@@ -1566,6 +1608,10 @@ test("earliest-row RPC failure preserves canonical rows, raw values, and edit mo
   };
   const { app, root } = createFixture({ auth, readings });
   await app.start();
+  const originalUnpaidDebt = normalizedText(
+    root.querySelector("[data-unpaid-total]")
+  );
+  assert.equal(originalUnpaidDebt, "Задолженность: 500,00 ₽");
   click(root, '[data-action="edit"][data-id="earliest"]');
   const rawValues = {
     previous_date: "2025-07-15",
@@ -1600,6 +1646,10 @@ test("earliest-row RPC failure preserves canonical rows, raw values, and edit mo
   assert.equal(
     readings.calls.filter(([method]) => method === "list").length,
     2
+  );
+  assert.equal(
+    normalizedText(root.querySelector("[data-unpaid-total]")),
+    originalUnpaidDebt
   );
 });
 

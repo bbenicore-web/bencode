@@ -446,7 +446,10 @@ test("baseline-pair migration statically orders authentication, locking, mutatio
   assert.match(bodySql, /if p_previous_date >= p_reading_date then/);
   assert.match(bodySql, /if p_previous_t1_reading > p_t1_reading then/);
   assert.match(bodySql, /if p_previous_t2_reading > p_t2_reading then/);
-  assert.match(bodySql, /return query .* order by (?:reading\.)?reading_date/);
+  assert.match(
+    bodySql,
+    /return query select reading\.\* from public\.electricity_readings as reading where reading\.user_id = v_user_id and reading\.id in \(v_baseline_id, v_current_id\) order by reading\.reading_date;/
+  );
   assert.match(sql, /revoke execute on function .* from public, anon/);
   assert.match(sql, /grant execute on function .* to authenticated/);
   assert.equal(
