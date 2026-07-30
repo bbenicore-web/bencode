@@ -12,6 +12,7 @@ function createFakeClient(response = { data: null, error: null }) {
     lastDelete: undefined,
     lastInsert: undefined,
     lastOrder: undefined,
+    lastRpc: undefined,
     lastSelect: undefined,
     lastTable: undefined,
     lastUpdate: undefined,
@@ -58,6 +59,11 @@ function createFakeClient(response = { data: null, error: null }) {
       };
 
       return query;
+    },
+    async rpc(name, parameters) {
+      this.lastRpc = [name, parameters];
+      this.calls.push(["rpc", name, parameters]);
+      return this.response;
     }
   };
 
@@ -181,6 +187,73 @@ test("throws the Supabase error object unchanged", async () => {
   );
 });
 
+test("saves a baseline and current reading through one focused RPC", async () => {
+  const rows = [
+    { id: "baseline", reading_date: "2025-07-15" },
+    { id: "current", reading_date: "2025-08-15" }
+  ];
+  const fakeClient = createFakeClient({ data: rows, error: null });
+  const repository = createReadingsRepository(fakeClient);
+
+  const result = await repository.saveWithBaseline({
+    currentId: "current",
+    previous: {
+      reading_date: "2025-07-15",
+      t1_reading: 100,
+      t2_reading: 200
+    },
+    current: {
+      reading_date: "2025-08-15",
+      t1_reading: 110,
+      t2_reading: 220,
+      t1_rate: 6.5,
+      t2_rate: 3,
+      totalCost: 125
+    }
+  });
+
+  assert.deepEqual(fakeClient.lastRpc, [
+    "save_electricity_reading_with_baseline",
+    {
+      p_current_id: "current",
+      p_previous_date: "2025-07-15",
+      p_previous_t1_reading: 100,
+      p_previous_t2_reading: 200,
+      p_reading_date: "2025-08-15",
+      p_t1_reading: 110,
+      p_t2_reading: 220,
+      p_t1_rate: 6.5,
+      p_t2_rate: 3
+    }
+  ]);
+  assert.deepEqual(result, rows);
+});
+
+test("propagates an atomic baseline RPC error without synthesizing rows", async () => {
+  const error = { code: "23514", message: "previous date must be before current date" };
+  const fakeClient = createFakeClient({ data: null, error });
+  const repository = createReadingsRepository(fakeClient);
+
+  await assert.rejects(
+    repository.saveWithBaseline({
+      currentId: null,
+      previous: {
+        reading_date: "2025-08-15",
+        t1_reading: 100,
+        t2_reading: 200
+      },
+      current: {
+        reading_date: "2025-08-15",
+        t1_reading: 110,
+        t2_reading: 220,
+        t1_rate: 6.5,
+        t2_rate: 3
+      }
+    }),
+    (thrown) => thrown === error
+  );
+});
+
 test("migration creates an RLS-protected readings table and updated-at trigger", async () => {
   const migration = await readFile(
     new URL(
@@ -297,4 +370,41 @@ test("migration rejects readings above the immediate next row and excludes an up
     sql,
     /execute function public\.validate_electricity_reading_monotonicity\(\)/
   );
+});
+
+test("baseline-pair migration enforces one authenticated locked transaction and returns both rows", async () => {
+  const migration = await readFile(
+    new URL(
+      "../../electricity/supabase/20260730000000_save_electricity_reading_with_baseline.sql",
+      import.meta.url
+    ),
+    "utf8"
+  );
+  const sql = migration.replace(/\s+/g, " ");
+
+  assert.match(
+    sql,
+    /create function public\.save_electricity_reading_with_baseline\(/
+  );
+  assert.match(sql, /returns setof public\.electricity_readings/);
+  assert.match(sql, /security invoker/);
+  assert.match(sql, /v_user_id := \(select auth\.uid\(\)\)/);
+  assert.match(sql, /if v_user_id is null then/);
+  assert.match(
+    sql,
+    /pg_catalog\.pg_advisory_xact_lock\( pg_catalog\.hashtextextended\(v_user_id::text, 0\) \)/
+  );
+  assert.match(
+    sql,
+    /where user_id = v_user_id and reading_date < p_reading_date and \(p_current_id is null or id <> p_current_id\)/
+  );
+  assert.match(sql, /if p_previous_date >= p_reading_date then/);
+  assert.match(sql, /if p_previous_t1_reading > p_t1_reading then/);
+  assert.match(sql, /if p_previous_t2_reading > p_t2_reading then/);
+  assert.match(sql, /insert into public\.electricity_readings/);
+  assert.match(sql, /update public\.electricity_readings/);
+  assert.match(sql, /return query[\s\S]*order by (?:reading\.)?reading_date/);
+  assert.match(sql, /revoke execute on function .* from public, anon/);
+  assert.match(sql, /grant execute on function .* to authenticated/);
+  assert.doesNotMatch(sql, /(?:usage|cost|total_amount) numeric/);
 });

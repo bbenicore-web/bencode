@@ -46,6 +46,24 @@ export function createReadingsRepository(client) {
       );
     },
 
+    saveWithBaseline({ currentId = null, previous, current }) {
+      const persistedCurrent = persistedReadingInput(current);
+
+      return dataOrThrow(
+        client.rpc("save_electricity_reading_with_baseline", {
+          p_current_id: currentId,
+          p_previous_date: previous.reading_date,
+          p_previous_t1_reading: previous.t1_reading,
+          p_previous_t2_reading: previous.t2_reading,
+          p_reading_date: persistedCurrent.reading_date,
+          p_t1_reading: persistedCurrent.t1_reading,
+          p_t2_reading: persistedCurrent.t2_reading,
+          p_t1_rate: persistedCurrent.t1_rate,
+          p_t2_rate: persistedCurrent.t2_rate
+        })
+      );
+    },
+
     update(userId, id, input) {
       return dataOrThrow(
         client

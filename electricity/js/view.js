@@ -99,6 +99,10 @@ function renderReadingForm(state) {
     state.pending || state.loadingReadings || !state.readingsLoaded
       ? " disabled"
       : "";
+  const previousDisabled = disabled || (state.needsPrevious ? "" : " disabled");
+  const previousDateError = fieldError(state, "previous_date");
+  const previousT1Error = fieldError(state, "previous_t1_reading");
+  const previousT2Error = fieldError(state, "previous_t2_reading");
   const dateError = fieldError(state, "reading_date");
   const t1ReadingError = fieldError(state, "t1_reading");
   const t2ReadingError = fieldError(state, "t2_reading");
@@ -107,6 +111,25 @@ function renderReadingForm(state) {
 
   return `
     <form data-form="reading">
+      <fieldset data-previous-fields${state.needsPrevious ? "" : " hidden"}${previousDisabled}>
+        <legend>Предыдущие показания</legend>
+        <p>Нужны для расчёта первого оплачиваемого периода.</p>
+        <div>
+          <label for="previous_date">Предыдущая дата</label>
+          <input id="previous_date" name="previous_date" type="date" value="${escapeHtml(state.form.previous_date)}"${state.needsPrevious ? " required" : ""}${previousDateError.attributes}${previousDisabled}>
+          <p id="previous_date-error" data-field-error="previous_date">${previousDateError.message}</p>
+        </div>
+        <div>
+          <label for="previous_t1_reading">Предыдущие показания Т1</label>
+          <input id="previous_t1_reading" name="previous_t1_reading" type="text" inputmode="decimal" value="${escapeHtml(state.form.previous_t1_reading)}"${state.needsPrevious ? " required" : ""}${previousT1Error.attributes}${previousDisabled}>
+          <p id="previous_t1_reading-error" data-field-error="previous_t1_reading">${previousT1Error.message}</p>
+        </div>
+        <div>
+          <label for="previous_t2_reading">Предыдущие показания Т2</label>
+          <input id="previous_t2_reading" name="previous_t2_reading" type="text" inputmode="decimal" value="${escapeHtml(state.form.previous_t2_reading)}"${state.needsPrevious ? " required" : ""}${previousT2Error.attributes}${previousDisabled}>
+          <p id="previous_t2_reading-error" data-field-error="previous_t2_reading">${previousT2Error.message}</p>
+        </div>
+      </fieldset>
       <div>
         <label for="reading_date">Дата показаний</label>
         <input id="reading_date" name="reading_date" type="date" value="${escapeHtml(state.form.reading_date)}" required${dateError.attributes}${disabled}>
@@ -179,7 +202,7 @@ function renderHistory(state) {
   if (state.periods.length === 0) {
     return `
       ${summary}
-      <p>Первая запись станет стартовой и не создаст начисление.</p>
+      <p>Для первой записи укажите предыдущие показания — начисление рассчитается сразу.</p>
     `;
   }
 
@@ -279,10 +302,19 @@ export function createView(root) {
       }
     },
     showFieldErrors,
-    updatePreview(preview) {
+    updateReadingForm(state) {
+      const previousFields = root.querySelector("[data-previous-fields]");
+      if (previousFields) {
+        previousFields.hidden = !state.needsPrevious;
+        previousFields.disabled = !state.needsPrevious;
+        for (const field of previousFields.querySelectorAll("input")) {
+          field.required = state.needsPrevious;
+          field.disabled = !state.needsPrevious;
+        }
+      }
       const currentPreview = root.querySelector("[data-preview]");
       if (currentPreview) {
-        currentPreview.outerHTML = renderPreview(preview);
+        currentPreview.outerHTML = renderPreview(state.preview);
       }
     }
   };

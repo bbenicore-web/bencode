@@ -52,6 +52,12 @@ export function calculatePeriods(readings) {
   });
 }
 
+export function calculateReadingPreview(candidate, previous) {
+  return calculatePeriods([previous, candidate]).find(
+    (period) => period.id === candidate.id
+  );
+}
+
 export function calculateUnpaidTotal(periods) {
   return roundMoney(
     periods
@@ -62,6 +68,61 @@ export function calculateUnpaidTotal(periods) {
 
 export function formatRubles(value) {
   return rubleFormatter.format(value);
+}
+
+export function findPreviousReading(candidate, readings, editingId) {
+  return sortByDate(
+    readings.filter(
+      (reading) =>
+        reading.id !== editingId &&
+        reading.reading_date < candidate.reading_date
+    )
+  ).at(-1);
+}
+
+export function requiresPreviousReading(candidate, readings, editingId) {
+  return !findPreviousReading(candidate, readings, editingId);
+}
+
+export function validatePreviousReading(previous, candidate) {
+  const errors = {};
+
+  if (!previous.reading_date) {
+    errors.previous_date = "Previous date is required";
+  } else if (
+    candidate.reading_date &&
+    previous.reading_date >= candidate.reading_date
+  ) {
+    errors.previous_date = "Previous date must be before the current date";
+  }
+
+  if (Number.isFinite(previous.t1_reading)) {
+    if (previous.t1_reading < 0) {
+      errors.previous_t1_reading =
+        "Previous T1 reading must be zero or greater";
+    } else if (
+      Number.isFinite(candidate.t1_reading) &&
+      previous.t1_reading > candidate.t1_reading
+    ) {
+      errors.previous_t1_reading =
+        "Previous T1 reading cannot exceed the current reading";
+    }
+  }
+
+  if (Number.isFinite(previous.t2_reading)) {
+    if (previous.t2_reading < 0) {
+      errors.previous_t2_reading =
+        "Previous T2 reading must be zero or greater";
+    } else if (
+      Number.isFinite(candidate.t2_reading) &&
+      previous.t2_reading > candidate.t2_reading
+    ) {
+      errors.previous_t2_reading =
+        "Previous T2 reading cannot exceed the current reading";
+    }
+  }
+
+  return errors;
 }
 
 export function validateReading(candidate, readings, editingId) {

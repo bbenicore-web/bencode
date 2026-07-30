@@ -1,7 +1,11 @@
 import { toUserMessage } from "./supabase.js";
 import {
   calculatePeriods,
+  calculateReadingPreview,
   calculateUnpaidTotal,
+  findPreviousReading,
+  requiresPreviousReading,
+  validatePreviousReading,
   validateReading
 } from "./domain.js";
 import { createView } from "./view.js";
@@ -14,6 +18,11 @@ const READING_FIELDS = [
   "t2_reading",
   "t1_rate",
   "t2_rate"
+];
+const PREVIOUS_FIELDS = [
+  "previous_date",
+  "previous_t1_reading",
+  "previous_t2_reading"
 ];
 const TABS = ["readings", "history"];
 const VALIDATION_MESSAGES = {
@@ -32,11 +41,25 @@ const VALIDATION_MESSAGES = {
   "T1 reading cannot exceed the next reading":
     "Показания Т1 не могут превышать следующую запись.",
   "T2 reading cannot exceed the next reading":
-    "Показания Т2 не могут превышать следующую запись."
+    "Показания Т2 не могут превышать следующую запись.",
+  "Previous date is required": "Укажите предыдущую дату.",
+  "Previous date must be before the current date":
+    "Предыдущая дата должна быть раньше текущей.",
+  "Previous T1 reading must be zero or greater":
+    "Предыдущие показания Т1 не могут быть отрицательными.",
+  "Previous T2 reading must be zero or greater":
+    "Предыдущие показания Т2 не могут быть отрицательными.",
+  "Previous T1 reading cannot exceed the current reading":
+    "Предыдущие показания Т1 не могут превышать текущие.",
+  "Previous T2 reading cannot exceed the current reading":
+    "Предыдущие показания Т2 не могут превышать текущие."
 };
 
 function emptyReadingForm(today) {
   return {
+    previous_date: "",
+    previous_t1_reading: "",
+    previous_t2_reading: "",
     reading_date: today(),
     t1_reading: "",
     t2_reading: "",
@@ -48,6 +71,15 @@ function emptyReadingForm(today) {
 function parseDecimal(value) {
   const normalized = String(value).trim().replace(",", ".");
   return normalized === "" ? Number.NaN : Number(normalized);
+}
+
+function previousCandidate(form) {
+  return {
+    id: "__previous_preview__",
+    reading_date: form.previous_date,
+    t1_reading: parseDecimal(form.previous_t1_reading),
+    t2_reading: parseDecimal(form.previous_t2_reading)
+  };
 }
 
 function readingCandidate(form, id = "__preview__") {
@@ -62,7 +94,13 @@ function readingCandidate(form, id = "__preview__") {
   };
 }
 
-function readingErrors(candidate, readings, editingId) {
+function readingErrors(
+  candidate,
+  readings,
+  editingId,
+  previous,
+  needsPrevious
+) {
   const errors = Object.fromEntries(
     Object.entries(validateReading(candidate, readings, editingId)).map(
       ([field, message]) => [
@@ -78,6 +116,27 @@ function readingErrors(candidate, readings, editingId) {
     }
   }
 
+  if (needsPrevious) {
+    Object.assign(
+      errors,
+      Object.fromEntries(
+        Object.entries(validatePreviousReading(previous, candidate)).map(
+          ([field, message]) => [
+            field,
+            VALIDATION_MESSAGES[message] ?? "Проверьте значение."
+          ]
+        )
+      )
+    );
+
+    for (const field of PREVIOUS_FIELDS.slice(1)) {
+      const candidateField = field.replace("previous_", "");
+      if (!Number.isFinite(previous[candidateField])) {
+        errors[field] = "Введите число";
+      }
+    }
+  }
+
   return errors;
 }
 
@@ -85,6 +144,14 @@ function persistedReadingInput(candidate) {
   return Object.fromEntries(
     READING_FIELDS.map((field) => [field, candidate[field]])
   );
+}
+
+function previousReadingInput(previous) {
+  return {
+    reading_date: previous.reading_date,
+    t1_reading: previous.t1_reading,
+    t2_reading: previous.t2_reading
+  };
 }
 
 export function createApp({ auth, readings, root, confirm, today }) {
@@ -106,33 +173,48 @@ export function createApp({ auth, readings, root, confirm, today }) {
       nextState.form,
       nextState.editingId ?? "__preview__"
     );
-    const errors = readingErrors(
+    const previous = previousCandidate(nextState.form);
+    const needsPrevious = requiresPreviousReading(
       candidate,
       nextState.readings,
       nextState.editingId
     );
+    const errors = readingErrors(
+      candidate,
+      nextState.readings,
+      nextState.editingId,
+      previous,
+      needsPrevious
+    );
     let preview = null;
 
     if (Object.keys(errors).length === 0) {
-      const previewReadings = nextState.editingId
-        ? nextState.readings.map((reading) =>
-            reading.id === nextState.editingId
-              ? {
-                  ...reading,
-                  ...candidate,
-                  id: reading.id,
-                  is_paid: reading.is_paid
-                }
-              : reading
-          )
-        : [...nextState.readings, candidate];
-      preview = calculatePeriods(previewReadings).find(
-        (period) => period.id === candidate.id
+      const predecessor = needsPrevious
+        ? {
+            ...previous,
+            t1_rate: candidate.t1_rate,
+            t2_rate: candidate.t2_rate,
+            is_paid: false
+          }
+        : findPreviousReading(
+            candidate,
+            nextState.readings,
+            nextState.editingId
+          );
+      preview = calculateReadingPreview(
+        {
+          ...candidate,
+          is_paid:
+            nextState.readings.find(
+              (reading) => reading.id === nextState.editingId
+            )?.is_paid ?? false
+        },
+        predecessor
       );
     }
-
     return {
       ...nextState,
+      needsPrevious,
       periods,
       preview,
       unpaidTotal: calculateUnpaidTotal(periods)
@@ -328,7 +410,7 @@ export function createApp({ auth, readings, root, confirm, today }) {
 
     if (!destroyed) {
       view.clearFieldErrors();
-      view.updatePreview(stateForView(state).preview);
+      view.updateReadingForm(stateForView(state));
     }
   }
 
@@ -415,15 +497,55 @@ export function createApp({ auth, readings, root, confirm, today }) {
       state.form,
       state.editingId ?? "__preview__"
     );
-    const errors = readingErrors(candidate, state.readings, state.editingId);
+    const previous = previousCandidate(state.form);
+    const needsPrevious = requiresPreviousReading(
+      candidate,
+      state.readings,
+      state.editingId
+    );
+    const errors = readingErrors(
+      candidate,
+      state.readings,
+      state.editingId,
+      previous,
+      needsPrevious
+    );
     if (Object.keys(errors).length > 0) {
       render({ ...state, fieldErrors: errors });
       return;
     }
 
     const input = persistedReadingInput(candidate);
-    const userId = state.user.id;
 
+    if (needsPrevious) {
+      const currentId = state.editingId;
+      await mutateReadings(
+        () =>
+          readings.saveWithBaseline({
+            currentId,
+            previous: previousReadingInput(previous),
+            current: input
+          }),
+        (canonicalReadings, savedRows) => {
+          if (!Array.isArray(savedRows) || savedRows.length !== 2) {
+            throw new Error("Atomic baseline RPC did not return two rows");
+          }
+
+          const savedIds = new Set(savedRows.map((reading) => reading.id));
+          return [
+            ...canonicalReadings.filter(
+              (reading) =>
+                reading.id !== currentId && !savedIds.has(reading.id)
+            ),
+            ...savedRows
+          ];
+        },
+        { resetForm: true }
+      );
+      return;
+    }
+
+    const userId = state.user.id;
     if (state.editingId) {
       const editingId = state.editingId;
       await mutateReadings(
@@ -451,9 +573,12 @@ export function createApp({ auth, readings, root, confirm, today }) {
 
     render({
       ...state,
-      form: Object.fromEntries(
-        READING_FIELDS.map((field) => [field, String(reading[field])])
-      ),
+      form: {
+        ...emptyReadingForm(today),
+        ...Object.fromEntries(
+          READING_FIELDS.map((field) => [field, String(reading[field])])
+        )
+      },
       editingId: id,
       activeTab: "readings",
       fieldErrors: {},

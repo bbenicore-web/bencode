@@ -102,6 +102,36 @@ function createFakeReadings(initialReadings = []) {
       storedReadings = storedReadings.filter((item) => item.id !== id);
       return { ...removed };
     },
+    async saveWithBaseline(input) {
+      calls.push(["saveWithBaseline", input]);
+      const baseline = {
+        id: `baseline-${storedReadings.length + 1}`,
+        user_id: "user-1",
+        reading_date: input.previous.reading_date,
+        t1_reading: input.previous.t1_reading,
+        t2_reading: input.previous.t2_reading,
+        t1_rate: input.current.t1_rate,
+        t2_rate: input.current.t2_rate,
+        is_paid: false
+      };
+      let current;
+
+      if (input.currentId) {
+        current = storedReadings.find((item) => item.id === input.currentId);
+        Object.assign(current, input.current);
+      } else {
+        current = {
+          id: `reading-${storedReadings.length + 2}`,
+          user_id: "user-1",
+          ...input.current,
+          is_paid: false
+        };
+        storedReadings.push(current);
+      }
+
+      storedReadings.push(baseline);
+      return [{ ...baseline }, { ...current }];
+    },
     async setPaid(userId, id, isPaid) {
       calls.push(["setPaid", userId, id, isPaid]);
       const changed = storedReadings.find((item) => item.id === id);
@@ -552,13 +582,16 @@ test("TOKEN_REFRESHED does not invalidate a pending reading mutation", async () 
   };
   const auth = createFakeAuth({ session });
   const readings = createFakeReadings();
-  readings.create = (userId, input) => {
-    readings.calls.push(["create", userId, input]);
+  readings.saveWithBaseline = (input) => {
+    readings.calls.push(["saveWithBaseline", input]);
     return pending.promise;
   };
   const { app, root } = createFixture({ auth, readings });
   await app.start();
   enterReading(root, {
+    previous_date: "2026-06-20",
+    previous_t1_reading: "6900",
+    previous_t2_reading: "3100",
     reading_date: "2026-07-20",
     t1_reading: "6989",
     t2_reading: "3136",
@@ -571,16 +604,28 @@ test("TOKEN_REFRESHED does not invalidate a pending reading mutation", async () 
     { user: { id: "user-1", email: "person@example.com" } },
     "TOKEN_REFRESHED"
   );
-  pending.resolve({
-    id: "created",
-    user_id: "user-1",
-    reading_date: "2026-07-20",
-    t1_reading: 6989,
-    t2_reading: 3136,
-    t1_rate: 6.25,
-    t2_rate: 2.5,
-    is_paid: false
-  });
+  pending.resolve([
+    {
+      id: "baseline",
+      user_id: "user-1",
+      reading_date: "2026-06-20",
+      t1_reading: 6900,
+      t2_reading: 3100,
+      t1_rate: 6.25,
+      t2_rate: 2.5,
+      is_paid: false
+    },
+    {
+      id: "created",
+      user_id: "user-1",
+      reading_date: "2026-07-20",
+      t1_reading: 6989,
+      t2_reading: 3136,
+      t1_rate: 6.25,
+      t2_rate: 2.5,
+      is_paid: false
+    }
+  ]);
   await settle();
 
   assert.equal(
@@ -626,7 +671,7 @@ test("SIGNED_IN for a different user resets local state and loads that user's hi
   assert.equal(root.querySelector('[data-action="cancelEdit"]'), null);
 });
 
-test("shows the baseline explanation and a reading form defaulted to today", async () => {
+test("explains first-period inputs and defaults the current date to today", async () => {
   const auth = createFakeAuth({
     session: {
       user: { id: "user-1", email: "person@example.com" }
@@ -639,7 +684,10 @@ test("shows the baseline explanation and a reading form defaulted to today", asy
 
   await app.start();
 
-  assert.match(normalizedText(root.querySelector("#history")), /первая запись.*стартов/i);
+  assert.match(
+    normalizedText(root.querySelector("#history")),
+    /первой записи.*предыдущие показания.*сразу/i
+  );
   assert.match(normalizedText(root.querySelector("[data-unpaid-total]")), /0,00 ₽/);
   assert.equal(root.querySelector("#reading_date")?.value, "2026-08-03");
   for (const name of ["t1_reading", "t2_reading", "t1_rate", "t2_rate"]) {
@@ -891,7 +939,7 @@ test("selects and focuses the first and last tabs with Home and End", async () =
   assert.equal(root.querySelector('#history[role="tabpanel"]').hidden, false);
 });
 
-test("previews a first valid reading as a zero-cost baseline and accepts comma decimals", async () => {
+test("empty history requires previous values and previews an immediately payable first period", async () => {
   const auth = createFakeAuth({
     session: {
       user: { id: "user-1", email: "person@example.com" }
@@ -900,7 +948,18 @@ test("previews a first valid reading as a zero-cost baseline and accepts comma d
   const { app, root } = createFixture({ auth });
   await app.start();
 
+  for (const name of [
+    "previous_date",
+    "previous_t1_reading",
+    "previous_t2_reading"
+  ]) {
+    assert.equal(root.querySelector(`[name="${name}"]`)?.required, true);
+  }
+
   enterReading(root, {
+    previous_date: "2026-06-25",
+    previous_t1_reading: "6980,5",
+    previous_t2_reading: "3100,5",
     reading_date: "2026-07-25",
     t1_reading: "6989,5",
     t2_reading: "3136,5",
@@ -908,7 +967,54 @@ test("previews a first valid reading as a zero-cost baseline and accepts comma d
     t2_rate: "2,50"
   });
 
-  assert.match(normalizedText(root.querySelector("[data-preview]")), /0,00 ₽/);
+  const preview = normalizedText(root.querySelector("[data-preview]"));
+  assert.match(preview, /Т1.*9.*56,25 ₽/);
+  assert.match(preview, /Т2.*36.*90,00 ₽/);
+  assert.match(preview, /146,25 ₽/);
+});
+
+test("shows safe Russian errors for invalid previous values", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const { app, readings, root } = createFixture({ auth });
+  await app.start();
+  enterReading(root, {
+    previous_date: "2026-07-20",
+    previous_t1_reading: "-1",
+    previous_t2_reading: "201",
+    reading_date: "2026-07-20",
+    t1_reading: "100",
+    t2_reading: "200",
+    t1_rate: "6.25",
+    t2_rate: "2.5"
+  });
+
+  submitReadingForm(root);
+  await settle();
+
+  assert.equal(
+    normalizedText(root.querySelector('[data-field-error="previous_date"]')),
+    "Предыдущая дата должна быть раньше текущей."
+  );
+  assert.equal(
+    normalizedText(
+      root.querySelector('[data-field-error="previous_t1_reading"]')
+    ),
+    "Предыдущие показания Т1 не могут быть отрицательными."
+  );
+  assert.equal(
+    normalizedText(
+      root.querySelector('[data-field-error="previous_t2_reading"]')
+    ),
+    "Предыдущие показания Т2 не могут превышать текущие."
+  );
+  assert.equal(
+    readings.calls.filter(([method]) => method === "saveWithBaseline").length,
+    0
+  );
 });
 
 test("previews exact T1 and T2 usage and costs for a second reading", async () => {
@@ -944,6 +1050,9 @@ test("updates the live preview without replacing the focused reading field", asy
   const { app, root } = createFixture({ auth });
   await app.start();
   enterReading(root, {
+    previous_date: "2026-06-25",
+    previous_t1_reading: "6980",
+    previous_t2_reading: "3130",
     reading_date: "2026-07-25",
     t1_reading: "6989",
     t2_reading: "3136",
@@ -960,7 +1069,7 @@ test("updates the live preview without replacing the focused reading field", asy
 
   assert.equal(root.ownerDocument.activeElement, field);
   assert.equal(root.querySelector("#t1_reading"), field);
-  assert.match(normalizedText(root.querySelector("[data-preview]")), /0,00 ₽/);
+  assert.match(normalizedText(root.querySelector("[data-preview]")), /77,50 ₽/);
 });
 
 test("shows field-level reading errors and does not persist invalid values", async () => {
@@ -1151,7 +1260,7 @@ test("renders newest-first history cards, separate tariff lines, and unpaid debt
   assert.match(normalizedText(newest), /559,50 ₽/);
 });
 
-test("creates a reading from normalized values and resets the form after success", async () => {
+test("atomically creates baseline and current rows, adopts both, and resets after success", async () => {
   const auth = createFakeAuth({
     session: {
       user: { id: "user-1", email: "person@example.com" }
@@ -1164,6 +1273,9 @@ test("creates a reading from normalized values and resets the form after success
   await app.start();
 
   enterReading(root, {
+    previous_date: "2026-06-20",
+    previous_t1_reading: "6900,5",
+    previous_t2_reading: "3100,5",
     reading_date: "2026-07-20",
     t1_reading: "6989,5",
     t2_reading: "3136,5",
@@ -1174,41 +1286,61 @@ test("creates a reading from normalized values and resets the form after success
   await settle();
 
   assert.deepEqual(
-    readings.calls.find(([method]) => method === "create"),
+    readings.calls.find(([method]) => method === "saveWithBaseline"),
     [
-      "create",
-      "user-1",
+      "saveWithBaseline",
       {
-        reading_date: "2026-07-20",
-        t1_reading: 6989.5,
-        t2_reading: 3136.5,
-        t1_rate: 6.25,
-        t2_rate: 2.5
+        currentId: null,
+        previous: {
+          reading_date: "2026-06-20",
+          t1_reading: 6900.5,
+          t2_reading: 3100.5
+        },
+        current: {
+          reading_date: "2026-07-20",
+          t1_reading: 6989.5,
+          t2_reading: 3136.5,
+          t1_rate: 6.25,
+          t2_rate: 2.5
+        }
       }
     ]
   );
-  assert.ok(root.querySelector('[data-reading-id="reading-1"]'));
+  assert.ok(root.querySelector('[data-reading-id="baseline-1"]'));
+  assert.ok(root.querySelector('[data-reading-id="reading-2"]'));
+  assert.equal(root.querySelectorAll("[data-reading-id]").length, 2);
   assert.equal(root.querySelector("#reading_date").value, "2026-07-25");
-  for (const name of ["t1_reading", "t2_reading", "t1_rate", "t2_rate"]) {
+  for (const name of [
+    "previous_date",
+    "previous_t1_reading",
+    "previous_t2_reading",
+    "t1_reading",
+    "t2_reading",
+    "t1_rate",
+    "t2_rate"
+  ]) {
     assert.equal(root.querySelector(`[name="${name}"]`).value, "");
   }
 });
 
-test("retains raw reading values and refetches canonical history after a network failure", async () => {
+test("an atomic RPC failure preserves all first-entry fields and creates no fake rows", async () => {
   const auth = createFakeAuth({
     session: {
       user: { id: "user-1", email: "person@example.com" }
     }
   });
   const readings = createFakeReadings();
-  readings.create = async (userId, input) => {
-    readings.calls.push(["create", userId, input]);
+  readings.saveWithBaseline = async (input) => {
+    readings.calls.push(["saveWithBaseline", input]);
     throw new TypeError("Failed to fetch");
   };
   const { app, root } = createFixture({ auth, readings });
   await app.start();
 
   const rawValues = {
+    previous_date: "2026-06-20",
+    previous_t1_reading: "6900,5",
+    previous_t2_reading: "3100,5",
     reading_date: "2026-07-20",
     t1_reading: "6989,5",
     t2_reading: "3136,5",
@@ -1231,6 +1363,59 @@ test("retains raw reading values and refetches canonical history after a network
     2
   );
   assert.equal(root.querySelectorAll("[data-reading-id]").length, 0);
+});
+
+test("editing the sole row atomically inserts its predecessor and updates that row", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([reading({ id: "sole" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+
+  click(root, '[data-action="edit"][data-id="sole"]');
+  assert.equal(root.querySelector('[name="previous_date"]').required, true);
+  enterReading(root, {
+    previous_date: "2025-07-15",
+    previous_t1_reading: "6900",
+    previous_t2_reading: "3100",
+    t1_reading: "7000",
+    t2_reading: "3200",
+    t1_rate: "6,50",
+    t2_rate: "3,00"
+  });
+  submitReadingForm(root);
+  await settle();
+
+  assert.deepEqual(
+    readings.calls.find(([method]) => method === "saveWithBaseline"),
+    [
+      "saveWithBaseline",
+      {
+        currentId: "sole",
+        previous: {
+          reading_date: "2025-07-15",
+          t1_reading: 6900,
+          t2_reading: 3100
+        },
+        current: {
+          reading_date: "2025-08-15",
+          t1_reading: 7000,
+          t2_reading: 3200,
+          t1_rate: 6.5,
+          t2_rate: 3
+        }
+      }
+    ]
+  );
+  assert.ok(root.querySelector('[data-reading-id="sole"]'));
+  assert.ok(root.querySelector('[data-reading-id="baseline-2"]'));
+  assert.match(
+    normalizedText(root.querySelector('[data-reading-id="sole"]')),
+    /950,00 ₽/
+  );
 });
 
 test("edits a canonical reading and recalculates later history periods", async () => {
@@ -1502,13 +1687,16 @@ test("disables reading controls while a mutation is pending", async () => {
     }
   });
   const readings = createFakeReadings();
-  readings.create = (userId, input) => {
-    readings.calls.push(["create", userId, input]);
+  readings.saveWithBaseline = (input) => {
+    readings.calls.push(["saveWithBaseline", input]);
     return pending.promise;
   };
   const { app, root } = createFixture({ auth, readings });
   await app.start();
   enterReading(root, {
+    previous_date: "2026-06-20",
+    previous_t1_reading: "6900",
+    previous_t2_reading: "3100",
     reading_date: "2026-07-20",
     t1_reading: "6989",
     t2_reading: "3136",
@@ -1523,16 +1711,28 @@ test("disables reading controls while a mutation is pending", async () => {
     assert.equal(input.disabled, true);
   }
 
-  pending.resolve({
-    id: "created",
-    user_id: "user-1",
-    reading_date: "2026-07-20",
-    t1_reading: 6989,
-    t2_reading: 3136,
-    t1_rate: 6.25,
-    t2_rate: 2.5,
-    is_paid: false
-  });
+  pending.resolve([
+    {
+      id: "baseline",
+      user_id: "user-1",
+      reading_date: "2026-06-20",
+      t1_reading: 6900,
+      t2_reading: 3100,
+      t1_rate: 6.25,
+      t2_rate: 2.5,
+      is_paid: false
+    },
+    {
+      id: "created",
+      user_id: "user-1",
+      reading_date: "2026-07-20",
+      t1_reading: 6989,
+      t2_reading: 3136,
+      t1_rate: 6.25,
+      t2_rate: 2.5,
+      is_paid: false
+    }
+  ]);
   await settle();
 });
 
@@ -1548,13 +1748,16 @@ test("returns to authentication when mutation recovery finds an expired session"
     return sessionChecks === 1 ? session : null;
   };
   const readings = createFakeReadings();
-  readings.create = async (userId, input) => {
-    readings.calls.push(["create", userId, input]);
+  readings.saveWithBaseline = async (input) => {
+    readings.calls.push(["saveWithBaseline", input]);
     throw { code: "PGRST301", message: "JWT expired" };
   };
   const { app, root } = createFixture({ auth, readings });
   await app.start();
   enterReading(root, {
+    previous_date: "2026-06-20",
+    previous_t1_reading: "6900",
+    previous_t2_reading: "3100",
     reading_date: "2026-07-20",
     t1_reading: "6989",
     t2_reading: "3136",
