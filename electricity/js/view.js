@@ -1,5 +1,8 @@
 import { formatRubles } from "./domain.js";
 
+const PREVIOUS_REQUIREMENT_MESSAGE =
+  "Предыдущая дата, показания Т1 и показания Т2 теперь обязательны.";
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -111,9 +114,10 @@ function renderReadingForm(state) {
 
   return `
     <form data-form="reading">
-      <fieldset data-previous-fields${state.needsPrevious ? "" : " hidden"}${previousDisabled}>
+      <fieldset data-previous-fields aria-describedby="previous-fields-requirement"${state.needsPrevious ? "" : " hidden"}${previousDisabled}>
         <legend>Предыдущие показания</legend>
         <p>Нужны для расчёта первого оплачиваемого периода.</p>
+        <p id="previous-fields-requirement" data-previous-requirement role="status" aria-live="polite"${state.needsPrevious ? "" : " hidden"}>${state.needsPrevious ? PREVIOUS_REQUIREMENT_MESSAGE : ""}</p>
         <div>
           <label for="previous_date">Предыдущая дата</label>
           <input id="previous_date" name="previous_date" type="date" value="${escapeHtml(state.form.previous_date)}"${state.needsPrevious ? " required" : ""}${previousDateError.attributes}${previousDisabled}>
@@ -311,6 +315,15 @@ export function createView(root) {
           field.required = state.needsPrevious;
           field.disabled = !state.needsPrevious;
         }
+      }
+      const previousRequirement = root.querySelector(
+        "[data-previous-requirement]"
+      );
+      if (previousRequirement) {
+        previousRequirement.hidden = !state.needsPrevious;
+        previousRequirement.textContent = state.needsPrevious
+          ? PREVIOUS_REQUIREMENT_MESSAGE
+          : "";
       }
       const currentPreview = root.querySelector("[data-preview]");
       if (currentPreview) {

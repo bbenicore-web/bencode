@@ -372,7 +372,7 @@ test("migration rejects readings above the immediate next row and excludes an up
   );
 });
 
-test("baseline-pair migration enforces one authenticated locked transaction and returns both rows", async () => {
+test("baseline-pair migration statically orders authentication, locking, mutations, and grants", async () => {
   const migration = await readFile(
     new URL(
       "../../electricity/supabase/20260730000000_save_electricity_reading_with_baseline.sql",
@@ -380,31 +380,83 @@ test("baseline-pair migration enforces one authenticated locked transaction and 
     ),
     "utf8"
   );
+  const functionDefinition = migration.match(
+    /create function public\.save_electricity_reading_with_baseline\([\s\S]*?\$\$;/
+  )?.[0];
+  const functionBody = functionDefinition?.match(/as \$\$([\s\S]*?)\$\$;/)?.[1];
   const sql = migration.replace(/\s+/g, " ");
+  const bodySql = functionBody?.replace(/\s+/g, " ");
 
+  assert.ok(functionDefinition, "expected the baseline-pair function definition");
+  assert.ok(functionBody, "expected the baseline-pair function body");
   assert.match(
-    sql,
-    /create function public\.save_electricity_reading_with_baseline\(/
+    functionDefinition.replace(/\s+/g, " "),
+    /returns setof public\.electricity_readings language plpgsql security invoker set search_path = '' as \$\$/
   );
   assert.match(sql, /returns setof public\.electricity_readings/);
-  assert.match(sql, /security invoker/);
-  assert.match(sql, /v_user_id := \(select auth\.uid\(\)\)/);
-  assert.match(sql, /if v_user_id is null then/);
-  assert.match(
-    sql,
-    /pg_catalog\.pg_advisory_xact_lock\( pg_catalog\.hashtextextended\(v_user_id::text, 0\) \)/
+  const authCheck = bodySql.match(
+    /if v_user_id is null then raise exception using .*?end if;/
+  );
+  const authCheckIndex = authCheck?.index ?? -1;
+  const authCheckEndIndex = authCheckIndex + (authCheck?.[0].length ?? 0);
+  const lockIndex = bodySql.search(
+    /perform pg_catalog\.pg_advisory_xact_lock\( pg_catalog\.hashtextextended\(v_user_id::text, 0\) \)/
+  );
+  const tableAccessIndexes = [
+    ...bodySql.matchAll(
+      /(?:from|insert into|update) public\.electricity_readings/g
+    )
+  ].map((match) => match.index);
+  const insertIndexes = [
+    ...bodySql.matchAll(/insert into public\.electricity_readings/g)
+  ].map((match) => match.index);
+  const updateIndex = bodySql.indexOf("update public.electricity_readings");
+  const returnIndex = bodySql.indexOf("return query");
+
+  assert.match(bodySql, /v_user_id := \(select auth\.uid\(\)\)/);
+  assert.notEqual(authCheckIndex, -1, "expected an unauthenticated-user guard");
+  assert.notEqual(lockIndex, -1, "expected a transaction-scoped advisory lock");
+  assert.equal(insertIndexes.length, 2, "expected current and baseline inserts");
+  assert.notEqual(updateIndex, -1, "expected the current-row update branch");
+  assert.notEqual(returnIndex, -1, "expected the pair return query");
+  assert.ok(
+    authCheckEndIndex < Math.min(...insertIndexes, updateIndex),
+    "authentication must be checked before every write"
+  );
+  assert.ok(
+    tableAccessIndexes.every((index) => lockIndex < index),
+    "the advisory lock must precede every table read and write"
+  );
+  assert.ok(
+    insertIndexes[0] < insertIndexes[1] && updateIndex < insertIndexes[1],
+    "the current-row insert/update branches must precede the baseline insert"
+  );
+  assert.ok(
+    insertIndexes.every((index) => index < returnIndex) && updateIndex < returnIndex,
+    "both mutations must occur before the return query"
   );
   assert.match(
-    sql,
+    bodySql,
+    /update public\.electricity_readings set .* where id = p_current_id and user_id = v_user_id returning id into v_current_id/
+  );
+  assert.match(
+    bodySql,
     /where user_id = v_user_id and reading_date < p_reading_date and \(p_current_id is null or id <> p_current_id\)/
   );
-  assert.match(sql, /if p_previous_date >= p_reading_date then/);
-  assert.match(sql, /if p_previous_t1_reading > p_t1_reading then/);
-  assert.match(sql, /if p_previous_t2_reading > p_t2_reading then/);
-  assert.match(sql, /insert into public\.electricity_readings/);
-  assert.match(sql, /update public\.electricity_readings/);
-  assert.match(sql, /return query[\s\S]*order by (?:reading\.)?reading_date/);
+  assert.match(bodySql, /if p_previous_date >= p_reading_date then/);
+  assert.match(bodySql, /if p_previous_t1_reading > p_t1_reading then/);
+  assert.match(bodySql, /if p_previous_t2_reading > p_t2_reading then/);
+  assert.match(bodySql, /return query .* order by (?:reading\.)?reading_date/);
   assert.match(sql, /revoke execute on function .* from public, anon/);
   assert.match(sql, /grant execute on function .* to authenticated/);
+  assert.equal(
+    sql.match(/grant execute on function /g)?.length,
+    1,
+    "authenticated must be the only grantee"
+  );
+  assert.doesNotMatch(
+    sql,
+    /grant execute on function .* to (?:public|anon|service_role)/
+  );
   assert.doesNotMatch(sql, /(?:usage|cost|total_amount) numeric/);
 });

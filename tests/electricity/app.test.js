@@ -1072,6 +1072,48 @@ test("updates the live preview without replacing the focused reading field", asy
   assert.match(normalizedText(root.querySelector("[data-preview]")), /77,50 ₽/);
 });
 
+test("announces when a current-date change makes previous readings required without disrupting typing", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([reading({ id: "later" })]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  const dateField = root.querySelector("#reading_date");
+  const previousFields = root.querySelector("[data-previous-fields]");
+  const requirementStatus = root.querySelector("[data-previous-requirement]");
+
+  assert.equal(previousFields.hidden, true);
+  assert.equal(requirementStatus.hidden, true);
+  dateField.focus();
+  dateField.value = "2025-07-15";
+  dateField.dispatchEvent(
+    new dateField.ownerDocument.defaultView.Event("input", { bubbles: true })
+  );
+
+  assert.equal(root.querySelector("#reading_date"), dateField);
+  assert.equal(root.ownerDocument.activeElement, dateField);
+  assert.equal(dateField.value, "2025-07-15");
+  assert.equal(previousFields.hidden, false);
+  assert.equal(previousFields.getAttribute("aria-describedby"), requirementStatus.id);
+  assert.equal(requirementStatus.hidden, false);
+  assert.equal(requirementStatus.getAttribute("role"), "status");
+  assert.equal(requirementStatus.getAttribute("aria-live"), "polite");
+  assert.match(
+    normalizedText(requirementStatus),
+    /предыдущая дата.*Т1.*Т2.*обязательны/i
+  );
+  for (const name of [
+    "previous_date",
+    "previous_t1_reading",
+    "previous_t2_reading"
+  ]) {
+    assert.equal(root.querySelector(`[name="${name}"]`).required, true);
+  }
+});
+
 test("shows field-level reading errors and does not persist invalid values", async () => {
   const auth = createFakeAuth({
     session: {
@@ -1415,6 +1457,149 @@ test("editing the sole row atomically inserts its predecessor and updates that r
   assert.match(
     normalizedText(root.querySelector('[data-reading-id="sole"]')),
     /950,00 ₽/
+  );
+});
+
+test("editing the earliest row adopts the RPC pair, preserves later rows, and recalculates debt", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([
+    reading({
+      id: "earliest",
+      reading_date: "2025-08-15",
+      t1_reading: 100,
+      t2_reading: 200,
+      t1_rate: 2,
+      t2_rate: 3
+    }),
+    reading({
+      id: "later",
+      reading_date: "2025-09-15",
+      t1_reading: 200,
+      t2_reading: 300,
+      t1_rate: 2,
+      t2_rate: 3
+    })
+  ]);
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+
+  click(root, '[data-action="edit"][data-id="earliest"]');
+  enterReading(root, {
+    previous_date: "2025-07-15",
+    previous_t1_reading: "80",
+    previous_t2_reading: "180",
+    t1_reading: "120",
+    t2_reading: "220"
+  });
+  submitReadingForm(root);
+  await settle();
+
+  assert.deepEqual(
+    readings.calls.find(([method]) => method === "saveWithBaseline"),
+    [
+      "saveWithBaseline",
+      {
+        currentId: "earliest",
+        previous: {
+          reading_date: "2025-07-15",
+          t1_reading: 80,
+          t2_reading: 180
+        },
+        current: {
+          reading_date: "2025-08-15",
+          t1_reading: 120,
+          t2_reading: 220,
+          t1_rate: 2,
+          t2_rate: 3
+        }
+      }
+    ]
+  );
+  assert.deepEqual(
+    [...root.querySelectorAll("[data-reading-id]")].map(
+      (card) => card.dataset.readingId
+    ),
+    ["later", "earliest", "baseline-3"]
+  );
+  assert.match(
+    normalizedText(root.querySelector('[data-reading-id="earliest"]')),
+    /200,00 ₽/
+  );
+  assert.match(
+    normalizedText(root.querySelector('[data-reading-id="later"]')),
+    /400,00 ₽/
+  );
+  assert.match(normalizedText(root.querySelector("[data-unpaid-total]")), /600,00 ₽/);
+});
+
+test("earliest-row RPC failure preserves canonical rows, raw values, and edit mode without a fake baseline", async () => {
+  const auth = createFakeAuth({
+    session: {
+      user: { id: "user-1", email: "person@example.com" }
+    }
+  });
+  const readings = createFakeReadings([
+    reading({
+      id: "earliest",
+      reading_date: "2025-08-15",
+      t1_reading: 100,
+      t2_reading: 200,
+      t1_rate: 2,
+      t2_rate: 3
+    }),
+    reading({
+      id: "later",
+      reading_date: "2025-09-15",
+      t1_reading: 200,
+      t2_reading: 300,
+      t1_rate: 2,
+      t2_rate: 3
+    })
+  ]);
+  readings.saveWithBaseline = async (input) => {
+    readings.calls.push(["saveWithBaseline", input]);
+    throw new TypeError("Failed to fetch");
+  };
+  const { app, root } = createFixture({ auth, readings });
+  await app.start();
+  click(root, '[data-action="edit"][data-id="earliest"]');
+  const rawValues = {
+    previous_date: "2025-07-15",
+    previous_t1_reading: "80,5",
+    previous_t2_reading: "180,5",
+    reading_date: "2025-08-15",
+    t1_reading: "120,5",
+    t2_reading: "220,5",
+    t1_rate: "2,00",
+    t2_rate: "3,00"
+  };
+
+  enterReading(root, rawValues);
+  submitReadingForm(root);
+  await settle();
+
+  assert.deepEqual(
+    [...root.querySelectorAll("[data-reading-id]")].map(
+      (card) => card.dataset.readingId
+    ),
+    ["later", "earliest"]
+  );
+  assert.equal(root.querySelector('[data-reading-id^="baseline-"]'), null);
+  for (const [name, value] of Object.entries(rawValues)) {
+    assert.equal(root.querySelector(`[name="${name}"]`).value, value);
+  }
+  assert.ok(root.querySelector('[data-action="cancelEdit"][data-id="earliest"]'));
+  assert.equal(
+    normalizedText(root.querySelector('[role="alert"]')),
+    "Не удалось подключиться к серверу. Проверьте интернет-соединение."
+  );
+  assert.equal(
+    readings.calls.filter(([method]) => method === "list").length,
+    2
   );
 });
 
