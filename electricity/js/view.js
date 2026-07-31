@@ -173,6 +173,7 @@ function renderReadingForm(state) {
 function renderHistoryCard(period, disabled) {
   const id = escapeHtml(period.id);
   const paymentStatus = period.is_paid ? "Оплачено" : "Не оплачено";
+  const paymentStatusValue = period.is_paid ? "paid" : "unpaid";
   const paymentAction = period.is_paid
     ? "Отметить неоплаченным"
     : "Отметить оплаченным";
@@ -184,7 +185,7 @@ function renderHistoryCard(period, disabled) {
       <p data-tariff="t1">Т1: показание ${formatNumber(period.t1_reading)}, расход ${formatNumber(period.t1Usage)} кВт⋅ч, тариф ${formatNumber(period.t1_rate)} ₽, стоимость ${formatRubles(period.t1Cost)}</p>
       <p data-tariff="t2">Т2: показание ${formatNumber(period.t2_reading)}, расход ${formatNumber(period.t2Usage)} кВт⋅ч, тариф ${formatNumber(period.t2_rate)} ₽, стоимость ${formatRubles(period.t2Cost)}</p>
       <p><strong>Итого: ${formatRubles(period.totalCost)}</strong></p>
-      <p>${paymentStatus}</p>
+      <p data-payment-status="${paymentStatusValue}">${paymentStatus}</p>
       <button type="button" data-action="togglePaid" data-id="${id}"${disabled}>${paymentAction}</button>
       <button type="button" data-action="edit" data-id="${id}"${disabled}>Редактировать</button>
       <button type="button" data-action="delete" data-id="${id}"${disabled}>Удалить</button>

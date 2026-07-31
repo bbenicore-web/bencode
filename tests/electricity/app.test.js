@@ -1899,6 +1899,11 @@ test("toggles paid status and removes that period from the debt total", async ()
   const { app, root } = createFixture({ auth, readings });
   await app.start();
   assert.match(normalizedText(root.querySelector("[data-unpaid-total]")), /3 453,88 ₽/);
+  assert.equal(
+    root.querySelector('[data-reading-id="unpaid"] [data-payment-status]')
+      ?.dataset.paymentStatus,
+    "unpaid"
+  );
 
   click(root, '[data-action="togglePaid"][data-id="unpaid"]');
   await settle();
@@ -1911,6 +1916,20 @@ test("toggles paid status and removes that period from the debt total", async ()
   assert.match(
     normalizedText(root.querySelector('[data-reading-id="unpaid"]')),
     /Оплачено/
+  );
+  assert.equal(
+    root.querySelector('[data-reading-id="unpaid"] [data-payment-status]')
+      ?.dataset.paymentStatus,
+    "paid"
+  );
+
+  const css = await readFile(
+    new URL("../../electricity/styles.css", import.meta.url),
+    "utf8"
+  );
+  assert.match(
+    css,
+    /\[data-payment-status="paid"\]\s*\{[^}]*color:\s*var\(--success\);/s
   );
 });
 
