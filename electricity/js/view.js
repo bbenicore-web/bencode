@@ -1,5 +1,8 @@
 import { formatRubles } from "./domain.js";
 
+const PREVIOUS_REQUIREMENT_MESSAGE =
+  "Предыдущая дата, показания Т1 и показания Т2 теперь обязательны.";
+
 function escapeHtml(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -99,6 +102,10 @@ function renderReadingForm(state) {
     state.pending || state.loadingReadings || !state.readingsLoaded
       ? " disabled"
       : "";
+  const previousDisabled = disabled || (state.needsPrevious ? "" : " disabled");
+  const previousDateError = fieldError(state, "previous_date");
+  const previousT1Error = fieldError(state, "previous_t1_reading");
+  const previousT2Error = fieldError(state, "previous_t2_reading");
   const dateError = fieldError(state, "reading_date");
   const t1ReadingError = fieldError(state, "t1_reading");
   const t2ReadingError = fieldError(state, "t2_reading");
@@ -107,6 +114,26 @@ function renderReadingForm(state) {
 
   return `
     <form data-form="reading">
+      <fieldset data-previous-fields aria-describedby="previous-fields-requirement"${state.needsPrevious ? "" : " hidden"}${previousDisabled}>
+        <legend>Предыдущие показания</legend>
+        <p>Нужны для расчёта первого оплачиваемого периода.</p>
+        <p id="previous-fields-requirement" data-previous-requirement role="status" aria-live="polite"${state.needsPrevious ? "" : " hidden"}>${state.needsPrevious ? PREVIOUS_REQUIREMENT_MESSAGE : ""}</p>
+        <div>
+          <label for="previous_date">Предыдущая дата</label>
+          <input id="previous_date" name="previous_date" type="date" value="${escapeHtml(state.form.previous_date)}"${state.needsPrevious ? " required" : ""}${previousDateError.attributes}${previousDisabled}>
+          <p id="previous_date-error" data-field-error="previous_date">${previousDateError.message}</p>
+        </div>
+        <div>
+          <label for="previous_t1_reading">Предыдущие показания Т1</label>
+          <input id="previous_t1_reading" name="previous_t1_reading" type="text" inputmode="decimal" value="${escapeHtml(state.form.previous_t1_reading)}"${state.needsPrevious ? " required" : ""}${previousT1Error.attributes}${previousDisabled}>
+          <p id="previous_t1_reading-error" data-field-error="previous_t1_reading">${previousT1Error.message}</p>
+        </div>
+        <div>
+          <label for="previous_t2_reading">Предыдущие показания Т2</label>
+          <input id="previous_t2_reading" name="previous_t2_reading" type="text" inputmode="decimal" value="${escapeHtml(state.form.previous_t2_reading)}"${state.needsPrevious ? " required" : ""}${previousT2Error.attributes}${previousDisabled}>
+          <p id="previous_t2_reading-error" data-field-error="previous_t2_reading">${previousT2Error.message}</p>
+        </div>
+      </fieldset>
       <div>
         <label for="reading_date">Дата показаний</label>
         <input id="reading_date" name="reading_date" type="date" value="${escapeHtml(state.form.reading_date)}" required${dateError.attributes}${disabled}>
@@ -146,6 +173,7 @@ function renderReadingForm(state) {
 function renderHistoryCard(period, disabled) {
   const id = escapeHtml(period.id);
   const paymentStatus = period.is_paid ? "Оплачено" : "Не оплачено";
+  const paymentStatusValue = period.is_paid ? "paid" : "unpaid";
   const paymentAction = period.is_paid
     ? "Отметить неоплаченным"
     : "Отметить оплаченным";
@@ -157,7 +185,7 @@ function renderHistoryCard(period, disabled) {
       <p data-tariff="t1">Т1: показание ${formatNumber(period.t1_reading)}, расход ${formatNumber(period.t1Usage)} кВт⋅ч, тариф ${formatNumber(period.t1_rate)} ₽, стоимость ${formatRubles(period.t1Cost)}</p>
       <p data-tariff="t2">Т2: показание ${formatNumber(period.t2_reading)}, расход ${formatNumber(period.t2Usage)} кВт⋅ч, тариф ${formatNumber(period.t2_rate)} ₽, стоимость ${formatRubles(period.t2Cost)}</p>
       <p><strong>Итого: ${formatRubles(period.totalCost)}</strong></p>
-      <p>${paymentStatus}</p>
+      <p data-payment-status="${paymentStatusValue}">${paymentStatus}</p>
       <button type="button" data-action="togglePaid" data-id="${id}"${disabled}>${paymentAction}</button>
       <button type="button" data-action="edit" data-id="${id}"${disabled}>Редактировать</button>
       <button type="button" data-action="delete" data-id="${id}"${disabled}>Удалить</button>
@@ -179,7 +207,7 @@ function renderHistory(state) {
   if (state.periods.length === 0) {
     return `
       ${summary}
-      <p>Первая запись станет стартовой и не создаст начисление.</p>
+      <p>Для первой записи укажите предыдущие показания — начисление рассчитается сразу.</p>
     `;
   }
 
@@ -242,6 +270,8 @@ function renderSignedIn(state) {
 }
 
 export function createView(root) {
+  let previousNeedsPrevious;
+
   function clearFieldErrors() {
     for (const message of root.querySelectorAll("[data-field-error]")) {
       const field = root.querySelector(`#${message.dataset.fieldError}`);
@@ -274,15 +304,37 @@ export function createView(root) {
         root.innerHTML = renderLoading();
       } else if (state.status === "signedIn") {
         root.innerHTML = renderSignedIn(state);
+        previousNeedsPrevious = state.needsPrevious;
       } else {
         root.innerHTML = renderSignedOut(state);
       }
     },
     showFieldErrors,
-    updatePreview(preview) {
+    updateReadingForm(state) {
+      const previousFields = root.querySelector("[data-previous-fields]");
+      if (previousFields) {
+        previousFields.hidden = !state.needsPrevious;
+        previousFields.disabled = !state.needsPrevious;
+        for (const field of previousFields.querySelectorAll("input")) {
+          field.required = state.needsPrevious;
+          field.disabled = !state.needsPrevious;
+        }
+      }
+      const previousRequirement = root.querySelector(
+        "[data-previous-requirement]"
+      );
+      if (previousRequirement) {
+        if (state.needsPrevious !== previousNeedsPrevious) {
+          previousRequirement.hidden = !state.needsPrevious;
+          previousRequirement.textContent = state.needsPrevious
+            ? PREVIOUS_REQUIREMENT_MESSAGE
+            : "";
+        }
+      }
+      previousNeedsPrevious = state.needsPrevious;
       const currentPreview = root.querySelector("[data-preview]");
       if (currentPreview) {
-        currentPreview.outerHTML = renderPreview(preview);
+        currentPreview.outerHTML = renderPreview(state.preview);
       }
     }
   };

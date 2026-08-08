@@ -320,6 +320,33 @@ form > div {
   min-width: 0;
 }
 
+form fieldset {
+  display: grid;
+  min-width: 0;
+  margin: 0;
+  padding: 0.875rem;
+  border: 1px solid var(--brand-soft);
+  border-radius: 14px;
+  gap: 0.75rem;
+  background: var(--surface-brand);
+}
+
+form fieldset > div {
+  min-width: 0;
+}
+
+form fieldset legend {
+  padding-inline: 0.35rem;
+  color: var(--brand-strong);
+  font-weight: 800;
+}
+
+form fieldset > p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
 label {
   display: inline-block;
   margin-bottom: 0.4rem;
@@ -644,6 +671,12 @@ form[data-form="reading"] > button {
   font-weight: 800;
 }
 
+[data-payment-status="paid"] {
+  color: var(--success);
+  background: var(--success-soft);
+  border: 1px solid #a8ddc1;
+}
+
 [data-reading-id] button {
   min-width: 0;
   min-height: 44px;
@@ -696,7 +729,17 @@ form[data-form="reading"] > button {
   }
 
   form[data-form="reading"] > div:first-child,
+  form[data-form="reading"] > fieldset,
   form[data-form="reading"] > button {
+    grid-column: 1 / -1;
+  }
+
+  form[data-form="reading"] > fieldset {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  form[data-form="reading"] > fieldset > :first-child,
+  form[data-form="reading"] > fieldset > p {
     grid-column: 1 / -1;
   }
 

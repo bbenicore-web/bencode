@@ -3,8 +3,12 @@ import test from "node:test";
 
 import {
   calculatePeriods,
+  calculateReadingPreview,
   calculateUnpaidTotal,
+  findPreviousReading,
   formatRubles,
+  requiresPreviousReading,
+  validatePreviousReading,
   validateReading
 } from "../../electricity/js/domain.js";
 
@@ -229,4 +233,104 @@ test("accepts an insertion between monotonic neighbors", () => {
   });
 
   assert.deepEqual(validateReading(candidate, readings, null), {});
+});
+
+test("requires explicit previous values whenever the candidate has no predecessor", () => {
+  const earliest = reading({ id: "earliest" });
+  const later = reading({
+    id: "later",
+    reading_date: "2025-09-15",
+    t1_reading: 7100,
+    t2_reading: 3200
+  });
+
+  assert.equal(requiresPreviousReading(reading(), [], null), true);
+  assert.equal(
+    requiresPreviousReading(earliest, [earliest, later], "earliest"),
+    true
+  );
+  assert.equal(
+    requiresPreviousReading(later, [earliest, later], "later"),
+    false
+  );
+  assert.equal(findPreviousReading(later, [later, earliest], "later"), earliest);
+});
+
+test("validates previous date and readings against the current candidate", () => {
+  const candidate = reading({
+    reading_date: "2025-08-15",
+    t1_reading: 100,
+    t2_reading: 200
+  });
+
+  assert.deepEqual(
+    validatePreviousReading(
+      {
+        reading_date: "2025-08-15",
+        t1_reading: -1,
+        t2_reading: 201
+      },
+      candidate
+    ),
+    {
+      previous_date: "Previous date must be before the current date",
+      previous_t1_reading: "Previous T1 reading must be zero or greater",
+      previous_t2_reading: "Previous T2 reading cannot exceed the current reading"
+    }
+  );
+});
+
+test("requires all previous values without assuming zero", () => {
+  const candidate = reading();
+
+  assert.deepEqual(
+    validatePreviousReading(
+      {
+        reading_date: "",
+        t1_reading: Number.NaN,
+        t2_reading: Number.NaN
+      },
+      candidate
+    ),
+    {
+      previous_date: "Previous date is required"
+    }
+  );
+});
+
+test("previews immediate usage with current tariffs from an explicit predecessor", () => {
+  const previous = reading({
+    id: "previous",
+    reading_date: "2025-07-15",
+    t1_reading: 100,
+    t2_reading: 200,
+    t1_rate: 999,
+    t2_rate: 999
+  });
+  const candidate = reading({
+    id: "candidate",
+    t1_reading: 110,
+    t2_reading: 220,
+    t1_rate: 6.5,
+    t2_rate: 3
+  });
+
+  assert.deepEqual(
+    pick(calculateReadingPreview(candidate, previous), [
+      "isBaseline",
+      "t1Usage",
+      "t2Usage",
+      "t1Cost",
+      "t2Cost",
+      "totalCost"
+    ]),
+    {
+      isBaseline: false,
+      t1Usage: 10,
+      t2Usage: 20,
+      t1Cost: 65,
+      t2Cost: 60,
+      totalCost: 125
+    }
+  );
 });
