@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>CPO Canvas Export 3x</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        background: #ffffff;
+      }
+
+      canvas {
+        display: block;
+      }
+    </style>
+    <script>
+      window.__EXPORT_SCALE__ = 3;
+    </script>
+  </head>
+  <body>
+    <canvas id="cpo-canvas" width="5760" height="5040"></canvas>
+    <div hidden>
+      <input id="scheme-search" />
+      <button id="reset-view" type="button"></button>
+      <span id="canvas-status"></span>
+      <aside id="details-panel">
+        <button id="close-details" type="button"></button>
+        <p id="details-type"></p>
+        <h2 id="details-title"></h2>
+        <p id="details-description"></p>
+        <span id="details-owner"></span>
+        <span id="details-raci"></span>
+        <div id="details-related"></div>
+      </aside>
+      <div id="node-list"></div>
+    </div>
+    <script src="../app.js"></script>
+  </body>
+</html>
