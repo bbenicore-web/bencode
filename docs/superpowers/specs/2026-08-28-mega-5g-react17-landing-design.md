@@ -8,11 +8,11 @@ Publish the provided Mega 5G mobile demo as a self-contained application at `/be
 
 - Visual and interaction reference: `https://zhenchur.github.io/mega-5g-mobile-demo/`
 - Provided implementation reference and assets: `https://github.com/zhenchur/mega-5g-mobile-demo`
-- The new implementation preserves the reference content, imagery, fonts, section order, motion, and interactions without copy changes.
+- The implementation preserves the reference imagery, fonts, motion, and interaction patterns, with only the approved tariff removal and connection-section extension described below.
 
 ## Architecture
 
-The landing lives in an isolated `mega-5g/` directory copied from the reference repository, including its React 19 source, GSAP motion, package files, configuration, and public assets. Only nested-route deployment configuration is changed; the app does not impose dependencies on the existing root package.
+The landing lives in an isolated `mega-5g/` directory copied from the reference repository, including its React 19 source, GSAP motion, package files, configuration, and public assets. Changes stay inside this app except for nested-route deployment integration; the app does not impose dependencies on the existing root package.
 
 The application will be configured with the GitHub Pages base path `/bencode/mega-5g/`. Its production build will be copied to `_site/mega-5g/` by the existing deployment workflow. Root deployment files and the electricity build remain part of the same published artifact.
 
@@ -25,11 +25,18 @@ The React application will mirror the reference section hierarchy:
 3. Key-benefit summary.
 4. Detailed feature cards.
 5. Mega 5G profile/product selection.
-6. Connection instructions and device presentation.
+6. Connection instructions for current and new subscribers.
 7. FAQ/details content.
 8. Promotional footer and legal/navigation links.
 
-Large visual sections remain in the React components supplied by the reference: promo, details, experience carousel, products, connection, tariffs, and footer.
+The supplied `TariffsSection` and the entire “Тарифы с Мега 5G” block are removed.
+
+The “Как подключить” section is split into two consecutive paths:
+
+1. “Для абонентов МегаФона” retains the supplied phone-and-steps carousel without behavioral changes.
+2. “Для новых абонентов” adds a brand-aligned card with short supporting copy and two full-width solid actions: a bright-green “Купить новую SIM” button and a contrasting black “Перейти со своим номером” button. Both are semantic demonstration buttons with no navigation until destination URLs are supplied.
+
+The new card reuses the landing's typography, spacing, radii, green accent, dark surfaces, and mobile content rail rather than introducing a separate visual language.
 
 ## Responsive behavior
 
@@ -55,7 +62,9 @@ The landing is static and has no backend dependency. If JavaScript is unavailabl
 
 An automated Node deployment-contract test covers the nested Vite base, base-aware preloads, retained React 19/GSAP dependencies, root test discovery, and workflow build/copy steps. The supplied app's `check` and `build:pages` scripts validate its source and production build.
 
-Manual browser verification will cover representative mobile widths, the `767px`/`768px` boundary, desktop notice behavior, animations, interactive controls, absence of horizontal overflow, and the built nested route. A short walkthrough recording will demonstrate the finished mobile landing and desktop notice.
+Automated component coverage will verify that the tariff block is absent, both subscriber paths render in the correct order, the current-subscriber carousel remains present, and both new-subscriber actions are semantic buttons.
+
+Manual browser verification will cover representative mobile widths, the `767px`/`768px` boundary, desktop notice behavior, animations, interactive controls, the new subscriber card, absence of horizontal overflow, and the built nested route. A short walkthrough recording will demonstrate the finished mobile landing and desktop notice.
 
 ## Deployment
 
