@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
+import { NewSubscriberSection } from './NewSubscriberSection'
 import { publicAsset } from '../publicAsset'
 
 const CONNECT_PATH = publicAsset('assets/connect')
@@ -539,6 +540,7 @@ export function ConnectSection() {
   return (
     <section className="support-section" aria-labelledby="connect-title">
       <h2 id="connect-title" className="connect-title">Как подключить</h2>
+      <h3 className="connect-audience-title">Для абонентов МегаФона</h3>
 
       <div
         ref={cardRef}
@@ -629,6 +631,8 @@ export function ConnectSection() {
           ))}
         </div>
       </div>
+
+      <NewSubscriberSection />
 
       <section className="faq" aria-labelledby="faq-title">
         <h2 id="faq-title">Остались вопросы?</h2>

@@ -3,7 +3,6 @@ import { DetailsSection } from './DetailsSection'
 import { FooterSection } from './FooterSection'
 import { ProductsSection } from './ProductsSection'
 import { PromoSection } from './PromoSection'
-import { TariffsSection } from './TariffsSection'
 import { publicAsset } from '../publicAsset'
 
 export function MobileExperience() {
@@ -30,7 +29,6 @@ export function MobileExperience() {
         <DetailsSection />
       </div>
       <ProductsSection />
-      <TariffsSection />
       <ConnectSection />
       <FooterSection />
       <div className="page-tail" aria-hidden="true" />
