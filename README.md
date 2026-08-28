@@ -10,7 +10,9 @@
 
 **Учёт электроэнергии:** https://bbenicore-web.github.io/bencode/electricity/
 
-Публикация выполняется workflow `Deploy GitHub Pages`: корневой сайт сохраняется, а собранное приложение добавляется по маршруту `/electricity/`. В [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages) выберите **Deploy from a branch**, ветку `gh-pages` и папку `/ (root)`. Workflow обновляет эту ветку после каждого push в `main`.
+**Мега 5G:** https://bbenicore-web.github.io/bencode/mega-5g/
+
+Публикация выполняется workflow `Deploy GitHub Pages`: корневой сайт сохраняется, а собранные приложения добавляются по маршрутам `/electricity/` и `/mega-5g/`. В [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages) выберите **Deploy from a branch**, ветку `gh-pages` и папку `/ (root)`. Workflow обновляет эту ветку после каждого push в `main`.
 
 Локально: откройте `index.html` в браузере или запустите любой статический сервер в корне репозитория.
 
