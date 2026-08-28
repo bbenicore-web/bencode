@@ -47,14 +47,33 @@ test('new subscriber actions use both approved solid accent treatments', async (
   assert.match(css, /\.new-subscriber-card__action--mnp\s*\{[^}]*background:\s*#0e0e0e/s)
 })
 
-test('narrow layout guard keeps the subscriber card clear of the FAQ through 344px', async () => {
+test('support section flows subscriber content and FAQ below the preserved carousel', async () => {
   const css = await readFile('mega-5g/src/styles.css', 'utf8')
-  const narrowLayout = css.match(
-    /@media \(max-width: (\d+)px\) \{[\s\S]*?\.support-section\s*\{\s*height:\s*1380px;\s*\}[\s\S]*?\.faq\s*\{\s*top:\s*870px;\s*\}[\s\S]*?\n\}/,
-  )
+  const support = css.match(/\.support-section\s*\{([^}]*)\}/s)?.[1]
+  const connectTitle = css.match(/\.connect-title\s*\{([^}]*)\}/s)?.[1]
+  const audienceTitle = css.match(/\.connect-audience-title\s*\{([^}]*)\}/s)?.[1]
+  const connectCard = css.match(/\.connect-card\s*\{([^}]*)\}/s)?.[1]
+  const newcomer = css.match(/\.new-subscriber\s*\{([^}]*)\}/s)?.[1]
+  const faq = css.match(/\.faq\s*\{([^}]*)\}/s)?.[1]
 
-  assert.ok(narrowLayout)
-  assert.ok(Number(narrowLayout[1]) >= 344)
+  assert.ok(support)
+  assert.match(support, /height:\s*auto/)
+  assert.match(support, /padding:\s*555px 12px 48px/)
+  assert.match(connectTitle, /position:\s*absolute/)
+  assert.match(connectTitle, /top:\s*48px/)
+  assert.match(audienceTitle, /position:\s*absolute/)
+  assert.match(audienceTitle, /top:\s*92px/)
+  assert.match(connectCard, /position:\s*absolute/)
+  assert.match(connectCard, /top:\s*130px/)
+  assert.match(newcomer, /position:\s*static/)
+  assert.match(newcomer, /width:\s*100%/)
+  assert.doesNotMatch(newcomer, /(?:^|\n)\s*(?:top|left):/)
+  assert.match(faq, /position:\s*static/)
+  assert.match(faq, /width:\s*100%/)
+  assert.match(faq, /margin-top:\s*19px/)
+  assert.doesNotMatch(faq, /(?:^|\n)\s*(?:top|left):/)
+  assert.doesNotMatch(css, /\.support-section\s*\{[^}]*height:\s*(?:1360|1380)px/s)
+  assert.doesNotMatch(css, /\.faq\s*\{[^}]*top:\s*(?:850|870)px/s)
 })
 
 test('new subscriber actions expose their accessible group label', async () => {

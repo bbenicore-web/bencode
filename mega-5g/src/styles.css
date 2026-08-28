@@ -833,8 +833,9 @@ img {
 
 .support-section {
   position: relative;
-  height: 1360px;
+  height: auto;
   overflow: hidden;
+  padding: 555px 12px 48px;
   border-radius: 16px 16px 0 0;
   background: #fff;
 }
@@ -1168,10 +1169,8 @@ img {
 }
 
 .new-subscriber {
-  position: absolute;
-  top: 555px;
-  left: 12px;
-  width: calc(100% - 24px);
+  position: static;
+  width: 100%;
 }
 
 .new-subscriber-card {
@@ -1238,11 +1237,10 @@ img {
 }
 
 .faq {
-  position: absolute;
-  top: 850px;
-  left: 12px;
-  width: calc(100% - 24px);
+  position: static;
+  width: 100%;
   height: 453px;
+  margin-top: 19px;
 }
 
 .faq > h2 {
@@ -1579,9 +1577,7 @@ img {
   display: none;
 }
 
-@media (max-width: 344px) {
-  .support-section { height: 1380px; }
-  .faq { top: 870px; }
+@media (max-width: 340px) {
   .technology-card--priority > img { left: 112px; }
   .technology-card--speed > img { left: 72px; }
   .profile-card { padding-inline: 14px; }

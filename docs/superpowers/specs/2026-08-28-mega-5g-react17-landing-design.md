@@ -62,7 +62,7 @@ The landing is static and has no backend dependency. If JavaScript is unavailabl
 
 An automated Node deployment-contract test covers the nested Vite base, base-aware preloads, retained React 19/GSAP dependencies, root test discovery, and workflow build/copy steps. The supplied app's `check` and `build:pages` scripts validate its source and production build.
 
-Automated component coverage will verify that the tariff block is absent, both subscriber paths render in the correct order, the current-subscriber carousel remains present, and both new-subscriber actions are semantic buttons.
+Automated source-contract coverage will verify that the tariff block is absent, both subscriber paths render in the correct order, the current-subscriber carousel remains present, and both new-subscriber actions are semantic buttons.
 
 Manual browser verification will cover representative mobile widths, the `767px`/`768px` boundary, desktop notice behavior, animations, interactive controls, the new subscriber card, absence of horizontal overflow, and the built nested route. A short walkthrough recording will demonstrate the finished mobile landing and desktop notice.
 
