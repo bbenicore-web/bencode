@@ -1,12 +1,14 @@
-# Mega 5G React 17 Landing Implementation Plan
+# Mega 5G Supplied React 19 Landing Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Publish a faithful, self-contained React 17 copy of the provided Mega 5G mobile demo at `/bencode/mega-5g/` without changing the existing root pages.
+**Goal:** Publish a faithful, self-contained copy of the provided Mega 5G mobile demo at `/bencode/mega-5g/` without changing the existing root pages.
 
-**Architecture:** Build an isolated Vite/TypeScript application in `mega-5g/`, port the supplied component and asset structure, and adapt only the React entry point and nested deployment base. Keep GSAP motion local to the new app and extend the existing GitHub Pages artifact with `mega-5g/dist`.
+**Architecture:** Copy the reference repository into isolated `mega-5g/`, retaining its React 19 implementation, package files, assets, and GSAP motion. Change only Vite's GitHub Pages base, base-aware HTML preloads, and the root deployment integration.
 
-**Tech Stack:** React 17.0.2, React DOM 17.0.2, TypeScript, Vite, GSAP, Vitest, jsdom, GitHub Actions
+**Tech Stack:** Supplied React 19, React DOM 19, TypeScript, Vite, GSAP, Node test runner, GitHub Actions
+
+**Superseding decision:** Faithful reproduction and delivery speed take priority over porting to React 17. Tasks 1–3 below document the earlier port approach and are superseded; do not execute their scaffolding, component rewrites, or Vitest additions. The implementation instead copies `https://github.com/zhenchur/mega-5g-mobile-demo` exactly and follows the deployment work in Task 4.
 
 ## Global Constraints
 
@@ -16,11 +18,12 @@
 - Use `/bencode/mega-5g/` as the production base URL.
 - Keep the root site, resume, and electricity tracker unchanged.
 - Do not load assets or code from the reference site at runtime.
+- Retain the supplied React 19 entry point, components, package versions, and GSAP behavior.
 - Respect `prefers-reduced-motion` and retain keyboard-accessible controls.
 
 ---
 
-### Task 1: Isolated React 17 project and asset URL contract
+### Task 1 (superseded): React 17 scaffold and asset helper
 
 **Files:**
 - Create: `mega-5g/package.json`
@@ -142,7 +145,7 @@ git commit -m "build: scaffold Mega 5G React 17 app"
 
 ---
 
-### Task 2: Page hierarchy, React 17 entry point, and navigation rules
+### Task 2 (superseded): React 17 entry point and component port
 
 **Files:**
 - Create: `mega-5g/index.html`
@@ -328,7 +331,7 @@ git commit -m "feat: port Mega 5G landing to React 17"
 
 ---
 
-### Task 3: Visual assets, responsive styles, and production fidelity
+### Task 3 (superseded): Port-specific visual bundle
 
 **Files:**
 - Create: `mega-5g/public/assets/**`
@@ -438,7 +441,7 @@ import test from 'node:test'
 test('Pages workflow builds and publishes Mega 5G under its nested route', async () => {
   const workflow = await readFile('.github/workflows/pages.yml', 'utf8')
   assert.match(workflow, /npm ci --prefix mega-5g/)
-  assert.match(workflow, /npm run test --prefix mega-5g/)
+  assert.match(workflow, /npm run check --prefix mega-5g/)
   assert.match(workflow, /npm run build:pages --prefix mega-5g/)
   assert.match(workflow, /cp -R mega-5g\/dist _site\/mega-5g/)
 })
@@ -468,8 +471,8 @@ Add after the root dependency installation:
 Add after the existing test step:
 
 ```yaml
-      - name: Test Mega 5G landing
-        run: npm run test --prefix mega-5g
+      - name: Check Mega 5G landing
+        run: npm run check --prefix mega-5g
 ```
 
 Add after the electricity build:
@@ -498,7 +501,7 @@ Run:
 ```bash
 npm test
 npm run build:electricity
-npm run test --prefix mega-5g
+npm run check --prefix mega-5g
 npm run build:pages --prefix mega-5g
 rm -rf /tmp/mega-5g-site-check
 mkdir -p /tmp/mega-5g-site-check
@@ -521,7 +524,7 @@ git commit -m "ci: publish Mega 5G landing on GitHub Pages"
 
 **Files:**
 - Modify only if browser verification reveals a reproducible defect: relevant file under `mega-5g/`
-- Create outside repository: `/opt/cursor/artifacts/mega-5g-react17-demo.mp4`
+- Create outside repository: `/opt/cursor/artifacts/mega-5g-react19-demo.mp4`
 
 **Interfaces:**
 - Consumes: production build and deployment base
@@ -562,7 +565,7 @@ Emulate `prefers-reduced-motion: reduce`, reload at `390×844`, and confirm all 
 
 Follow the walkthrough-artifact rubric and record a concise mobile scroll-through with one carousel interaction, followed by the desktop notice. Save it as:
 
-`/opt/cursor/artifacts/mega-5g-react17-demo.mp4`
+`/opt/cursor/artifacts/mega-5g-react19-demo.mp4`
 
 - [ ] **Step 6: Fix and reverify any observed defect**
 

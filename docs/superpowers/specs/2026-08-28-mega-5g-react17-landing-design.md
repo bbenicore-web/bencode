@@ -1,8 +1,8 @@
-# Mega 5G landing on React 17
+# Mega 5G landing on supplied React 19 app
 
 ## Goal
 
-Reproduce the provided Mega 5G mobile demo as a self-contained React 17 application and publish it alongside the existing site at `/bencode/mega-5g/`. The existing root site, resume, and electricity tracker must remain unchanged.
+Publish the provided Mega 5G mobile demo as a self-contained application at `/bencode/mega-5g/`. Faithful reproduction and delivery speed take priority over a React 17 port, so the supplied React 19 implementation remains intact. The existing root site, resume, and electricity tracker must remain unchanged.
 
 ## Source of truth
 
@@ -12,7 +12,7 @@ Reproduce the provided Mega 5G mobile demo as a self-contained React 17 applicat
 
 ## Architecture
 
-The landing will live in an isolated `mega-5g/` directory with its own `package.json`, Vite configuration, source tree, tests, and public assets. It will use React 17 and `ReactDOM.render`, so it does not impose React dependencies on the existing root package.
+The landing lives in an isolated `mega-5g/` directory copied from the reference repository, including its React 19 source, GSAP motion, package files, configuration, and public assets. Only nested-route deployment configuration is changed; the app does not impose dependencies on the existing root package.
 
 The application will be configured with the GitHub Pages base path `/bencode/mega-5g/`. Its production build will be copied to `_site/mega-5g/` by the existing deployment workflow. Root deployment files and the electricity build remain part of the same published artifact.
 
@@ -29,7 +29,7 @@ The React application will mirror the reference section hierarchy:
 7. FAQ/details content.
 8. Promotional footer and legal/navigation links.
 
-Large visual sections will remain separate React components, following the boundaries used by the supplied reference: promo, details, experience carousel, products, connection, tariffs, and footer. Repeated cards and controls will be rendered from local structured data where this does not alter output.
+Large visual sections remain in the React components supplied by the reference: promo, details, experience carousel, products, connection, tariffs, and footer.
 
 ## Responsive behavior
 
@@ -45,7 +45,7 @@ The implementation will preserve the reference behavior for carousel controls, e
 
 ## Assets
 
-Fonts, images, and SVG artwork from the user-provided reference repository will be copied into `mega-5g/public/` and addressed through a base-path-aware asset helper. No runtime dependency on the reference GitHub Pages site is allowed.
+Fonts, images, and SVG artwork from the reference repository are copied into `mega-5g/public/`. Vite's GitHub Pages base and `%BASE_URL%` HTML preloads keep asset URLs correct under the nested route. No runtime dependency on the reference GitHub Pages site is allowed.
 
 ## Failure behavior
 
@@ -53,13 +53,7 @@ The landing is static and has no backend dependency. If JavaScript is unavailabl
 
 ## Verification
 
-Automated checks will cover:
-
-- the mobile landing section order and key copy;
-- the desktop notice breakpoint state;
-- core carousel and disclosure interactions;
-- base-path-aware asset URL generation;
-- a successful production build.
+An automated Node deployment-contract test covers the nested Vite base, base-aware preloads, retained React 19/GSAP dependencies, root test discovery, and workflow build/copy steps. The supplied app's `check` and `build:pages` scripts validate its source and production build.
 
 Manual browser verification will cover representative mobile widths, the `767px`/`768px` boundary, desktop notice behavior, animations, interactive controls, absence of horizontal overflow, and the built nested route. A short walkthrough recording will demonstrate the finished mobile landing and desktop notice.
 

@@ -27,14 +27,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Mega 5G dependencies
+        run: npm ci --prefix mega-5g
+
       - name: Run tests
         run: npm test
+
+      - name: Check Mega 5G landing
+        run: npm run check --prefix mega-5g
 
       - name: Build electricity tracker
         run: npm run build:electricity
         env:
           VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://hheobgjivljydirnculb.supabase.co' }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || 'sb_publishable_N26f9M2WPwiOMzHlHwoY4w_Jh1gr8GD' }}
+
+      - name: Build Mega 5G landing for GitHub Pages
+        run: npm run build:pages --prefix mega-5g
 
       - name: Prepare site files
         run: |
@@ -43,6 +52,7 @@ jobs:
           cp -R canva _site/canva
           cp -R assets _site/assets
           cp -R dist/electricity _site/electricity
+          cp -R mega-5g/dist _site/mega-5g
 
       - name: Publish to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
