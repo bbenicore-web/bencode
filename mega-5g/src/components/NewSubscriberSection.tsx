@@ -7,7 +7,7 @@ export function NewSubscriberSection() {
         <p className="new-subscriber-card__copy">
           Подключитесь к МегаФону и выберите профиль Мега 5G под свой ритм жизни.
         </p>
-        <div className="new-subscriber-card__actions" aria-label="Подключение новых абонентов">
+        <div className="new-subscriber-card__actions" role="group" aria-label="Подключение новых абонентов">
           <button className="new-subscriber-card__action new-subscriber-card__action--sim" type="button">
             Купить новую SIM
           </button>

@@ -1182,7 +1182,7 @@ img {
 
 .new-subscriber-card__eyebrow {
   margin: 0 0 8px;
-  color: #00a94f;
+  color: #007a3d;
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
@@ -1224,10 +1224,12 @@ img {
 
 .new-subscriber-card__action--sim {
   background: #00b956;
+  color: #0e0e0e;
 }
 
 .new-subscriber-card__action--mnp {
   background: #0e0e0e;
+  color: #fff;
 }
 
 .new-subscriber-card__action:focus-visible {
@@ -1578,6 +1580,8 @@ img {
 }
 
 @media (max-width: 340px) {
+  .support-section { height: 1380px; }
+  .faq { top: 870px; }
   .technology-card--priority > img { left: 112px; }
   .technology-card--speed > img { left: 72px; }
   .profile-card { padding-inline: 14px; }
