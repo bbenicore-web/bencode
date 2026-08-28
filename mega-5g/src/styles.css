@@ -1579,7 +1579,7 @@ img {
   display: none;
 }
 
-@media (max-width: 340px) {
+@media (max-width: 344px) {
   .support-section { height: 1380px; }
   .faq { top: 870px; }
   .technology-card--priority > img { left: 112px; }

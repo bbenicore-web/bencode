@@ -47,13 +47,14 @@ test('new subscriber actions use both approved solid accent treatments', async (
   assert.match(css, /\.new-subscriber-card__action--mnp\s*\{[^}]*background:\s*#0e0e0e/s)
 })
 
-test('320px layout guard keeps the subscriber card clear of the FAQ', async () => {
+test('narrow layout guard keeps the subscriber card clear of the FAQ through 344px', async () => {
   const css = await readFile('mega-5g/src/styles.css', 'utf8')
-
-  assert.match(
-    css,
-    /@media \(max-width: 340px\) \{[\s\S]*?\.support-section\s*\{\s*height:\s*1380px;\s*\}[\s\S]*?\.faq\s*\{\s*top:\s*870px;\s*\}[\s\S]*?\n\}/,
+  const narrowLayout = css.match(
+    /@media \(max-width: (\d+)px\) \{[\s\S]*?\.support-section\s*\{\s*height:\s*1380px;\s*\}[\s\S]*?\.faq\s*\{\s*top:\s*870px;\s*\}[\s\S]*?\n\}/,
   )
+
+  assert.ok(narrowLayout)
+  assert.ok(Number(narrowLayout[1]) >= 344)
 })
 
 test('new subscriber actions expose their accessible group label', async () => {
