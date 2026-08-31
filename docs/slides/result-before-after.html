@@ -137,10 +137,9 @@
         background: var(--ink);
         color: #fff;
         border-radius: 24px;
-        padding: 32px 28px 24px;
+        padding: 28px 24px 22px;
         display: flex;
         flex-direction: column;
-        text-align: center;
       }
 
       .kicker {
@@ -149,42 +148,49 @@
         text-transform: uppercase;
         color: var(--green);
         font-weight: 700;
+        margin-bottom: 18px;
       }
 
-      .number {
-        font-size: 148px;
-        font-weight: 800;
-        line-height: 0.88;
-        letter-spacing: -0.07em;
-        margin: 10px 0 6px;
+      .facts {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
-      .word {
-        font-size: 26px;
-        font-weight: 700;
-        margin: 0 0 22px;
-      }
-
-      .stat {
+      .fact {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        gap: 12px;
+        align-items: center;
         background: #1c1c1c;
         border-radius: 14px;
-        padding: 14px 16px;
-        text-align: left;
-        margin-bottom: 10px;
+        padding: 12px 14px;
       }
 
-      .stat strong {
-        display: block;
-        font-size: 32px;
-        color: var(--green);
+      .fact strong {
+        font-size: 36px;
         line-height: 1;
-        margin-bottom: 4px;
+        letter-spacing: -0.04em;
+        color: #fff;
       }
 
-      .stat span {
-        font-size: 15px;
+      .fact span {
+        font-size: 16px;
+        line-height: 1.25;
         color: #c9cdd2;
-        line-height: 1.35;
+      }
+
+      .fact-solved {
+        background: #12351f;
+      }
+
+      .fact-solved strong,
+      .fact-critical-solved strong {
+        color: var(--green);
+      }
+
+      .fact-unsolved strong {
+        color: #ff8b8b;
       }
 
       .ab {
@@ -196,7 +202,6 @@
         font-size: 16px;
         font-weight: 700;
         line-height: 1.4;
-        text-align: left;
       }
     </style>
   </head>
@@ -232,16 +237,28 @@
       </section>
 
       <aside class="metric">
-        <div class="kicker">Снимаем барьеры</div>
-        <div class="number">48</div>
-        <p class="word">барьеров будут решены</p>
-        <div class="stat">
-          <strong>68</strong>
-          <span>найдено аудитом КО на слайдах 9–13</span>
-        </div>
-        <div class="stat">
-          <strong>34</strong>
-          <span>из них критичных — в конструкторе продаж до конца Q2</span>
+        <div class="kicker">Барьеры</div>
+        <div class="facts">
+          <div class="fact">
+            <strong>68</strong>
+            <span>всего барьеров</span>
+          </div>
+          <div class="fact">
+            <strong>38</strong>
+            <span>критических</span>
+          </div>
+          <div class="fact fact-solved">
+            <strong>48</strong>
+            <span>будет решено</span>
+          </div>
+          <div class="fact fact-critical-solved">
+            <strong>26</strong>
+            <span>критических будет решено</span>
+          </div>
+          <div class="fact fact-unsolved">
+            <strong>20</strong>
+            <span>не будет решено</span>
+          </div>
         </div>
         <p class="ab">
           Запущен A/B-тест до 30.08. 31.08–02.09 — анализ и подведение итогов теста.

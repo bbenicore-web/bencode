@@ -5,9 +5,11 @@
     "ceo": "Единый сценарий заказа SIM (ceo).pptx — слайды 9–13, таблица барьеров"
   },
   "audit_total": 68,
+  "critical_total": 38,
   "total_solved": 48,
-  "critical_solved": 34,
-  "unsolved_or_out_of_scope": 15,
+  "critical_solved": 26,
+  "total_unsolved": 20,
+  "unsolved_marked_no": 15,
   "unmarked": 5,
   "solved_by_slide_9_13": {
     "9": 14,
