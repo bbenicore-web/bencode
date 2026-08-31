@@ -2,89 +2,80 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <title>Как было / Как будет — 48 барьеров МНП</title>
+    <title>Целевой сценарий MNP снимает 48 барьеров из 68</title>
     <style>
       :root {
         --green: #00b956;
-        --green-dark: #007a3d;
-        --ink: #0e0e0e;
-        --paper: #f3f5f7;
-        --muted: #5b6168;
-        --card: #ffffff;
+        --green-bar: #28b956;
+        --purple: #731982;
+        --ink: #282828;
+        --muted: #8a8a8a;
+        --line: #d9d9d9;
+        --paper: #ffffff;
       }
 
       * { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; background: #111; }
+      html, body {
+        margin: 0;
+        padding: 0;
+        background: var(--paper);
+      }
 
       .slide {
         width: 1920px;
         height: 1080px;
         background: var(--paper);
         color: var(--ink);
-        font-family: Inter, "Noto Sans Display", Arial, sans-serif;
-        display: grid;
-        grid-template-columns: 1fr 400px;
-        grid-template-rows: 108px 1fr;
+        font-family: "GT Walsheim Pro", Inter, Arial, sans-serif;
+        position: relative;
         overflow: hidden;
       }
 
-      .top {
-        grid-column: 1 / -1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 48px;
-        background: var(--ink);
-        color: #fff;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        letter-spacing: 0.08em;
-        font-size: 16px;
-        font-weight: 700;
-        color: var(--green);
-        text-transform: uppercase;
-      }
-
-      .brand i {
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-        background: var(--green);
-        border-radius: 3px;
-      }
-
       h1 {
+        position: absolute;
+        left: 61px;
+        top: 42px;
+        width: 1798px;
         margin: 0;
-        font-size: 40px;
-        letter-spacing: -0.03em;
-      }
-
-      .subtitle {
-        margin: 4px 0 0;
-        font-size: 17px;
-        color: #c9cdd2;
+        font-family: "GT Walsheim Pro", Inter, Arial, sans-serif;
+        font-weight: 700;
+        font-size: 34px;
+        line-height: 1.2;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        color: var(--ink);
       }
 
       .flows {
-        padding: 24px 28px 28px 40px;
+        position: absolute;
+        left: 61px;
+        top: 168px;
+        width: 1230px;
+        height: 748px;
         display: flex;
         flex-direction: column;
         gap: 18px;
-        min-width: 0;
       }
 
       .flow {
-        background: var(--card);
-        border-radius: 20px;
-        padding: 14px 16px 12px;
+        flex: 1;
+        min-height: 0;
+        border: 2px dotted var(--green);
+        border-radius: 18px;
+        padding: 14px 18px 12px;
         display: flex;
         flex-direction: column;
-        min-height: 0;
-        flex: 1;
+        background: var(--paper);
+      }
+
+      .flow-was {
+        border-color: var(--purple);
+        flex: 0.82;
+      }
+
+      .flow-will {
+        border-color: var(--green);
+        flex: 1.18;
       }
 
       .flow-head {
@@ -92,32 +83,32 @@
         align-items: baseline;
         justify-content: space-between;
         margin-bottom: 8px;
-        padding: 0 6px;
+        padding: 0 4px;
       }
 
       .flow-head h2 {
         margin: 0;
         font-size: 22px;
-        letter-spacing: -0.03em;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--ink);
       }
 
       .badge {
         font-size: 13px;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        padding: 5px 10px;
-        border-radius: 999px;
+        letter-spacing: 0.08em;
+        color: var(--muted);
       }
 
-      .badge-was { background: #eceff2; color: var(--muted); }
-      .badge-will { background: #d8f5e5; color: var(--green-dark); }
+      .badge-will { color: var(--green); }
+      .badge-was { color: var(--purple); }
 
       .shot {
         flex: 1;
         min-height: 0;
-        border-radius: 12px;
-        background: #fafbfc;
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -132,91 +123,105 @@
         display: block;
       }
 
-      .metric {
-        margin: 24px 28px 28px 0;
-        background: var(--ink);
-        color: #fff;
-        border-radius: 24px;
-        padding: 28px 24px 22px;
+      .metrics {
+        position: absolute;
+        left: 1316px;
+        top: 168px;
+        width: 543px;
+        height: 748px;
+        border: 2px dotted var(--green);
+        border-radius: 18px;
+        padding: 18px 20px 16px;
         display: flex;
         flex-direction: column;
       }
 
       .kicker {
-        font-size: 14px;
-        letter-spacing: 0.14em;
+        font-size: 13px;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
         color: var(--green);
         font-weight: 700;
-        margin-bottom: 18px;
+        margin-bottom: 8px;
       }
 
       .facts {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
+        flex: 1;
       }
 
       .fact {
         display: grid;
-        grid-template-columns: 72px 1fr;
-        gap: 12px;
+        grid-template-columns: 92px 1fr;
+        gap: 10px;
         align-items: center;
-        background: #1c1c1c;
-        border-radius: 14px;
-        padding: 12px 14px;
+        padding: 8px 4px;
+        border-bottom: 1px solid #eeeeee;
       }
 
+      .fact:last-child { border-bottom: 0; }
+
       .fact strong {
-        font-size: 36px;
+        font-size: 48px;
         line-height: 1;
-        letter-spacing: -0.04em;
-        color: #fff;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--ink);
       }
 
       .fact span {
-        font-size: 16px;
-        line-height: 1.25;
-        color: #c9cdd2;
+        font-size: 18px;
+        line-height: 1.2;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        color: var(--ink);
       }
 
-      .fact-solved {
-        background: #12351f;
-      }
-
-      .fact-solved strong,
-      .fact-critical-solved strong {
-        color: var(--green);
-      }
-
-      .fact-unsolved strong {
-        color: #ff8b8b;
-      }
+      .fact-solved strong { color: var(--green); }
+      .fact-critical-solved strong { color: var(--green); }
+      .fact-unsolved strong { color: var(--purple); }
 
       .ab {
-        margin-top: auto;
-        background: var(--green);
-        color: var(--ink);
-        border-radius: 14px;
-        padding: 16px;
+        margin-top: 8px;
+        background: var(--green-bar);
+        color: #fff;
+        border-radius: 10px;
+        padding: 14px 16px;
         font-size: 16px;
         font-weight: 700;
-        line-height: 1.4;
+        line-height: 1.35;
+      }
+
+      .footer {
+        position: absolute;
+        left: 61px;
+        top: 1004px;
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--muted);
+      }
+
+      .footer-num {
+        position: absolute;
+        left: 61px;
+        top: 1004px;
+        font-size: 16px;
+        color: var(--muted);
+        display: none;
       }
     </style>
   </head>
   <body>
     <article class="slide" id="result-slide">
-      <header class="top">
-        <div>
-          <h1>Как было и как будет</h1>
-          <p class="subtitle">МНП · единый сценарий заказа SIM · слайды 9–13 презентации для CEO</p>
-        </div>
-        <div class="brand"><i></i>МегаФон · конструктор продаж</div>
-      </header>
+      <h1>
+        Целевой сценарий MNP снимает 48 барьеров из 68, в том числе 26 критических
+      </h1>
 
       <section class="flows">
-        <div class="flow">
+        <div class="flow flow-was">
           <div class="flow-head">
             <h2>Как сейчас</h2>
             <span class="badge badge-was">Вариант А · презентация 1</span>
@@ -225,7 +230,7 @@
             <img src="assets/as-was.png" alt="Как сейчас, вариант А — текущий сценарий МНП" />
           </div>
         </div>
-        <div class="flow">
+        <div class="flow flow-will">
           <div class="flow-head">
             <h2>Как станет</h2>
             <span class="badge badge-will">Вариант B · целевой сценарий</span>
@@ -236,7 +241,7 @@
         </div>
       </section>
 
-      <aside class="metric">
+      <aside class="metrics">
         <div class="kicker">Барьеры</div>
         <div class="facts">
           <div class="fact">
@@ -264,6 +269,8 @@
           Запущен A/B-тест до 30.08. 31.08–02.09 — анализ и подведение итогов теста.
         </p>
       </aside>
+
+      <div class="footer">МегаФон | 31.08.2026</div>
     </article>
   </body>
 </html>
