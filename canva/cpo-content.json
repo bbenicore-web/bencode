@@ -1,0 +1,121 @@
+{
+  "design_title": "CPO: Цифровой продукт МегаФон — схема платформ",
+  "recommended_size_px": {
+    "width": 1920,
+    "height": 1680
+  },
+  "blocks": [
+    {
+      "id": "biz-leader-telecom",
+      "title": "Бизнес лидер — Телеком Core",
+      "type": "Бизнес-лидер",
+      "owner": "Бизнес",
+      "raci": "A"
+    },
+    {
+      "id": "biz-leader-showcases",
+      "title": "Бизнес лидер — Витрины",
+      "type": "Бизнес-лидер",
+      "owner": "Бизнес",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-main-line",
+      "title": "CPO — основная линейка",
+      "type": "CPO домена",
+      "owner": "CPO",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-persona",
+      "title": "CPO — Персона",
+      "type": "CPO домена",
+      "owner": "CPO",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-mnp",
+      "title": "CPO — MNP, клоны, SIM",
+      "type": "CPO домена",
+      "owner": "CPO",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-megainternet",
+      "title": "CPO — МегаИнтернет",
+      "type": "CPO домена",
+      "owner": "CPO",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-home-internet",
+      "title": "CPO — ДомИнтернет",
+      "type": "CPO домена",
+      "owner": "CPO",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-monetization",
+      "title": "CPO — Монетизация",
+      "type": "CPO домена",
+      "owner": "CPO",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-header",
+      "title": "CPO Цифровой продукт МегаФона (Личный кабинет)",
+      "type": "Роль CPO",
+      "owner": "CPO цифрового продукта",
+      "raci": "A"
+    },
+    {
+      "id": "platform-note-left",
+      "title": "Общие возможности платформы",
+      "type": "Пояснение",
+      "owner": "CPO платформы",
+      "raci": "I"
+    },
+    {
+      "id": "telecom-platform",
+      "title": "ТЕЛЕКОМ ПЛАТФОРМА",
+      "type": "Платформа",
+      "owner": "CPO Telecom Platform",
+      "raci": "R/A"
+    },
+    {
+      "id": "cx-platform",
+      "title": "CX ПЛАТФОРМА",
+      "type": "Платформа",
+      "owner": "CPO CX",
+      "raci": "R/A"
+    },
+    {
+      "id": "vas-platform",
+      "title": "VAS ПЛАТФОРМА",
+      "type": "Платформа",
+      "owner": "CPO VAS",
+      "raci": "R/A"
+    },
+    {
+      "id": "cpo-platform-duties",
+      "title": "Зона ответственности CPO платформы",
+      "type": "Пояснение",
+      "owner": "CPO платформы",
+      "raci": "A"
+    },
+    {
+      "id": "cpo-responsibilities",
+      "title": "Ответственность CPO цифрового продукта",
+      "type": "Пояснение",
+      "owner": "CPO цифрового продукта",
+      "raci": "A"
+    },
+    {
+      "id": "team-telecom",
+      "title": "Команда Телеком платформы",
+      "type": "Команды",
+      "owner": "CPO Telecom Platform",
+      "raci": "R/A"
+    }
+  ]
+}
