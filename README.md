@@ -12,7 +12,11 @@
 
 **Мега 5G:** https://bbenicore-web.github.io/bencode/mega-5g/
 
-Публикация выполняется workflow `Deploy GitHub Pages`: корневой сайт сохраняется, а собранные приложения добавляются по маршрутам `/electricity/` и `/mega-5g/`. В [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages) выберите **Deploy from a branch**, ветку `gh-pages` и папку `/ (root)`. Workflow обновляет эту ветку после каждого push в `main`.
+**Презентации:** https://bbenicore-web.github.io/bencode/presentations/
+
+**Q3 2025:** https://bbenicore-web.github.io/bencode/presentations/Q3_2025.bento.html
+
+Публикация выполняется workflow `Deploy GitHub Pages`: корневой сайт сохраняется, а собранные приложения добавляются по маршрутам `/electricity/`, `/mega-5g/` и `/presentations/`. В [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages) выберите **Deploy from a branch**, ветку `gh-pages` и папку `/ (root)`. Workflow обновляет эту ветку после каждого push в `main`.
 
 Локально: откройте `index.html` в браузере или запустите любой статический сервер в корне репозитория.
 
@@ -23,6 +27,22 @@
 - подсветка связанных элементов прямо на холсте;
 - поиск по названиям, владельцам и описаниям;
 - адаптивная верстка для широких и узких экранов.
+
+## Презентации в Bento
+
+Скилл лежит в `.cursor/skills/bento-slides/`. Напиши агенту тему и бриф, например:
+
+```text
+Сделай презентацию про Q3: аудитория — совет директоров, вывод — рост 18%.
+Вот таблица по продуктам…
+```
+
+Агент соберёт один самодостаточный файл `.bento.html` в папке `presentations/`. Открой его в браузере — это и документ, и редактор, и плеер. Bento ставить не нужно.
+
+На телефоне открой список колод: https://bbenicore-web.github.io/bencode/presentations/
+
+- [Итоги Q3 2025](https://bbenicore-web.github.io/bencode/presentations/Q3_2025.bento.html)
+- [Как заказать колоду](https://bbenicore-web.github.io/bencode/presentations/Bento_brief.bento.html)
 
 ## Импорт в Canva
 

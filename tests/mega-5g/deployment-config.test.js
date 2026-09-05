@@ -17,6 +17,7 @@ test('Pages workflow checks, builds, and publishes Mega 5G at its nested route',
   assert.match(workflow, /npm test/)
   assert.match(workflow, /npm run build:electricity/)
   assert.match(workflow, /cp -R dist\/electricity _site\/electricity/)
+  assert.match(workflow, /cp -R presentations _site\/presentations/)
 })
 
 test('Mega 5G uses the repository nested base for builds and preloads', async () => {
