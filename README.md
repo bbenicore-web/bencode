@@ -16,6 +16,12 @@
 
 Локально: откройте `index.html` в браузере или запустите любой статический сервер в корне репозитория.
 
+## UX/UI Agent Skills
+
+В репозиторий установлен набор [plugin87/ux-ui-agent-skills](https://github.com/plugin87/ux-ui-agent-skills) (v2.5.1): design tokens, спецификации компонентов, WCAG 2.2 и runnable-скиллы для Cursor/Claude.
+
+В агенте вызывайте `/design-tokens`, `/a11y-audit`, `/design-component` и остальные команды. Кратко: [`docs/ux-ui-agent-skills.md`](docs/ux-ui-agent-skills.md). Скиллы лежат в `.cursor/skills/` (и зеркалах `.claude/skills/`, `.agents/skills/`).
+
 ## Возможности
 
 - отрисовка схемы на `<canvas>`;
