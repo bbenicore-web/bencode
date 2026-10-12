@@ -12,7 +12,9 @@
 
 **Мега 5G:** https://bbenicore-web.github.io/bencode/mega-5g/
 
-Публикация выполняется workflow `Deploy GitHub Pages`: корневой сайт сохраняется, а собранные приложения добавляются по маршрутам `/electricity/` и `/mega-5g/`. В [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages) выберите **Deploy from a branch**, ветку `gh-pages` и папку `/ (root)`. Workflow обновляет эту ветку после каждого push в `main`.
+**Demo:** https://bbenicore-web.github.io/bencode/presentations/Demo.bento.html
+
+Публикация выполняется workflow `Deploy GitHub Pages`: корневой сайт сохраняется, а собранные приложения добавляются по маршрутам `/electricity/`, `/mega-5g/` и `/presentations/`. В [Settings → Pages](https://github.com/bbenicore-web/bencode/settings/pages) выберите **Deploy from a branch**, ветку `gh-pages` и папку `/ (root)`. Workflow обновляет эту ветку после каждого push в `main`.
 
 Локально: откройте `index.html` в браузере или запустите любой статический сервер в корне репозитория.
 
@@ -29,6 +31,12 @@
 - подсветка связанных элементов прямо на холсте;
 - поиск по названиям, владельцам и описаниям;
 - адаптивная верстка для широких и узких экранов.
+
+## Презентация Demo
+
+Колода для показа лежит в `presentations/Demo.bento.html`. Это один файл: документ, редактор и плеер. Стрелки листают слайды. На слайде платформ карточка открывает состав.
+
+Список колод: https://bbenicore-web.github.io/bencode/presentations/
 
 ## Импорт в Canva
 
