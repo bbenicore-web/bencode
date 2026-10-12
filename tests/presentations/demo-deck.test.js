@@ -26,6 +26,8 @@ test('presentation index and site entry points link the Demo deck', async () => 
 
   assert.match(index, /viewport/)
   assert.match(index, /href="Demo\.bento\.html"/)
+  assert.match(index, /href="Квартальное_демо_Мега5G_19\.10\.2026\.pptx"/)
+  assert.match(readme, /Квартальное_демо_Мега5G_19\.10\.2026\.pptx/)
   assert.match(readme, /https:\/\/bbenicore-web\.github\.io\/bencode\/presentations\/Demo\.bento\.html/)
   assert.match(home, /href="presentations\/"/)
 })
