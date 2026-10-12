@@ -142,3 +142,37 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
   assert.doesNotMatch(simChart, /CR A/)
   assert.doesNotMatch(filled, /25\.05\.25/)
 })
+
+test('restored Telecom deck keeps the tag cloud and bento note after the copy pass', async () => {
+  const buf = await readFile('presentations/Квартальное_демо_Телеком_19.10.2026_восстановлен.pptx')
+  const direction = slideText(buf, 1)
+  const sim = slideText(buf, 3)
+  const family = slideText(buf, 5)
+  const plans = slideText(buf, 6)
+  const notes = readZipEntry(buf, 'ppt/notesSlides/notesSlide1.xml').toString('utf8')
+
+  assert.match(direction, /Цифровая платформа клиентского опыта Телеком/)
+  assert.match(direction, /от потребности до покупки, подключения и управления телеком-продуктами/)
+  assert.match(direction, /Облако тегов/)
+  assert.match(direction, /Для клиента:/)
+  assert.match(direction, /MEU направления/)
+  assert.match(direction, /Ключевые запуски выходят в срок/)
+  assert.doesNotMatch(direction, /Наравление/)
+  assert.doesNotMatch(direction, /нужна цифра/)
+  assert.doesNotMatch(direction, /Пример заполнения/)
+
+  assert.match(sim, /первые экраны показывают суть, выгоды и ограничения/)
+  assert.match(sim, /CJ MNP/)
+  assert.doesNotMatch(sim, /онбординг/)
+
+  assert.match(family, /рекламной кампании 21\.07/)
+  assert.match(family, /Дом групповых продуктов/)
+  assert.doesNotMatch(family, /\?/)
+
+  assert.match(plans, /Улучшить опцию за счёт новых партнёрств/)
+  assert.match(plans, /Запустить сценарий eSIM/)
+  assert.match(plans, /1Q27–4Q27/)
+  assert.match(plans, /Бенто Бокс с картинками будущих релизов и облако фичей/)
+  assert.doesNotMatch(plans, /Покажите ключевые/)
+  assert.doesNotMatch(notes, /Шаблон квартального/)
+})
