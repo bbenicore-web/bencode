@@ -43,10 +43,11 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
   const direction = slideText(buf, 3)
   const metrics = slideText(buf, 4)
   const results = slideText(buf, 5)
-  const plans = slideText(buf, 6)
-  const dependencies = slideText(buf, 7)
-  const example = slideText(buf, 9)
-  const filled = [direction, metrics, results, plans].join('\n')
+  const demo = slideText(buf, 6)
+  const plans = slideText(buf, 7)
+  const dependencies = slideText(buf, 8)
+  const example = slideText(buf, 10)
+  const filled = [direction, metrics, results, demo, plans].join('\n')
 
   assert.match(
     direction,
@@ -55,6 +56,12 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
   assert.match(direction, /Подключения — 10\. Конверсия — план не задан\. GM — 4 млн/)
   assert.match(direction, /Телеком/)
   assert.match(direction, /Мега5G/)
+  assert.match(direction, /Дом групповых продуктов/)
+  assert.match(
+    direction,
+    /Создание и внедрение семейных механик на витринах для улучшение клиентского опыта и развитие разметки сегментов/,
+  )
+  assert.match(direction, /1,6 млн на 2026 год/)
   assert.doesNotMatch(direction, /Витрина Мега5G/)
   assert.doesNotMatch(direction, /Разовое ускорение/)
   assert.doesNotMatch(direction, /Мега5G Город/)
@@ -63,13 +70,21 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
   assert.match(metrics, /2,45%/)
   assert.match(metrics, /4 млн/)
   assert.match(metrics, /8 млн/)
+  assert.match(metrics, /Конверсия в назначение роли/)
+  assert.match(metrics, /25%/)
+  assert.match(metrics, /31%/)
+  assert.match(metrics, /50%/)
 
   assert.match(results, /Точки входа: виджет на главной и блок в «Услугах»/)
   assert.match(results, /Поставлено/)
   assert.match(results, /РК 21\.09/)
+  assert.match(results, /МегаСемья 2\.0/)
+  assert.match(results, /Релиз 23\.07\.2026/)
 
   assert.match(plans, /Улучшение опции за счёт новых партнёрств/)
   assert.doesNotMatch(plans, /\d{2}\.\d{2}\.\d{4}/)
+  assert.doesNotMatch(plans, /1Q27/)
+  assert.doesNotMatch(plans, /Дели тариф/)
 
   assert.match(dependencies, /\[Конкретная зависимость или конфликт\]/)
   assert.match(example, /Цифровое самообслуживание/)
@@ -84,4 +99,11 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
   const rels = readZipEntry(buf, 'ppt/slides/_rels/slide5.xml.rels').toString('utf8')
   const images = rels.match(/relationships\/image/g) ?? []
   assert.equal(images.length, 2)
+
+  assert.match(demo, /Экраны МегаСемьи 2\.0/)
+  const demoRels = readZipEntry(buf, 'ppt/slides/_rels/slide6.xml.rels').toString('utf8')
+  assert.equal((demoRels.match(/relationships\/image/g) ?? []).length, 3)
+  assert.doesNotMatch(demo, /925/)
+  assert.doesNotMatch(demo, /03\.04\.1993/)
+  assert.doesNotMatch(demo, /Ванечка/)
 })
