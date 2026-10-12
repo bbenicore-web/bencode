@@ -56,7 +56,13 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
     /Растить сценарии активации в продукты МегаИнтернета, и улучшать клиентский опыт/,
   )
   assert.match(direction, /Подключения — 10\. Конверсия — план не задан\. GM — 4 млн/)
-  assert.match(direction, /Телеком/)
+  assert.match(direction, /Цифровая платформа клиентского опыта Телеком/)
+  assert.match(
+    direction,
+    /Цифровая среда пути клиента: найти, понять, выбрать, купить, подключить и обслуживать/,
+  )
+  assert.match(slideText(buf, 1), /Цифровая платформа клиентского опыта Телеком/)
+  assert.match(metrics, /Цифровая платформа клиентского опыта Телеком · Метрики/)
   assert.match(direction, /Мега5G/)
   assert.match(direction, /Дом групповых продуктов/)
   assert.match(
