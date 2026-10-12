@@ -3,7 +3,7 @@ import { readFile } from 'node:fs/promises'
 import { inflateRawSync } from 'node:zlib'
 import test from 'node:test'
 
-const deckPath = 'presentations/Квартальное_демо_Мега5G_19.10.2026.pptx'
+const deckPath = 'presentations/Квартальное_демо_Телеком_19.10.2026.pptx'
 
 function readZipEntry(buf, name) {
   const eocd = buf.lastIndexOf(Buffer.from([0x50, 0x4b, 0x05, 0x06]))
@@ -53,8 +53,11 @@ test('quarterly Mega5G deck keeps slide 1 facts and the template backup', async 
     /Растить сценарии активации в продукты МегаИнтернета, и улучшать клиентский опыт/,
   )
   assert.match(direction, /Подключения — 10\. Конверсия — план не задан\. GM — 4 млн/)
-  assert.match(direction, /Разовое ускорение/)
-  assert.match(direction, /Мега5G Город/)
+  assert.match(direction, /Телеком/)
+  assert.match(direction, /Мега5G/)
+  assert.doesNotMatch(direction, /Витрина Мега5G/)
+  assert.doesNotMatch(direction, /Разовое ускорение/)
+  assert.doesNotMatch(direction, /Мега5G Город/)
 
   assert.match(metrics, /Подключения/)
   assert.match(metrics, /2,45%/)
