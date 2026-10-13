@@ -1,4 +1,4 @@
-import { toUserMessage } from "./supabase.js";
+import { toUserMessage as defaultToUserMessage } from "./supabase.js";
 import {
   calculatePeriods,
   calculateReadingPreview,
@@ -154,7 +154,14 @@ function previousReadingInput(previous) {
   };
 }
 
-export function createApp({ auth, readings, root, confirm, today }) {
+export function createApp({
+  auth,
+  readings,
+  root,
+  confirm,
+  today,
+  toUserMessage = defaultToUserMessage
+}) {
   const view = createView(root);
   let authSubscription;
   let destroyed = false;
