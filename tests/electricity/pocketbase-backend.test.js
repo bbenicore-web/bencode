@@ -47,22 +47,24 @@ test("maps pocketbase auth failures to safe Russian messages", () => {
 
 test("creates a pocketbase client through the injected factory", () => {
   const calls = [];
-  const client = {
+
+  class FakePocketBase {
+    constructor(url) {
+      calls.push(["factory", url]);
+      this.url = url;
+    }
+
     autoCancellation(value) {
       calls.push(["autoCancellation", value]);
     }
-  };
-  const factory = (url) => {
-    calls.push(["factory", url]);
-    return client;
-  };
+  }
 
   const result = createPocketBaseClient(
     { url: "https://example.com/pb" },
-    factory
+    FakePocketBase
   );
 
-  assert.equal(result, client);
+  assert.equal(result.url, "https://example.com/pb");
   assert.deepEqual(calls, [
     ["factory", "https://example.com/pb"],
     ["autoCancellation", false]

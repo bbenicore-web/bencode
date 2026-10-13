@@ -97,8 +97,8 @@ export function toUserMessage(error) {
   return USER_MESSAGES.fallback;
 }
 
-export function createPocketBaseClient(config, factory = PocketBase) {
-  const client = factory(config.url);
+export function createPocketBaseClient(config, Client = PocketBase) {
+  const client = new Client(config.url);
   client.autoCancellation(false);
   return client;
 }
