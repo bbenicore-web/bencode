@@ -1,8 +1,21 @@
 import { createApp } from "./app.js";
 import { createAuthService } from "./auth-service.js";
-import { getSupabaseConfig } from "./config.js";
+import {
+  getBackendKind,
+  getPocketBaseConfig,
+  getSupabaseConfig
+} from "./config.js";
+import {
+  createPocketBaseAuthService,
+  createPocketBaseClient,
+  createPocketBaseReadingsRepository,
+  toUserMessage as toPocketBaseUserMessage
+} from "./pocketbase-backend.js";
 import { createReadingsRepository } from "./readings-repository.js";
-import { createSupabaseClient } from "./supabase.js";
+import {
+  createSupabaseClient,
+  toUserMessage as toSupabaseUserMessage
+} from "./supabase.js";
 
 function renderSetupScreen(root, message) {
   root.innerHTML = `
@@ -32,7 +45,16 @@ export function createProductionServices(client, location) {
     auth: createAuthService(client, {
       emailRedirectTo: getAppDirectoryUrl(location)
     }),
-    readings: createReadingsRepository(client)
+    readings: createReadingsRepository(client),
+    toUserMessage: toSupabaseUserMessage
+  };
+}
+
+export function createPocketBaseProductionServices(client) {
+  return {
+    auth: createPocketBaseAuthService(client),
+    readings: createPocketBaseReadingsRepository(client),
+    toUserMessage: toPocketBaseUserMessage
   };
 }
 
@@ -40,10 +62,22 @@ export async function bootstrap({
   env = import.meta.env,
   root = document.querySelector("#app")
 } = {}) {
-  let config;
+  const backend = getBackendKind(env);
+  let services;
 
   try {
-    config = getSupabaseConfig(env);
+    if (backend === "pocketbase") {
+      const config = getPocketBaseConfig(env);
+      const client = createPocketBaseClient(config);
+      services = createPocketBaseProductionServices(client);
+    } else {
+      const config = getSupabaseConfig(env);
+      const client = createSupabaseClient(config);
+      services = createProductionServices(
+        client,
+        root?.ownerDocument?.defaultView?.location ?? globalThis.location
+      );
+    }
   } catch (error) {
     if (root) {
       renderSetupScreen(root, error.message);
@@ -55,14 +89,10 @@ export async function bootstrap({
     throw new Error("Не найден корневой элемент приложения.");
   }
 
-  const client = createSupabaseClient(config);
-  const { auth, readings } = createProductionServices(
-    client,
-    root.ownerDocument.defaultView.location
-  );
   const app = createApp({
-    auth,
-    readings,
+    auth: services.auth,
+    readings: services.readings,
+    toUserMessage: services.toUserMessage,
     root,
     confirm: (message) => root.ownerDocument.defaultView.confirm(message),
     today: localDate
