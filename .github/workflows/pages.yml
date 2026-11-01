@@ -56,6 +56,7 @@ jobs:
           cp -R assets _site/assets
           cp -R dist/electricity _site/electricity
           cp -R mega-5g/dist _site/mega-5g
+          cp -R presentations _site/presentations
 
       - name: Publish to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
